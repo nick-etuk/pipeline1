@@ -1,0 +1,7 @@
+{
+  "dependencies": ["install_oh_my_zsh"],
+  "os": ["unix"],
+  "checks": {
+    "unix": ["test -d ~/.oh-my-zsh/custom/themes/powerlevel10k"]
+  }
+}

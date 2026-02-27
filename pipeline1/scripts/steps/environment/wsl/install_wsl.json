@@ -1,0 +1,10 @@
+{
+  "os": ["win"],
+  "checks": { 
+    "win": [ "IsDistroInstalled ubuntu" ]
+  },
+  "commands": [
+    "Write-Output 'Installing Ubuntu...'",
+    "wsl --install -d ubuntu"
+  ]
+}

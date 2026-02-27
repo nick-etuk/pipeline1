@@ -1,0 +1,11 @@
+{
+  "checks": {
+    "unix": [
+      "test ! -f ~/.bashrc || grep -q \"pipeline1_v$P1_VERSION\" ~/.bashrc",
+      "test ! -f ~/.zshrc || grep -q \"pipeline1_v$P1_VERSION\" ~/.zshrc"
+    ],
+    "win": [
+      "(Get-Content -Path $PROFILE.CurrentUserCurrentHost -Raw) -match \"pipeline1_v$P1_VERSION\""
+    ]
+  }
+}

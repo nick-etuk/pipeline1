@@ -1,0 +1,7 @@
+{
+  "dependencies": [],
+  "isElevated": true,
+  "checks": {
+    "unix": ["sudo grep -q $(whoami) /etc/sudoers"]
+  }
+}

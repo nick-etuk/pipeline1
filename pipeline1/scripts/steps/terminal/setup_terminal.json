@@ -1,0 +1,20 @@
+{
+  "checks": {
+    "unix": [
+      "test ! -f ~/.bashrc || grep -q \"pipeline1_v$P1_VERSION\" ~/.bashrc",
+      "test ! -f ~/.zshrc || grep -q \"pipeline1_v$P1_VERSION\" ~/.zshrc",
+      "echo $PATH | grep -q \"$P1_ROOT_UNIX\""
+    ],
+    "win": [
+      "(Get-Content -Path $PROFILE.CurrentUserCurrentHost -Raw) -match \"pipeline1_v$P1_VERSION\""
+    ]
+  },
+  "steps": [
+    "edit_login_profile",
+    "install_ttab",
+    "install_zsh",
+    "install_oh_my_zsh",
+    "install_powerlevel10k",
+    "install_zoxide"
+  ]
+}

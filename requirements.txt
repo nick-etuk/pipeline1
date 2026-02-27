@@ -1,0 +1,5 @@
+# Development dependencies
+icecream
+pytest
+
+# Production dependencies

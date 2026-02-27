@@ -1,0 +1,6 @@
+{
+  "id": "child1",
+  "steps": [
+    "grandchild1 arg1 $@"
+  ]
+}

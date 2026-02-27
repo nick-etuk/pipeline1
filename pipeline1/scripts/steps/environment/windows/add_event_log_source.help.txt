@@ -1,0 +1,6 @@
+This step prepares the Windows event log to accept log messages from the pipeline1 scripts.
+It only needs to run once on each machine. It has to run in Administrator mode.
+Only errors and warnings are sent to the Windows event log.
+The messages in the event log are subsequently sent to Azure Log Analytics by an Azure Monitor Agent, 
+which is installed on each Dev Box.
+To see the messages, log into the Azure Portal and open the pipeline1 Log Analytics workspace.

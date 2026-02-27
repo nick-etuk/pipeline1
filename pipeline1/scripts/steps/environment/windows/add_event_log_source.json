@@ -1,0 +1,9 @@
+{
+  "dependencies": [],
+  "isElevated": true,
+  "checks": {
+    "win": [
+      "CheckEventLogSource -Source $Arguments -ErrorAction SilentlyContinue"
+    ]
+  }
+}

@@ -1,0 +1,61 @@
+<head>
+  <title>NHS App Workstation - Troubleshooting</title>
+</head>
+<style>
+  * {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 12px;
+  }
+</style>
+<body>
+  <p>
+    <strong>Troubleshooting</strong>
+  </p>
+  <p>Welcome to your NHS App Dev Box.</p>
+  <p>
+    When you login, the installation of WSL should start automatically. This
+    will take about five minutes. Once it is complete, you should see this menu:
+  </p>
+  <p>
+    <img width="467" height="334" src="image-menu.png" alt="Workstation menu" />
+  </p>
+  <p>
+    If you do not see this screen, start PowerShell in Administrator mode, and
+    then run the command "nhsapp". This will run
+    C:\provisioning\scripts\nhsapp.ps1
+  </p>
+  <p>Log files can be found in C:\provisioning\log</p>
+  <p>
+    <strong>Manual Installation</strong>
+  </p>
+  <p>
+    If nhsapp.ps1 has not been deployed or is not available, you can run the
+    install it manually.
+  </p>
+  <p>
+    Start PowerShell as an administrator, and then run the following commands:
+  </p>
+  <p>mkdir c:\repos</p>
+  <p>cd c:\repos</p>
+  <p>
+    git clone
+    <a
+      href="https://nhsapp@dev.azure.com/nhsapp/NHS%20App/_git/nhsapp-dev-workstation"
+    >
+      https://nhsapp@dev.azure.com/nhsapp/NHS%20App/_git/nhsapp-dev-workstation
+    </a>
+  </p>
+  <p>The Git Credential Manager will then start.</p>
+  <p>
+    <img
+      border="0"
+      width="315"
+      height="264"
+      src="image-gcm.png"
+      alt="GCM login screen"
+    />
+  </p>
+  <p>Click on continue.</p>
+  <p>cd nhsapp-dev-workstation\deploy-scripts\pipeline1</p>
+  <p>.\p1.ps1</p>
+</body>

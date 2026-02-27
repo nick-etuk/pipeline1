@@ -1,0 +1,4 @@
+{
+  "id": "one_argument",
+  "steps": ["child1 arg1a", "child2 arg1b", "child3 arg1c"]
+}

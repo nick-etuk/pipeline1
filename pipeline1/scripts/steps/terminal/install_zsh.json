@@ -1,0 +1,6 @@
+{
+  "os": ["unix"],
+  "checks": {
+    "unix": ["test -f ~/.zshrc"]
+  }
+}

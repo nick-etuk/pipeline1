@@ -1,0 +1,7 @@
+{
+  "dependencies": ["install_zsh"],
+  "os": ["unix"],
+  "checks": {
+    "unix": ["test -d ~/.oh-my-zsh"]
+  }
+}

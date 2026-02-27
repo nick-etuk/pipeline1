@@ -1,0 +1,9 @@
+{
+  "id": "{{id}}",
+  "title": "{{title}}",
+  "sortOrder": 10,
+  "contact": {
+    "email": "me@mydomain.com"
+  },
+  "showMenu": true
+}

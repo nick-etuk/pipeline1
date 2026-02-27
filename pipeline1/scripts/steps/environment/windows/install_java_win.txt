@@ -1,0 +1,12 @@
+Java SDK 17 is required for the NHS Android app, but Java 8
+is required for BDD development.
+
+If you setup your Dev Box for both Android and BDD development, both versions will be installed.
+In that case, check that IntelliJ points to the Java 8 JDK and Android Studio points to Java 17.
+
+To configure IntelliJ to use Java 8,
+...
+
+To configure Android Studio to use Java 17,
+...
+

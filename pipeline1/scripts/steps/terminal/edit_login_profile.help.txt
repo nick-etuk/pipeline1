@@ -1,0 +1,10 @@
+If you are using the bash shell, add the following to lines
+to the bottom of ~/.bashrc
+
+    export P1_ROOT_UNIX="$P1_ROOT_UNIX"
+    source "$P1_ROOT_UNIX"/steps/environment/terminal_login.sh'
+
+For zsh, add them to the top of ~/.zshrc. It is important that it goes at the top
+to avoid issues with p10k-instant-prompt.
+
+If you are using the fish shell, add them to ~/.config/fish/config.fish

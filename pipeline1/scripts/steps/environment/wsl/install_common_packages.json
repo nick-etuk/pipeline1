@@ -1,0 +1,6 @@
+{
+  "checks": { 
+    "unix": [ "dpkg-query -W build-essential libgbm-dev" ],
+    "win": [ "wsl -u root dpkg-query -W build-essential libgbm-dev" ]
+  }
+}

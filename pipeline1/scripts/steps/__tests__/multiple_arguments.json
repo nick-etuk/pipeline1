@@ -1,0 +1,8 @@
+{
+  "id": "multiple_arguments",
+  "steps": [
+    "child1 arg1 arg2",
+    "child2 arga argb argc",
+    "child3 argx argy argz"
+  ]
+}

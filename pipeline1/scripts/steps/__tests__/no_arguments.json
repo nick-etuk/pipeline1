@@ -1,0 +1,4 @@
+{
+  "id": "no_arguments",
+  "steps": ["child1", "child2", "child3"]
+}

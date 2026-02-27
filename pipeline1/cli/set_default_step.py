@@ -1,0 +1,71 @@
+import os
+import json
+from typing import Any
+
+from pipeline1.lib.config_dynamic import get_dynamic, set_dynamic
+from pipeline1.lib.logging import log
+from pipeline1.run_step.enrich_step import enrich_step
+from icecream import ic
+
+def is_absolute_path(path: str) -> bool:
+    return path == '/' or (len(path) >= 2 and path[1] == ':' and len(path) == 2)
+
+def expand_path(path: str) -> str:
+    expanded_path = os.path.expandvars(path)
+    if not os.path.isdir(expanded_path):
+        log.error(f"Path does not exist: {expanded_path}. Aborting.")
+        return ''
+    return expanded_path
+
+
+def set_step_path(step: dict[str, Any], project_registry: list[dict[str, Any]]) -> None:  
+    if 'exitTo' not in step:
+        log.debug(f"Using step_id ({step['step_id']}) as exitTo")
+        step['exitTo'] = step['step_id']
+        
+    if is_absolute_path(step['exitTo']):
+        log.debug(f"Setting default step path to absolute path {step['exitTo']}")
+        set_dynamic('default_step_path', expand_path(step['exitTo']))
+        return
+
+    project_found = False
+    for project in project_registry:
+        if project['project_id'] == step['project_id']:
+            project_found = True
+            # project['sourceCodePath'] is the directory where the source code is located
+            # project['wsProjectPath'] is the directory where the p1_project.json file is located.
+            # The two are not always the same.
+            project_root = project['sourceCodePath'] if 'sourceCodePath' in project else project['wsProjectPath']
+            exit_to_path = os.path.join(project_root, str(step['exitTo']))
+            log.debug(f"Setting default step path to {exit_to_path}")
+            set_dynamic('default_step_path', expand_path(exit_to_path))
+            break
+
+    if not project_found:
+        log.warn(f"Project id {step['project_id']} not found in project registry. Could not set default step root.")
+        return
+        
+def set_default_step(project_registry: list[dict[str, Any]], step_registry_entry: dict[str, Any]) -> None:
+    config_file = os.path.join(step_registry_entry['path'], f"{step_registry_entry['base_filename']}.json")
+    if not os.path.isfile(config_file):
+        ic(step_registry_entry, config_file)
+        # ic(config_file)
+        log.warn(f"Cannot set default step to {step_registry_entry['step_id']} because it does not have a config file") 
+        return
+    
+    with open(config_file) as f:
+        step = json.load(f)
+        
+    if not ('menu' in step and step['menu'] == 'main'): 
+        return
+
+    step = enrich_step(base_step=step, registry_entry=step_registry_entry)
+    step_id = step['step_id']
+    default_step_id = get_dynamic('default_step_id')
+    if default_step_id == step_id:
+        return
+    
+    log.info(f"Setting default step id to {step_id}")
+    set_dynamic('default_step_id', step_id)
+
+    set_step_path(step, project_registry)
