@@ -14,12 +14,15 @@ def make_step_title(step_id: str) -> str:
 
 def find_steps(project_id: str, project_path: str) -> list[dict[str, Any]] | None:
     # todo: find steps without config files, prevent duplicate step_ids across all projects
-    step_dir = Path(project_path) / 'p1' / 'steps'
+    # step_dir = Path(project_path) / 'p1' / 'steps'
+    step_dir = Path(project_path)
     if not step_dir.exists() or not step_dir.is_dir():
-        step_dir = Path(project_path) / 'steps'
-        if not step_dir.exists() or not step_dir.is_dir():
-            print(f"Warning: No steps directory found in {project_path}")
-            return None
+        print(f"Warning: No steps directory found in {project_path}")
+        return None
+        # step_dir = Path(project_path) / 'steps'
+        # if not step_dir.exists() or not step_dir.is_dir():
+        #     print(f"Warning: No steps directory found in {project_path}")
+        #     return None
 
     if step_dir == Path('conf/project_template'):
         log.debug(f"Skipping project template steps in {step_dir}")
@@ -27,6 +30,8 @@ def find_steps(project_id: str, project_path: str) -> list[dict[str, Any]] | Non
     
     step_registry: list[dict[str, Any]] = []
     for step_config_file in step_dir.rglob('*.json'):
+        if any(part in ['lib','shared'] for part in step_config_file.parts[:-1]):
+            continue
         if '__test' in str(step_config_file):
             continue
         with open(step_config_file, 'r') as f:

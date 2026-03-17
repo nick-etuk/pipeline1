@@ -1,6 +1,0 @@
-{
-  "steps": [
-    "check_for_os_updates",
-    "setup_terminal"
-  ]
-}
