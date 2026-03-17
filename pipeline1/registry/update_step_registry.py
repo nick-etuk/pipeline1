@@ -29,10 +29,10 @@ def update_step_registry(project_registry: list[dict[str, Any]]) -> None:
         log.info(f"Found {len(project_steps)} steps in {project['project_id']}")
         combined_step_registry.extend(project_steps)
     
-    core_steps = find_steps('core', config['script_root'])
-    if core_steps:
-        log.info(f"Found {len(core_steps)} steps in core")
-        combined_step_registry.extend(core_steps)
+    built_in_steps = find_steps('core', config['script_root'])
+    if built_in_steps:
+        log.info(f"Found {len(built_in_steps)} built-in steps")
+        combined_step_registry.extend(built_in_steps)
 
     for project in project_registry:
         if not os.path.exists(project['p1_project_path']):

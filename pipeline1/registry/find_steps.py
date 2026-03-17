@@ -1,7 +1,8 @@
 import json
-from logging import log
-from pathlib import Path
 from typing import Any
+from pathlib import Path
+from pipeline1.lib.logging import log
+
 
 def sort_order(project_id: str) -> float:
     if project_id == 'core':
@@ -11,7 +12,7 @@ def sort_order(project_id: str) -> float:
 def make_step_title(step_id: str) -> str:
     return step_id.replace('_', ' ').capitalize()
 
-def find_steps(project_id: str, project_path: str) -> list[dict[str, Any]]:
+def find_steps(project_id: str, project_path: str) -> list[dict[str, Any]] | None:
     # todo: find steps without config files, prevent duplicate step_ids across all projects
     step_dir = Path(project_path) / 'p1' / 'steps'
     if not step_dir.exists() or not step_dir.is_dir():
@@ -22,7 +23,7 @@ def find_steps(project_id: str, project_path: str) -> list[dict[str, Any]]:
 
     if step_dir == Path('conf/project_template'):
         log.debug(f"Skipping project template steps in {step_dir}")
-        return
+        return None
     
     step_registry: list[dict[str, Any]] = []
     for step_config_file in step_dir.rglob('*.json'):

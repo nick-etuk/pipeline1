@@ -12,7 +12,7 @@
 set -u
 setopt shwordsplit
 
-libraries=(
+required_libraries=(
     get_shell_version 
     detect_os
     config_dynamic 
@@ -24,7 +24,7 @@ init_script=$(find "$P1_ROOT_UNIX" -name "init.sh" -type f -not -path '.venv_p1/
 P1_ROOT_SCRIPT=$(dirname "$init_script")
 export P1_ROOT_SCRIPT
 
-for lib in "${libraries[@]}"; do
+for lib in "${required_libraries[@]}"; do
     script=$(find "$P1_ROOT_SCRIPT" -name "$lib.sh" -type f)
     . "$script"
 done

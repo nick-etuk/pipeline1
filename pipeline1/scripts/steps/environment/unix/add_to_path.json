@@ -1,6 +1,0 @@
-{
-  "dependencies": [],
-  "checks": {
-    "unix": ["echo $PATH | grep -q $P1_ROOT_UNIX"]
-  }
-}

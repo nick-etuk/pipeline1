@@ -2,13 +2,13 @@ from pipeline1.lib.logging import log
 from pipeline1.registry.get_registries import get_registries
 
 
-def list_steps(args: list[str]) -> None:
+def list_steps() -> None:
     project_registry, step_registry = get_registries()
 
-    log.info("core")
-    core_steps = [step for step in step_registry if step['project_id'] == 'core']
-    core_steps = sorted(core_steps, key=lambda x: x['step_id'])
-    for step in core_steps:
+    log.info("built_in:")
+    built_in_steps = [step for step in step_registry if step['project_id'] == 'core']
+    built_in_steps = sorted(built_in_steps, key=lambda x: x['step_id'])
+    for step in built_in_steps:
         log.info(f"\t {step['step_id']}")
     for project in project_registry:
         log.info(f"{project['title']}")
@@ -16,5 +16,4 @@ def list_steps(args: list[str]) -> None:
         project_steps = sorted(project_steps, key=lambda x: x['step_id'])
         for step in project_steps:
             log.info(f"\t {step['step_id']}")
-    return
  
