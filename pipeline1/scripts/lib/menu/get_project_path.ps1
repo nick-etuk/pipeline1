@@ -1,9 +1,15 @@
-function get_project_paths {
+function get_project_path {
     Param (
-        [Parameter(Mandatory=$false)]
+        [Parameter(Mandatory=$true)]
         [string]
-        $Filter
+        $project_id
     )
+    
+    if ($project_id -eq "p1") {
+        $project_id = "pipeline1"
+        return $P1_ROOT
+    }
+
     $ProjectRegistry = "$WORKING_DIR/project_registry.csv"
     if (!(Test-Path -Path $ProjectRegistry)) {
         WriteError "Project registry not found at $ProjectRegistry"
@@ -16,11 +22,10 @@ function get_project_paths {
         WriteError "Project registry is empty or could not be read: $RegistryFile"
         return
     }
-    $ProjectPaths = @()
     foreach ($Line in $RegistryContent) {
         $SortOrder = $Line.sort_order
         $ProjectID = $Line.project_id
-        $ProjectDirectory = $Line.path
+        $ProjectDirectory = $Line.p1Path
         if (!$ProjectID -or !$ProjectDirectory) {
             WriteWarning "Invalid registry line: $Line"
             continue
@@ -30,11 +35,11 @@ function get_project_paths {
             WriteWarning "Project directory not found: $ProjectDirectory"
             continue
         }
-        if ($Filter -and $ProjectID -eq $Filter) {
+        if ($project_id -and $ProjectID -eq $project_id) {
             return $ProjectDirectory
         }
-        $ProjectPaths += $ProjectDirectory
     }
 
-    return $ProjectPaths
+     WriteWarning "No project found matching project id: $project_id"
+     return
 }

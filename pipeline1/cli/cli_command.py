@@ -7,7 +7,7 @@ from pipeline1.registry.add_project.add_project import add_project
 from pipeline1.cli.list_steps import list_steps
 from pipeline1.lib.logging import log
 
-from icecream import ic
+# from icecream import ic
 
 def cli_command(args: list[str]):
     command = args[0].lower()
@@ -19,10 +19,10 @@ def cli_command(args: list[str]):
         return
     
     if command == "list":
-        list_steps(command_args)
+        list_steps()
         return 
     
-    if command == 'add':
+    if command == 'install':
         add_project(command_args)
         return
     

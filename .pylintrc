@@ -1,0 +1,24 @@
+[MASTER]
+ignore-patterns=
+    .venv/*,
+    venv/*,
+    __pycache__/*,
+    build/*,
+    dist/*,
+    z_*,
+    
+disable=
+    C0114, C0115, C0116,  # missing module/class/function docstring
+    C0301,  # line too long
+    C0303,  # trailing whitespace
+    C0305,  # trailing newlines
+    C0411,
+    C0412,  # ungrouped imports
+    C0304,
+    R0914,  # too many local variables
+    W1514,  # encoding is not specified
+    C0103,  # variable name doesn't conform to style
+    C0209,  # consider using f-string
+    R0903,
+    R0902,  # too many instance attributes
+    W0511,  # todo comments

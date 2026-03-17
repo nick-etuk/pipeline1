@@ -11,7 +11,7 @@ P1_VERSION='2.0'  # Update this when making changes that require users to update
 get_shell_version
 P1_USER_UNIX=''
 P1_USER_WIN=''
-WINDOP1_HOME=''
+WINDOWS_HOME=''
 WORKING_DIR_WIN=''
 VM=''
 
