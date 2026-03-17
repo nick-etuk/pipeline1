@@ -13,9 +13,9 @@ def project_registry() -> list[dict[str, Any]]:
     
     with open(project_file) as f:
         project_lines = f.readlines()
-    project_registry = csv.DictReader(project_lines)
-    project_registry = sorted(project_registry, key=lambda x: int(x['display_order']))
-    return project_registry
+    registry = csv.DictReader(project_lines)
+    registry = sorted(registry, key=lambda x: int(x['display_order']))
+    return registry
 
 def activity_registry() -> list[dict[str, Any]]:
     activity_file = f"{config['working_dir']}/activity_registry.csv"
@@ -25,9 +25,9 @@ def activity_registry() -> list[dict[str, Any]]:
     
     with open(activity_file) as f:
         activity_lines = f.readlines()
-    activity_registry = csv.DictReader(activity_lines)
-    activity_registry = sorted(activity_registry, key=lambda x: int(x['display_order']))
-    return activity_registry
+    registry = csv.DictReader(activity_lines)
+    registry = sorted(registry, key=lambda x: int(x['display_order']))
+    return registry
 
 def step_registry() -> list[dict[str, Any]]:
     step_file = f"{config['working_dir']}/step_registry.csv"
@@ -37,9 +37,9 @@ def step_registry() -> list[dict[str, Any]]:
     
     with open(step_file) as f:
         step_lines = f.readlines()
-    step_registry = csv.DictReader(step_lines)
-    step_registry = sorted(step_registry, key=lambda x: float(x['sort_order']))
-    return step_registry
+    registry = csv.DictReader(step_lines)
+    registry = sorted(registry, key=lambda x: float(x['sort_order']))
+    return registry
 
 def get_registries() -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
     return project_registry(), step_registry()

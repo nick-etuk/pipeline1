@@ -18,13 +18,13 @@ def expand_path(path: str) -> str:
     return expanded_path
 
 
-def set_step_path(step: dict[str, Any], project_registry: list[dict[str, Any]]) -> None:  
+def set_step_exit_path(step: dict[str, Any], project_registry: list[dict[str, Any]]) -> None:  
     if 'exitTo' not in step:
-        log.debug(f"Using step_id ({step['step_id']}) as exitTo")
-        step['exitTo'] = step['step_id']
+        step['exitTo'] = step['path']
+        log.debug(f"Using step path ({step['path']}) as exitTo")
         
     if is_absolute_path(step['exitTo']):
-        log.debug(f"Setting default step path to absolute path {step['exitTo']}")
+        log.debug(f"Setting default step exit path to absolute path {step['exitTo']}")
         set_dynamic('default_step_path', expand_path(step['exitTo']))
         return
 
@@ -32,28 +32,27 @@ def set_step_path(step: dict[str, Any], project_registry: list[dict[str, Any]]) 
     for project in project_registry:
         if project['project_id'] == step['project_id']:
             project_found = True
-            # project['sourceCodePath'] is the directory where the source code is located
-            # project['wsProjectPath'] is the directory where the p1_project.json file is located.
+            # project['source_code_path'] is the directory where the source code is located
+            # project['p1_project_path'] is the directory where the project.json file is located.
             # The two are not always the same.
-            project_root = project['sourceCodePath'] if 'sourceCodePath' in project else project['wsProjectPath']
+            project_root = project['source_code_path'] if 'source_code_path' in project else project['p1_project_path']
             exit_to_path = os.path.join(project_root, str(step['exitTo']))
-            log.debug(f"Setting default step path to {exit_to_path}")
+            log.debug(f"Setting default step exit path to {exit_to_path}")
             set_dynamic('default_step_path', expand_path(exit_to_path))
             break
 
     if not project_found:
-        log.warn(f"Project id {step['project_id']} not found in project registry. Could not set default step root.")
+        log.warn(f"Project id {step['project_id']} not found in project registry. Could not set default step exit path.")
         return
         
 def set_default_step(project_registry: list[dict[str, Any]], step_registry_entry: dict[str, Any]) -> None:
     config_file = os.path.join(step_registry_entry['path'], f"{step_registry_entry['base_filename']}.json")
     if not os.path.isfile(config_file):
         ic(step_registry_entry, config_file)
-        # ic(config_file)
         log.warn(f"Cannot set default step to {step_registry_entry['step_id']} because it does not have a config file") 
         return
     
-    with open(config_file) as f:
+    with open(config_file, encoding="utf-8") as f:
         step = json.load(f)
         
     if not ('menu' in step and step['menu'] == 'main'): 
@@ -68,4 +67,4 @@ def set_default_step(project_registry: list[dict[str, Any]], step_registry_entry
     log.info(f"Setting default step id to {step_id}")
     set_dynamic('default_step_id', step_id)
 
-    set_step_path(step, project_registry)
+    set_step_exit_path(step, project_registry)
