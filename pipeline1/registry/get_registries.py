@@ -6,36 +6,32 @@ from pipeline1.lib.config import config
 
 
 def project_registry() -> list[dict[str, Any]]:
-    project_file = f"{config['working_dir']}/project_registry.csv"
+    registry_file = f"{config['working_dir']}/project_registry.csv"
 
-    if not os.path.exists(project_file):
+    if not os.path.exists(registry_file):
+        # todo: create registry file with headers
+        # download remote projects
+        # add remote projects to registry
+        # update project registry
+        # update step registry
         return []
     
-    with open(project_file) as f:
+    with open(registry_file, encoding='utf-8') as f:
         project_lines = f.readlines()
     registry = csv.DictReader(project_lines)
     registry = sorted(registry, key=lambda x: int(x['display_order']))
     return registry
 
-def activity_registry() -> list[dict[str, Any]]:
-    activity_file = f"{config['working_dir']}/activity_registry.csv"
-
-    if not os.path.exists(activity_file):
-        return []
-    
-    with open(activity_file) as f:
-        activity_lines = f.readlines()
-    registry = csv.DictReader(activity_lines)
-    registry = sorted(registry, key=lambda x: int(x['display_order']))
-    return registry
 
 def step_registry() -> list[dict[str, Any]]:
-    step_file = f"{config['working_dir']}/step_registry.csv"
+    registry_file = f"{config['working_dir']}/step_registry.csv"
 
-    if not os.path.exists(step_file):
+    if not os.path.exists(registry_file):
+        # todo: create registry file with headers
+        # update step registry
         return []
     
-    with open(step_file) as f:
+    with open(registry_file, encoding='utf-8') as f:
         step_lines = f.readlines()
     registry = csv.DictReader(step_lines)
     registry = sorted(registry, key=lambda x: float(x['sort_order']))

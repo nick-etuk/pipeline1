@@ -1,15 +1,11 @@
 function parse_template {
-    $template_file = "$PSScriptRoot\login_profile_template_win.txt"
+    $template_file = "$PSScriptRoot\login_profile_win.template.ps1"
     if (!(Test-Path -Path $template_file -PathType Leaf)) {
-        Write-Error "Login profile template file not found at $template_file"
-        exit 0
-    }
-
-
-    $template_file = Get-Childitem -Path "$P1_ROOT_WIN" -Include 'login_profile_template_win.*' -exclude '.venv_p1' -Recurse -File -ErrorAction SilentlyContinue
-    if ($template_file -eq $null) { 
-        WriteWarn "Could not find login_profile_template_win in $P1_ROOT_WIN"
-        return
+        $template_file = Get-Childitem -Path "$P1_ROOT_WIN" -Include 'login_profile_win.template.ps1' -exclude '.venv_p1' -Recurse -File -ErrorAction SilentlyContinue
+        if ($template_file -eq $null) { 
+            WriteWarn "Could not find login_profile_win.template.ps1 in $P1_ROOT_WIN"
+            return
+        }
     }
 
     $template_content = Get-Content -Path $template_file -Raw

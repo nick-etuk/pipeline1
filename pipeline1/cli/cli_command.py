@@ -37,7 +37,6 @@ def cli_command(args: list[str]):
     project_registry, step_registry = get_registries()
     for step in step_registry:
         if step['step_id'] == command:
-            log.debug(f"Found step: {step}")
             set_default_step(project_registry=project_registry, step_registry_entry=step)
             run_step(step_registry_entry=step, step_args=command_args, overrides=[], new_tab_active=False)
             return

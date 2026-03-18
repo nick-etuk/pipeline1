@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-install_py_packages() {
+pip_install() {
     local project_id
     local project_root
     local package_name

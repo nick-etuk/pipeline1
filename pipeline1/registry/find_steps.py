@@ -1,5 +1,5 @@
 import json
-from typing import Any
+from typing import Any, Optional
 from pathlib import Path
 from pipeline1.lib.logging import log
 
@@ -12,7 +12,7 @@ def sort_order(project_id: str) -> float:
 def make_step_title(step_id: str) -> str:
     return step_id.replace('_', ' ').capitalize()
 
-def find_steps(project_id: str, project_path: str) -> list[dict[str, Any]] | None:
+def find_steps(project_id: str, project_path: str) -> Optional[list[dict[str, Any]]]:
     # todo: find steps without config files, prevent duplicate step_ids across all projects
     # step_dir = Path(project_path) / 'p1' / 'steps'
     step_dir = Path(project_path)
