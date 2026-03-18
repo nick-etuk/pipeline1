@@ -1,13 +1,13 @@
 # Introduction
 
-Pipeline1 is a Python application that lets you run a collection of shell or PowerShell scripts in a sequence.
+Pipeline1 lets you run a collection of shell or PowerShell scripts in sequence.
 Your scripts can be located anywhere on your file system, and organised in a directory structure of your choosing.
-Pipeline1 will scan the parent directory and it's child directories, find all of your scripts and create a registry of where they are.
+Pipeline1 will scan the parent directory and it's child directories, find all of your scripts and then create a registry of where they all are.
 It works on Linux, Windows (with or without WSL), and Macos.
 
 The scripts can have dependencies, where some scripts will not run if others have failed.
-They can run serially or in parallel, either in the current terminal tab or a new tab. 
-This is useful for running backend servers or web servers in their own tab.
+They can run serially or in parallel, in the current terminal tab or a new tab.
+This is useful for running backend servers in their own tab.
 
 For example, if you are working on an app that has Android, IOS and web clients, Python or dotnet
 backends with multiple databases and middleware, you will be dealing with several IDEs and development tools.
@@ -24,7 +24,6 @@ Your scripts can be in an existing repo, or their own repo, or both.
 The menus contain the major steps for each of your major development projects.
 ![image info](./doc/troubleshooting/image-menu.png)
 
-
 # Getting started
 
 Clone this repo to wherever you keep your local repos.
@@ -34,44 +33,24 @@ Restart your terminal.
 
 # Add a project to the menu
 
-To add a project to the menu, switch to the root directoy of the project (or any other directory), and then run `p1 install`.
-This will prompt you for the title of your project and then create a `p1` directory, where you can define your steps.
-`p1 install` creates a `p1_project.json` file in the `p1` directory.
-This file defines the project and its attributes.
-It also adds the path of the `p1` directory to ~/.pipeline1/project_registry.csv, so that it is included in the main menu.
-Create new scripts for the project inside the `p1` directory.
-Only create new scripts if one does not already exist that does what you want. To get a list of existing scripts, run `p1 list`.
+To add a collection of scripts to P1, switch to the directory where they are, and then run `p1 install`.
+The scripts don't all have to be in the same directory, but they should be underneath one parent directory,
+
+`p1 install` adds the current directory to the file `$HOME/.pipeline1/project_registry.csv`.
 
 # Working directory
+
 A directory named .pipeline1 will be created in your <home> directory. This is where Pipeline1 stores project and step registries.
 These are csv files that contain lists of your scripts and where they are located.
 It also stores context variables there. These are variables that can be shared between scripts.
 
-# Projects
-Each project has a `p1_project.json` file that defines its attibutes. Here is an example:
-
-```
-{
-  "id": "webapp",
-  "title": "Sample Web App",
-  "sourceCodePath": "$REPO_DIR/nhsapp",
-  "menu": "main"
-  "sortOrder": 10,
-  "os": ["macos", "ubuntu"],
-  "contact": {
-    "email": "nick_etuk@hotmail.com"
-  },
-}
-```
-
-The project will be shown in the main menu if the `menu` property is set to `main`.
-
 # Steps
+
 A step is another name for a script.
 Steps are the Shell script or Powershell code files that actually perform the actions.
 Each step can have a json configuration file that matches the name of the script file. This specifies the
 dependencies and checks that go with the step. It can also contain child steps.
-If the step is simple, the code for what it does can be entered as a Shell or PowerShell command directly in the step defintion.
+If the step is simple, the code for what it does can be entered as a Shell or PowerShell command directly in the step definition.
 
 ## Showing steps in the main menu
 

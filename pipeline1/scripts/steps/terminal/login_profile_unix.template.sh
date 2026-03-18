@@ -1,6 +1,7 @@
 # Pipeline1_v{{P1_VERSION}} start
 export P1_ROOT_UNIX='{{P1_ROOT_UNIX}}'
 export REPO_DIR=$(dirname "$P1_ROOT_UNIX")
+export P1_ROOT_SCRIPT="$P1_ROOT_UNIX/pipeline1/scripts'
 export GPG_TTY=$(tty)
 
 export NVM_DIR="$HOME/.nvm"
@@ -13,9 +14,9 @@ if [ -d "$HOME/.pyenv" ]; then
   eval "$(pyenv init - zsh)"
 fi
 
-source "$P1_ROOT_UNIX/.venv_p1/bin/activate"
-login_script=$(find "$P1_ROOT_UNIX" -name "terminal_login.sh" -not -path ".venv_p1/*")
-export P1_ROOT_SCRIPT=$(dirname "$login_script")
+. "$P1_ROOT_UNIX/.venv_p1/bin/activate"
+login_script="$P1_ROOT_SCRIPT/terminal_login.sh"
+
 # if any scripts in $P1_ROOT_SCRIPT are not executable, make them so
 for file in "$P1_ROOT_SCRIPT"/*.sh; do
   [ ! -x "$file" ] && chmod +x "$file"

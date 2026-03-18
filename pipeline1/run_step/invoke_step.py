@@ -8,15 +8,7 @@ from pipeline1.lib.logging import log
 
 
 def invoke_step(step: dict[str, Any], args: list[str]) -> None:
-    # todo: make get_script_path return executable name also,
-    # then use it.
-
     parent_step_id = step['step_id']
-    
-    if args and len(args) > 0:
-        log.debug(f"Running step {parent_step_id} with args: {args}")
-    else:
-        log.debug(f"Running step {parent_step_id}")
     
     base_filename = os.path.join(step['path'], f"{step['base_filename']}")
     python_executable = 'python' if config['my_os'] == 'win' else 'python3'

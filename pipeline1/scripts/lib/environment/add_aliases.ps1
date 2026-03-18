@@ -7,7 +7,7 @@ function gch { git checkout $args }
 function gs { git status }
 function gls { git log --show-signature }
 
-function wspf { p1 pf }
+function p1pf { p1 pf }
 function cdpf { cd F:\repos\portfolio }
 
-function cdws { cd F:\repos\pipeline1 }
+function cdp1 { cd F:\repos\pipeline1 }

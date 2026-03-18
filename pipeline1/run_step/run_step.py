@@ -5,6 +5,15 @@ from pipeline1.run_step.enrich_step import enrich_step
 from pipeline1.run_step.execute_step import execute_step
 from pipeline1.lib.logging import log
 
+def run_step_by_id(step_id: str, step_args: list[str], step_registry: list[dict[str, Any]]) -> bool:
+    found = False
+    for step in step_registry:
+        if step['step_id'] == step_id:
+            found = True
+            run_step(step_registry_entry=step, step_args=step_args, overrides=[], new_tab_active=False)
+    if not found:
+        log.warn(f"Step with id '{step_id}' not found in registry.")
+    return found
 
 def run_step(step_registry_entry: dict[str, Any], step_args: list[str], overrides: list[str], new_tab_active: bool = False) -> bool:
     base_step: dict[str, Any] = {}

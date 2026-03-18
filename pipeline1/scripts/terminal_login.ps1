@@ -51,9 +51,8 @@ if ($startup_script -eq $null) {
 }
 
 # todo: decide how to manage venvs
-# create_venv 'p1'
-# activate_venv 'p1'
-# install_py_packages 'p1'
+# create_venv
+# pip_install
 python $startup_script.FullName $Command $Arguments
 
 $default_step_path=$(Get-Config 'default_step_path')

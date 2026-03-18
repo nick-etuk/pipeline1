@@ -5,7 +5,7 @@ parse_template() {
     local template_file
     local template_content
 
-    template_file=$(find "$P1_ROOT_UNIX" -name "login_profile_template_unix.*" -type f -not -path '.venv_p1/*')
+    template_file=$(find "$P1_ROOT_UNIX" -name 'login_profile_unix.template.sh' -type f -not -path '.venv_p1/*')
 
     [ "$template_file" ] || return
 
@@ -42,12 +42,8 @@ function add_to_profile {
         info "Added login script to bottom of $target"
     fi
 }
-echo "=> edit_login_profile"
-# return
-[ -f ~/.hushlogin ] || touch ~/.hushlogin
 
-login_script=$(find "$P1_ROOT_UNIX/core/steps" -name "terminal_login.sh" -type f)
-[ -f "$login_script" ] || return
+[ -f ~/.hushlogin ] || touch ~/.hushlogin
 
 # If there are multiple login profiles, modify them all.
 shell_name='zsh'

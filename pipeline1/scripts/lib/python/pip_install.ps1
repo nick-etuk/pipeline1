@@ -1,4 +1,4 @@
-function install_py_packages($project_id) {
+function pip_install($project_id) {
     $project_root = get_project_path $project_id
     if ($project_id -eq "p1") {
         $package_name = "pipeline1"

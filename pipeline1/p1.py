@@ -5,6 +5,8 @@ from pipeline1.registry.get_registries import get_registries
 from pipeline1.menu.menu_main import show_menu_main
 from pipeline1.cli.cli_command import cli_command
 from pipeline1.lib.get_new_tab_file import get_new_tab_file
+from pipeline1.run_step.run_step import run_step_by_id
+
 # from pipeline1.lib.logging import log
 
 # from icecream import ic
@@ -43,6 +45,9 @@ def main():
     #     sys.exit(0)
     
     show_config()
+
+    run_step_by_id('setup_terminal', [], step_registry)
+
     show_menu_main(project_registry=project_registry, step_registry=step_registry)
     sys.exit(0)
 
