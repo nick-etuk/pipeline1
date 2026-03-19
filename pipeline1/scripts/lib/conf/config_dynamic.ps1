@@ -2,7 +2,7 @@ function Get-Config {
     switch($args.Length) {
         1 {
             $Key = $args[0]
-            $Group = 'general'
+            $Group = 'global'
         }
         2 {
             $Key = $args[0]
@@ -14,9 +14,9 @@ function Get-Config {
         }
     }
 
-    $ConfigFile = "$WORKING_DIR\dynamic_config\$Group\$Key.txt"
+    $ConfigFile = "$WORKING_DIR\context\$Group\$Key.txt"
 
-    if (!(Test-Path "$WORKING_DIR\dynamic_config\$Group" -PathType Container)) {
+    if (!(Test-Path "$WORKING_DIR\context\$Group" -PathType Container)) {
         return
     }
 
@@ -33,7 +33,7 @@ function Set-Config {
         2 {
             $Key = $args[0]
             $Value = $args[1]
-            $Group = 'general'
+            $Group = 'global'
         }
         3 {
             $Key = $args[0]
@@ -51,11 +51,11 @@ function Set-Config {
         return
     }
     
-    if (!(Test-Path -PathType Container "$WORKING_DIR\dynamic_config\$Group")) {
-        New-Item -ItemType Directory -Path "$WORKING_DIR\dynamic_config\$Group" | Out-Null
+    if (!(Test-Path -PathType Container "$WORKING_DIR\context\$Group")) {
+        New-Item -ItemType Directory -Path "$WORKING_DIR\context\$Group" | Out-Null
     }
 
-    $ConfigFile = "$WORKING_DIR\dynamic_config\$Group\$Key.txt"
+    $ConfigFile = "$WORKING_DIR\context\$Group\$Key.txt"
     if (!(Test-Path $ConfigFile)) {
         New-Item -ItemType File -Path $ConfigFile | Out-Null
     }

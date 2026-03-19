@@ -9,7 +9,7 @@ get_config() {
     case $# in
     1)
         key=$1
-        group='general'
+        group='global'
         ;;
     2)
         key=$1
@@ -23,9 +23,9 @@ get_config() {
         ;;
     esac
 
-    [ ! -d "$WORKING_DIR/dynamic_config/$group" ] && return
+    [ ! -d "$WORKING_DIR/context/$group" ] && return
 
-    status_file="$WORKING_DIR/dynamic_config/$group/$key.txt"
+    status_file="$WORKING_DIR/context/$group/$key.txt"
     [ ! -f "$status_file" ] && return
 
     value=$(cat "$status_file")
