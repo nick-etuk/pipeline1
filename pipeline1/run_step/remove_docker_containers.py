@@ -5,7 +5,7 @@ from pipeline1.lib.logging import log
 
 def remove_container(container_name: str) -> None:
     commandline = ['docker', 'container', 'rm', '-f', container_name]
-    process = subprocess.run(commandline, capture_output=True, text=True)
+    process = subprocess.run(commandline, capture_output=True, text=True, check=False)
     if process.returncode == 0:
         log.info(f"Old docker container '{container_name}' removed successfully.")
     else:
@@ -22,7 +22,7 @@ def remove_docker_containers(step: dict[str, Any]) -> None:
     containers_to_remove = [str(item).lower() for item in containers_to_remove]
     
     running_containers = []
-    process = subprocess.run(commandline, capture_output=True, text=True)
+    process = subprocess.run(commandline, capture_output=True, text=True, check=False)
     if process.returncode != 0:
         log.warn("Failed to list Docker containers. Is Docker running?")
         return

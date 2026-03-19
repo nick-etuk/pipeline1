@@ -4,47 +4,57 @@ import csv
 from typing import Any
 import difflib
 from pipeline1.lib.config import config
-from pipeline1.registry.find_steps_without_config import find_steps_without_config
-from pipeline1.registry.find_steps import find_steps
+from pipeline1.registry.add_project.list_projects import list_projects
+from pipeline1.registry.create_blank_registry import create_blank_registry
+# from pipeline1.registry.get_registries import get_project_registry
+from pipeline1.registry.steps.scan_steps_without_config import scan_steps_without_config
+from pipeline1.registry.steps.scan_project_steps import scan_project_steps
 from pipeline1.lib.logging import log
 
-def update_step_registry(project_registry: list[dict[str, Any]]) -> None:
+
+def scan_all_steps() -> None:
+    # pylint: disable=too-many-branches, too-many-statements
     log.info('Updating step registry')
     step_registry_file = f"{config['working_dir']}/step_registry.csv"
 
     backup_file = f"{step_registry_file}.bak"
     if Path(step_registry_file).exists():
         os.replace(step_registry_file, backup_file)
+    else:
+        create_blank_registry('step')
 
     combined_step_registry: list[dict[str, Any]] = []
+
+    project_registry = list_projects()
     for project in project_registry:
-        log.info(f"Scanning {project['project_id']} at {project['p1_project_path']}")
-        if not os.path.exists(project['p1_project_path']):
-            log.warn(f"Project {project['project_id']} - path does not exist: {project['p1_project_path']}")
+        log.info(f"Scanning {project['projectId']} at {project['p1ProjectPath']}")
+        if not os.path.exists(project['p1ProjectPath']):
+            log.warn(f"Project {project['projectId']} - path does not exist: {project['p1ProjectPath']}")
             continue
-        project_dir = Path(project['p1_project_path'])
-        project_steps = find_steps(project['project_id'], str(project_dir))
+        project_dir = Path(project['p1ProjectPath'])
+        project_steps = scan_project_steps(project['projectId'], str(project_dir))
         if not project_steps:
             continue
-        log.info(f"Found {len(project_steps)} steps in {project['project_id']}")
+        log.info(f"Found {len(project_steps)} steps in {project['projectId']}")
         combined_step_registry.extend(project_steps)
     
-    built_in_steps = find_steps('core', config['script_root'])
+    built_in_steps = scan_project_steps('core', config['script_root'])
     if built_in_steps:
         log.info(f"Found {len(built_in_steps)} built-in steps")
         combined_step_registry.extend(built_in_steps)
 
+    # Search for steps without a config file
     for project in project_registry:
-        if not os.path.exists(project['p1_project_path']):
-            log.warn(f"Project {project['project_id']} - path does not exist: {project['p1_project_path']}")
+        if not os.path.exists(project['p1ProjectPath']):
+            log.warn(f"Project {project['projectId']} - path does not exist: {project['p1ProjectPath']}")
             continue
-        project_dir = Path(project['p1_project_path'])
-        steps_without_config = find_steps_without_config(project_id=project['project_id'], project_path=str(project_dir), existing_steps=combined_step_registry)
+        project_dir = Path(project['p1ProjectPath'])
+        steps_without_config = scan_steps_without_config(project_id=project['projectId'], project_path=str(project_dir), existing_steps=combined_step_registry)
         if not steps_without_config:
             continue
         combined_step_registry.extend(steps_without_config)
 
-    combined_step_registry = sorted(combined_step_registry, key=lambda x: (x['sort_order']))
+    combined_step_registry = sorted(combined_step_registry, key=lambda x: (x['sortOrder']))
 
     with open(step_registry_file, 'w', newline='') as csvfile:
         fieldnames = combined_step_registry[0].keys()
@@ -53,12 +63,12 @@ def update_step_registry(project_registry: list[dict[str, Any]]) -> None:
         writer.writeheader()
         for step in combined_step_registry:
             writer.writerow({
-                'step_id': step['step_id'],
-                'sort_order': step['sort_order'],
-                'project_id': step['project_id'],
+                'stepId': step['stepId'],
+                'sortOrder': step['sortOrder'],
+                'projectId': step['projectId'],
                 'menu': step['menu'],
                 'title': step['title'],
-                'base_filename': step['base_filename'],
+                'baseFilename': step['baseFilename'],
                 'path': step['path']
             })
 

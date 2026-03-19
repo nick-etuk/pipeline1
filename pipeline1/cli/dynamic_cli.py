@@ -46,5 +46,4 @@ def set_dynamic_cli(args: list[str]) -> None:
         log.info(f"{key} set to {value}")
     else:
         log.info(f"[{group}] {key} set to {value}")
-    return
     

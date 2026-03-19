@@ -10,14 +10,12 @@ def invoke_commands(commands: list[str]) -> bool:
         startup_script = os.path.join(f"{config['script_root']}", 'run_commands.ps1')
         process = subprocess.run(
             ['pwsh', '-ExecutionPolicy', 'Bypass', '-File', startup_script] + commands,
-            capture_output=True,
-            text=True)
+            capture_output=True, text=True, check=False)
     else:
         startup_script = os.path.join(f"{config['script_root']}", 'run_commands.sh')
         process = subprocess.run(
             ['bash', startup_script] + commands,
-            capture_output=True,
-            text=True)
+            capture_output=True, text=True, check=False)
     
     if process.returncode != 0:
         log.debug(f"commands: {','.join(commands)}")

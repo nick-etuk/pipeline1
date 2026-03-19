@@ -20,6 +20,7 @@ required_libraries=(
     add_to_path
     add_aliases
     check_for_os_updates
+    daily_tasks
     split_string
     process_new_tab_file
     create_venv
@@ -36,7 +37,7 @@ get_shell_version
 detect_os
 add_to_path
 add_aliases
-check_for_os_updates
+daily_tasks
 new_tab_queue="$HOME/.pipeline1/working/new_tab_queue"
 if [ -d "$new_tab_queue" ] && [ -n "$(ls "$new_tab_queue")" ]; then
     echo "Tasks found in New Tab queue..."

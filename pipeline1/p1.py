@@ -38,7 +38,7 @@ def main():
     #         # ic(args)
 
     #         for step in step_registry:
-    #             if step['step_id'] == step_id:
+    #             if step['stepId'] == step_id:
     #                 run_step(step_registry_entry=step, step_args=args, overrides=[], new_tab_active=True)
     #                 break
     #     # return

@@ -33,8 +33,8 @@ indentation = config['indentation']
 
 # success_symbol = '✔'
 # failure_symbol = '✘'
-success_symbol = u'\u2714'
-failure_symbol = u'\u2718'
+success_symbol = '\u2714'
+failure_symbol = '\u2718'
 
 success_messages = ['step completed', 'already done']
 failure_messages = ['step failed', 'not attempted']

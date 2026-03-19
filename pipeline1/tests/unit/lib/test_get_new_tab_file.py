@@ -72,9 +72,9 @@ class TestGetNewTabFile(unittest.TestCase):
         def getctime_side_effect(path: str):
             if 'file1.txt' in path:
                 return 1000.0  # oldest
-            elif 'file2.txt' in path:
+            if 'file2.txt' in path:
                 return 2000.0
-            elif 'file3.txt' in path:
+            if 'file3.txt' in path:
                 return 3000.0  # newest
             return 0.0
         
@@ -96,9 +96,9 @@ class TestGetNewTabFile(unittest.TestCase):
         def getctime_side_effect(path: str) -> float:
             if 'oldest.txt' in path:
                 return 500.0   # oldest
-            elif 'middle.txt' in path:
+            if 'middle.txt' in path:
                 return 1500.0
-            elif 'newest.txt' in path:
+            if 'newest.txt' in path:
                 return 2500.0  # newest
             return 0.0
         
@@ -143,7 +143,7 @@ class TestGetNewTabFileIntegration(unittest.TestCase):
     @patch('pipeline1.lib.get_new_tab_file.os.path.exists')
     @patch('pipeline1.lib.get_new_tab_file.os.makedirs')
     @patch('pipeline1.lib.get_new_tab_file.os.listdir')
-    def test_integration_empty_directory(self, mock_listdir: MagicMock, mock_makedirs: MagicMock, mock_exists: MagicMock):
+    def test_integration_empty_directory(self, mock_listdir: MagicMock, mock_exists: MagicMock):
         """Integration test: empty directory returns None."""
         mock_exists.return_value = True
         mock_listdir.return_value = []
@@ -175,9 +175,9 @@ class TestGetNewTabFileIntegration(unittest.TestCase):
             def getctime_side_effect(path: str) -> float:
                 if 'file1.txt' in path:
                     return current_time - 300
-                elif 'file2.txt' in path:
+                if 'file2.txt' in path:
                     return current_time - 200
-                elif 'file3.txt' in path:
+                if 'file3.txt' in path:
                     return current_time - 100
                 return current_time
             
@@ -222,9 +222,9 @@ class TestGetNewTabFileEdgeCases(unittest.TestCase):
         def getctime_side_effect(path: str) -> float:
             if 'file-with-dashes.txt' in path:
                 return 500.0
-            elif 'file_with_underscores.txt' in path:
+            if 'file_with_underscores.txt' in path:
                 return 1000.0
-            elif 'file with spaces.txt' in path:
+            if 'file with spaces.txt' in path:
                 return 1500.0
             return 0.0
         
@@ -246,7 +246,7 @@ class TestGetNewTabFileEdgeCases(unittest.TestCase):
         def getctime_side_effect(path: str) -> float:
             if '.hidden_file.txt' in path:
                 return 500.0   # oldest
-            elif 'regular_file.txt' in path:
+            if 'regular_file.txt' in path:
                 return 1000.0
             return 0.0
         
