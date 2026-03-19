@@ -1,6 +1,6 @@
 from typing import Any
 from pipeline1.lib.config import config
-from pipeline1.lib.config_dynamic import get_dynamic, set_dynamic
+from pipeline1.lib.context import get_context, set_context
 from pipeline1.run_step.remove_docker_containers import remove_docker_containers
 from pipeline1.run_step.schedule_step import schedule_step
 from pipeline1.run_step.invoke_commands import invoke_step_commands
@@ -73,7 +73,7 @@ def execute_step(step: dict[str, Any], args: list[str], overrides: list[str], ne
     status = None
     if 'runOnce' in step and str(step['runOnce']).lower() == 'true':
         run_once = True
-        status = get_dynamic(step_key, 'status')
+        status = get_context(step_key, 'status')
 
         if status == 'done':
             if 'runonce' in overrides:
@@ -88,7 +88,7 @@ def execute_step(step: dict[str, Any], args: list[str], overrides: list[str], ne
             if ok_to_proceed['reason'] == 'done':
                 log.end(f"{step['title']} already done")
                 if run_once:
-                    set_dynamic(step_key, 'done', 'status')
+                    set_context(step_key, 'done', 'status')
                 return True
 
             log.end(f"{step['title']} not attempted")
@@ -118,7 +118,7 @@ def execute_step(step: dict[str, Any], args: list[str], overrides: list[str], ne
     if all_passed:
         log.end(f"{step['title']} step completed")
         if run_once:
-            set_dynamic(step_key, 'done', 'status')
+            set_context(step_key, 'done', 'status')
     else:
         if new_tab_active:
             log.end(f"{step['title']} parallel step failed")

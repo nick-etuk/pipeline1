@@ -6,7 +6,7 @@ set -u
 [ -n "${INIT_UNIX+set}" ] && return
 
 INIT_UNIX=1
-CURRENT_STEP='general'
+CURRENT_STEP=''
 
 [ -z "${FORCE+set}" ] && FORCE=0
 [ -z "${DEBUG+set}" ] && DEBUG=1

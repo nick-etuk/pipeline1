@@ -1,5 +1,5 @@
 from pipeline1.registry.remote_projects.fetch_remote_projects import fetch_remote_projects
-from pipeline1.cli.dynamic_cli import get_dynamic_cli, set_dynamic_cli
+from pipeline1.cli.context_cli import get_context_cli, set_context_cli
 from pipeline1.cli.set_default_step import set_default_step
 from pipeline1.registry.get_registries import get_registries
 from pipeline1.registry.steps.scan_all_steps import scan_all_steps
@@ -29,11 +29,11 @@ def cli_command(args: list[str]):
         return
     
     if command == 'get':
-        get_dynamic_cli(command_args)
+        get_context_cli(command_args)
         return
     
     if command == 'set':
-        set_dynamic_cli(command_args)
+        set_context_cli(command_args)
         return
         
     project_registry, step_registry = get_registries()

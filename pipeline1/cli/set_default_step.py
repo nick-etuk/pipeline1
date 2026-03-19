@@ -2,7 +2,7 @@ import os
 import json
 from typing import Any
 
-from pipeline1.lib.config_dynamic import get_dynamic, set_dynamic
+from pipeline1.lib.context import get_context, set_context
 from pipeline1.lib.logging import log
 from pipeline1.run_step.enrich_step import enrich_step
 from icecream import ic
@@ -25,7 +25,7 @@ def set_step_exit_path(step: dict[str, Any], project_registry: list[dict[str, An
         
     if is_absolute_path(step['exitTo']):
         log.debug(f"Setting default step exit path to absolute path {step['exitTo']}")
-        set_dynamic('default_step_path', expand_path(step['exitTo']))
+        set_context('default_step_path', expand_path(step['exitTo']))
         return
 
     project_found = False
@@ -38,7 +38,7 @@ def set_step_exit_path(step: dict[str, Any], project_registry: list[dict[str, An
             project_root = project['source_code_path'] if 'source_code_path' in project else project['p1ProjectPath']
             exit_to_path = os.path.join(project_root, str(step['exitTo']))
             log.debug(f"Setting default step exit path to {exit_to_path}")
-            set_dynamic('default_step_path', expand_path(exit_to_path))
+            set_context('default_step_path', expand_path(exit_to_path))
             break
 
     if not project_found:
@@ -60,11 +60,11 @@ def set_default_step(project_registry: list[dict[str, Any]], step_registry_entry
 
     step = enrich_step(base_step=step, registry_entry=step_registry_entry)
     step_id = step['stepId']
-    default_step_id = get_dynamic('default_step_id')
+    default_step_id = get_context('default_step_id')
     if default_step_id == step_id:
         return
     
     log.info(f"Setting default step id to {step_id}")
-    set_dynamic('default_step_id', step_id)
+    set_context('default_step_id', step_id)
 
     set_step_exit_path(step, project_registry)

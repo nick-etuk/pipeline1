@@ -1,5 +1,5 @@
 from typing import Any
-from pipeline1.lib.config_dynamic import get_dynamic
+from pipeline1.lib.context import get_context
 
 
 def check_run_once(step: dict[str, Any], args: list[str], overrides: list[str]) -> bool:
@@ -20,7 +20,7 @@ def check_run_once(step: dict[str, Any], args: list[str], overrides: list[str]) 
         formatted_args = "_".join(args)
         step_key = f"step_{step_id}_{formatted_args}"
 
-    if get_dynamic(step_key, 'status') == 'done':
+    if get_context(step_key, 'status') == 'done':
         # log.debug(f"=>check run once: step {step_key} step already done")
         return True
 

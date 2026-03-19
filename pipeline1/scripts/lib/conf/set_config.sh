@@ -14,7 +14,7 @@ set_config() {
     2)
         key=$1
         value=$2
-        group='general'
+        group='global'
         ;;
     3)
         key=$1
@@ -33,9 +33,9 @@ set_config() {
         return
     fi
 
-    mkdir -p "$WORKING_DIR/dynamic_config/$group"
+    mkdir -p "$WORKING_DIR/context/$group"
     
-    status_file="$WORKING_DIR/dynamic_config/$group/$key.txt"
+    status_file="$WORKING_DIR/context/$group/$key.txt"
     # debug "=>set config"
     # debug "WORKING_DIR: $WORKING_DIR group: $group, key: $key, value: $value"
     # debug "status_file: $status_file"

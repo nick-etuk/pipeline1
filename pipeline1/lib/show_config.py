@@ -1,5 +1,5 @@
 from pipeline1.lib.config import config
-from pipeline1.lib.config_dynamic import get_dynamic
+from pipeline1.lib.context import get_context
 
 def show_config() -> None:
     excluded = [
@@ -19,9 +19,9 @@ def show_config() -> None:
             print(f"{key}:{' ' * (25 - len(key))}{value}")
 
 
-    dynamic_config = {
-        'default_step_id': get_dynamic('default_step_id'),
-        'default_step_path': get_dynamic('default_step_path')
+    context = {
+        'default_step_id': get_context('default_step_id'),
+        'default_step_path': get_context('default_step_path')
     }
-    for key, value in dynamic_config.items():
+    for key, value in context.items():
         print(f"{key}:{' ' * (25 - len(key))}{value}")

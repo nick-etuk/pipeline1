@@ -41,11 +41,9 @@ def fetch_remote_projects(force: bool = False) -> None:
             continue
 
         log.info(f"Cloning remote project from {git_url}...")
-        # os.system(f"git clone {git_url} {project_dir}")
         command = f"git clone {git_url} {project_dir}"
-        log.debug(f"Running command: {command}")
-        status = invoke_commands([command])
-        if not status:
+        invoke_commands([command])
+        if not os.path.exists(project_dir):
             log.warn(f"Failed to clone {git_url}.")
             continue
 

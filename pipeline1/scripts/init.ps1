@@ -4,7 +4,7 @@ Set-StrictMode -Version 3.0
 if (Test-Path variable:INIT_WIN) { return }
 
 $Script:INIT_WIN = 1
-$Script:CURRENT_STEP = 'general'
+$Script:CURRENT_STEP = ''
 
 $Script:FORCE = $false
 $Script:DEBUG = $true

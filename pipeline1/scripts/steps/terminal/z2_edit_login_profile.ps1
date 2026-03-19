@@ -12,9 +12,9 @@ function edit_login_profile {
 
     $StartBanner = "# pipeline1_v$P1_VERSION start"
     $Line1 = "`$global:WORKING_DIR = `"$HOME\.pipeline1\working`""
-    $Line2 = "`$ConfigFile = `"$WORKING_DIR\dynamic_config\general\p1_root_win.txt`""
-    $Line3 = "if (!(Test-Path `"$WORKING_DIR\dynamic_config\general`" -PathType Container)) {"
-    $Line4 = "    write-output `"Pipeline1 dynamic config directory not found at `$WORKING_DIR\dynamic_config\general`""
+    $Line2 = "`$ConfigFile = `"$WORKING_DIR\context\general\p1_root_win.txt`""
+    $Line3 = "if (!(Test-Path `"$WORKING_DIR\context\general`" -PathType Container)) {"
+    $Line4 = "    write-output `"Pipeline1 dynamic config directory not found at `$WORKING_DIR\context\general`""
     $Line5 = '    exit 0'
     $Line6 = '}'
     $Line7 = "if (!(Test-Path `$ConfigFile)) {"
