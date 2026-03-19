@@ -1,4 +1,5 @@
 {
+  "runOnce": true,
   "steps": [
     "install_ttab",
     "install_zsh",

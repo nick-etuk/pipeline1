@@ -1,8 +1,5 @@
 from typing import Any
-
-from icecream import ic
 from pipeline1.lib.config_dynamic import get_dynamic
-from pipeline1.lib.logging import log
 
 
 def check_run_once(step: dict[str, Any], args: list[str], overrides: list[str]) -> bool:
@@ -17,7 +14,7 @@ def check_run_once(step: dict[str, Any], args: list[str], overrides: list[str]) 
     if str(step['runOnce']).lower() != 'true': 
         return False
 
-    step_id = step['step_id']
+    step_id = step['stepId']
     step_key = f"step_{step_id}"
     if len(args) > 0:
         formatted_args = "_".join(args)

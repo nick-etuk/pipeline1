@@ -2,10 +2,22 @@
 import os
 import pathlib
 from pipeline1.registry.add_project.detect_python import detect_python_project, extract_description_python
-from pipeline1.registry.get_registries import get_registries
+from pipeline1.registry.add_project.list_projects import list_projects
 from pipeline1.registry.write_registry import write_registry
-from pipeline1.registry.update_step_registry import update_step_registry
 from pipeline1.lib.logging import log
+
+
+def add_project_registry_entry(new_project_entry: dict[str, str]) -> None:
+    project_registry = list_projects()
+    if any(x['projectId'] == new_project_entry['projectId'] for x in project_registry):
+        log.info(f"Project {new_project_entry['projectId']} already exists in the registry.")
+        return
+
+    project_registry.append(new_project_entry)
+    project_registry = sorted(project_registry, key=lambda x: float(x['sortOrder']))
+    write_registry(project_registry, 'project')
+    log.info(f"Added project {new_project_entry['title']} to registry.")
+
 
 def add_project(path_param: str) -> None:
     # todo: where does project.json fit into this?
@@ -26,7 +38,7 @@ def add_project(path_param: str) -> None:
     # current_path = str(pathlib.Path().resolve())
 
     prompts= {
-        'project_id': {'prompt': 'Id', 'value': pathlib.Path(project_path).name},
+        'projectId': {'prompt': 'Id', 'value': pathlib.Path(project_path).name},
         'title': {'prompt': 'Description', 'value': 'New project'},
         'sourceCodePath': {'prompt': 'Source code path', 'value': project_path},
     }
@@ -49,18 +61,5 @@ def add_project(path_param: str) -> None:
 
     new_project_entry['p1ProjectPath'] = project_path
 
-
-    project_registry, _ = get_registries()
-
-    # detect duplictate project_ids
-    if any(x['project_id'] == new_project_entry['project_id'] for x in project_registry):
-        log.info(f"Project {new_project_entry['project_id']} already exists in the registry.")
-        return
-
-    project_registry.append(new_project_entry)
-    write_registry(project_registry, 'project')
-    log.info(f"Added project {new_project_entry['title']} to registry.")
-
-    update_step_registry(project_registry)
-    return
+    add_project_registry_entry(new_project_entry)
 

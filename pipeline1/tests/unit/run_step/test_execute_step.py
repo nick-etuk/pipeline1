@@ -13,9 +13,9 @@ class TestExecuteStep(unittest.TestCase):
 
     def setUp(self) -> None:
         self.registry_entry: dict[str, Any] = {
-            'step_id': 'sample_step',
+            'stepId': 'sample_step',
             'title': 'Sample Step',
-            'base_filename': 'sample_step',
+            'baseFilename': 'sample_step',
             'path': '/tmp/sample_step/config.json'
         }
         self.base_config = {
@@ -38,7 +38,7 @@ class TestExecuteStep(unittest.TestCase):
         mock_open_fn.return_value.__enter__.return_value = StringIO('{}')
         config = {}
         mock_enrich.return_value = config | {
-            'step_id': 'sample_step',
+            'stepId': 'sample_step',
             'title': 'Sample Step',
             'path': '/tmp/sample_step/config.json',
             'dir': '/tmp/sample_step'
@@ -58,7 +58,7 @@ class TestExecuteStep(unittest.TestCase):
         mock_step_exit.return_value = True
         config = {}
         mock_enrich.return_value = config | {
-            'step_id': 'sample_step',
+            'stepId': 'sample_step',
             'title': 'Sample Step',
             'path': '/tmp/sample_step/config.json',
             'dir': '/tmp/sample_step'
@@ -80,9 +80,9 @@ class TestExecuteStep(unittest.TestCase):
         mock_step_entry.return_value = {'status': True, 'reason': ''}
         config = {'newTab': True}
         mock_enrich.return_value = config | {
-            'step_id': 'sample_step',
+            'stepId': 'sample_step',
             'title': 'Sample Step',
-            'base_filename': 'sample_step',
+            'baseFilename': 'sample_step',
             'path': '/tmp/sample_step/config.json',
             'dir': '/tmp/sample_step'
         }
@@ -110,7 +110,7 @@ class TestExecuteStep(unittest.TestCase):
         # run_once True triggers early info log and return (status hardcoded to done)
         config = {'run_once': True}
         mock_enrich.return_value = config | {
-            'step_id': 'sample_step',
+            'stepId': 'sample_step',
             'title': 'Sample Step',
             'path': '/tmp/sample_step/config.json',
             'dir': '/tmp/sample_step'
@@ -132,11 +132,11 @@ class TestExecuteStep(unittest.TestCase):
         mock_step_exit.return_value = False
         config = {}
         mock_enrich.return_value = config | {
-            'step_id': 'sample_step',
+            'stepId': 'sample_step',
             'title': 'Sample Step',
             'path': '/tmp/sample_step/config.json',
             'dir': '/tmp/sample_step',
-            'base_filename': 'sample_step'
+            'baseFilename': 'sample_step'
         }
         with patch('subprocess.run') as mock_run, \
              patch('pipeline1.run_step.execute_step.log.info') as mock_info, \

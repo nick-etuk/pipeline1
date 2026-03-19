@@ -9,7 +9,7 @@ class TestRunChecks(unittest.TestCase):
         process = subprocess.run(
             ['bash', startup_script, 'test -d /tmp', 'test -d /var/tmp'],
             capture_output=True,
-            text=True)
+            text=True, check=False)
         ret_code = process.returncode
         self.assertEqual(ret_code, 0)
 
@@ -18,7 +18,7 @@ class TestRunChecks(unittest.TestCase):
         process = subprocess.run(
             ['bash', startup_script, 'test -d /tmp', 'test -d /tmp1'],
             capture_output=True,
-            text=True)
+            text=True, check=False)
         ret_code = process.returncode
         self.assertEqual(ret_code, 1)
 

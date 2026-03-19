@@ -23,16 +23,16 @@ def check_step_done(step: dict[str, Any], step_args: list[str], calling_function
         # is this needed? empty checks should be allowed to mean "no checks to run"
         # if calling_function in ['step_exit', 'check_dependencies']:
         #     return True
-        # warn(f"Empty checks defined for step {step['step_id']}")
+        # warn(f"Empty checks defined for step {step['stepId']}")
         # return False
 
     status = invoke_commands(checks)
     if status:
         return True
-    else:
-        if calling_function == 'step_exit':
-            log.warn(f"{step['step_id']} {' '.join(step_args)} step failed")
-            log.info(f"Checks: {','.join(checks)}")
-            # show_help(step['step_id'])
-        return False
+    
+    if calling_function == 'step_exit':
+        log.warn(f"{step['stepId']} {' '.join(step_args)} step failed")
+        log.info(f"Checks: {','.join(checks)}")
+        # show_help(step['stepId'])
+    return False
     

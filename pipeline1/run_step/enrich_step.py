@@ -4,7 +4,7 @@ from typing import Any
 
 def enrich_step(base_step: dict[str, Any], registry_entry: dict[str, Any]) -> dict[str, Any]:
     enriched_step = base_step.copy()
-    enriched_step['step_id'] = base_step.get('id', registry_entry['base_filename'])
+    enriched_step['stepId'] = base_step.get('id', registry_entry['baseFilename'])
 
     registry_keys = registry_entry.keys()
     for key in registry_keys:

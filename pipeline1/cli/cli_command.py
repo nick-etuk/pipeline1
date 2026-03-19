@@ -1,8 +1,9 @@
+from pipeline1.registry.remote_projects.fetch_remote_projects import fetch_remote_projects
 from pipeline1.cli.dynamic_cli import get_dynamic_cli, set_dynamic_cli
 from pipeline1.cli.set_default_step import set_default_step
 from pipeline1.registry.get_registries import get_registries
+from pipeline1.registry.steps.scan_all_steps import scan_all_steps
 from pipeline1.run_step.run_step import run_step
-from pipeline1.registry.update_registries import update_registries
 from pipeline1.registry.add_project.add_project import add_project
 from pipeline1.cli.list_steps import list_steps
 from pipeline1.lib.logging import log
@@ -14,8 +15,8 @@ def cli_command(args: list[str]):
     command_args = args[1:]
 
     if command == 'scan':
-        project_registry, _ = get_registries()
-        update_registries(project_registry)
+        fetch_remote_projects()
+        scan_all_steps()
         return
     
     if command == "list":
@@ -23,7 +24,8 @@ def cli_command(args: list[str]):
         return 
     
     if command == 'install':
-        add_project(command_args)
+        add_project(command_args[0])
+        scan_all_steps()
         return
     
     if command == 'get':
@@ -36,7 +38,7 @@ def cli_command(args: list[str]):
         
     project_registry, step_registry = get_registries()
     for step in step_registry:
-        if step['step_id'] == command:
+        if step['stepId'] == command:
             set_default_step(project_registry=project_registry, step_registry_entry=step)
             run_step(step_registry_entry=step, step_args=command_args, overrides=[], new_tab_active=False)
             return

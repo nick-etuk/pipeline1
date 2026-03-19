@@ -5,7 +5,7 @@ from pipeline1.step_done.check_step_done import check_step_done
 
 
 def wait_for_parallel(step: dict[str, Any], args: list[str]) -> bool:
-    log.info(f"Waiting for {step['step_id']}")
+    log.info(f"Waiting for {step['stepId']}")
 
     max_wait_time = 600  # seconds. Todo: read from config
     poll_interval = 5    # seconds
@@ -15,12 +15,12 @@ def wait_for_parallel(step: dict[str, Any], args: list[str]) -> bool:
         step_done = check_step_done(step, args, calling_function='wait_for_parallel')
 
         if step_done:
-            log.info(f"{step['step_id']} completed in new tab.")
+            log.info(f"{step['stepId']} completed in new tab.")
             return True
         
         sleep(poll_interval)
         waited_time += poll_interval
         print('.', end='', flush=True)
 
-    log.warn(f"Timed-out waiting for {step['step_id']}")
+    log.warn(f"Timed-out waiting for {step['stepId']}")
     return False

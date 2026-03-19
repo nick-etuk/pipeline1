@@ -14,9 +14,9 @@ class TestExecuteStep(unittest.TestCase):
 
     def setUp(self) -> None:
         self.registry_entry: dict[str, Any] = {
-            'step_id': 'sample_step',
+            'stepId': 'sample_step',
             'title': 'Sample Step',
-            'base_filename': 'sample_step',
+            'baseFilename': 'sample_step',
             'path': '/tmp/sample_step/config.json'
         }
         self.base_config = {
@@ -31,9 +31,9 @@ class TestExecuteStep(unittest.TestCase):
         # Step specifies a different OS
         # config = {'os': 'macos'}
         # mock_enrich.return_value = config | {
-        #     'step_id': self.registry_entry['step_id'],
+        #     'stepId': self.registry_entry['stepId'],
         #     'title': 'enriched ' + self.registry_entry['title'],
-        #     'base_filename': self.registry_entry['base_filename'],
+        #     'baseFilename': self.registry_entry['baseFilename'],
         #     'path': self.registry_entry['path'],
         #     'dir': '/tmp/sample_step'
         # }

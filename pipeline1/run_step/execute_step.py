@@ -1,20 +1,16 @@
 from typing import Any
-
-# from icecream import ic
 from pipeline1.lib.config import config
 from pipeline1.lib.config_dynamic import get_dynamic, set_dynamic
 from pipeline1.run_step.remove_docker_containers import remove_docker_containers
 from pipeline1.run_step.schedule_step import schedule_step
-from pipeline1.run_step.invoke_commands import invoke_commands
-from pipeline1.run_step.load_step import load_step
+from pipeline1.run_step.invoke_commands import invoke_step_commands
+from pipeline1.run_step.get_step import get_step
 from pipeline1.run_step.invoke_step import invoke_step
 from pipeline1.run_step.open_new_tab import open_new_tab
 from pipeline1.lib.logging import log
 from pipeline1.step_done.check_dependencies import check_dependencies
 from pipeline1.step_done.step_entry import step_entry
 from pipeline1.step_done.step_exit import step_exit
-
-# from icecream import ic
 
 
 def run_child_steps(parent_step: dict[str, Any], parent_args: list[str], parent_overrides: list[str], depth: int = 0) -> bool:
@@ -32,12 +28,12 @@ def run_child_steps(parent_step: dict[str, Any], parent_args: list[str], parent_
 
         child_step_id = child_args[0]
         child_step_args = child_args[1:]
-        child_step = load_step(child_step_id)
+        child_step = get_step(child_step_id)
         
         # if child_step_args and len(child_step_args) > 0:
-            # debug(f"Running child step: {child_step['step_id']} with arguments: {child_step_args}")
+            # debug(f"Running child step: {child_step['stepId']} with arguments: {child_step_args}")
         # else:
-            # debug(f"Running child step: {child_step['step_id']}")
+            # debug(f"Running child step: {child_step['stepId']}")
         log.set_indent(depth + 1)
         status = execute_step(step=child_step, args=child_step_args, overrides=parent_overrides, new_tab_active=False, depth=depth + 1)
         if not status:
@@ -45,7 +41,8 @@ def run_child_steps(parent_step: dict[str, Any], parent_args: list[str], parent_
     return all_passed
 
 def execute_step(step: dict[str, Any], args: list[str], overrides: list[str], new_tab_active: bool = False, depth: int = 0) -> bool:
-    step_id = step['step_id']
+    # pylint: disable=too-many-branches, too-many-statements, too-many-return-statements
+    step_id = step['stepId']
 
     if 'os' in step and step['os'] != config['my_os'] and step['os'] != 'unix':
         log.end(f"Step {step_id} not for {config['my_os']}")
@@ -58,7 +55,7 @@ def execute_step(step: dict[str, Any], args: list[str], overrides: list[str], ne
     log.begin(step['title'])
 
     if 'dependencies' not in overrides and not check_dependencies(step, args):
-        log.end(f"{step['step_id']} not attempted")
+        log.end(f"{step['stepId']} not attempted")
         return False
     
     run_always = False
@@ -93,9 +90,9 @@ def execute_step(step: dict[str, Any], args: list[str], overrides: list[str], ne
                 if run_once:
                     set_dynamic(step_key, 'done', 'status')
                 return True
-            else:
-                log.end(f"{step['title']} not attempted")
-                return False
+
+            log.end(f"{step['title']} not attempted")
+            return False
 
     remove_docker_containers(step)
 
@@ -107,8 +104,7 @@ def execute_step(step: dict[str, Any], args: list[str], overrides: list[str], ne
             
     all_passed = True
     
-    if 'commands' in step:
-        invoke_commands(step['commands'])
+    invoke_step_commands(step)
 
     if 'steps' in step:
         all_passed = run_child_steps(parent_step=step, parent_args=args, parent_overrides=overrides, depth=depth) and all_passed

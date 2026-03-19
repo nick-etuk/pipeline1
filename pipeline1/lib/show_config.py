@@ -12,6 +12,7 @@ def show_config() -> None:
         'temp_dir', 
         'python_root', 
         'my_download_dir',
+        'indentation',
         'debug']
     for key, value in config.items():
         if key not in excluded:
