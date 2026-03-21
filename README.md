@@ -1,6 +1,6 @@
 # Introduction
 
-Pipeline1 lets you run a collection of shell or PowerShell scripts in sequence.
+Pipeline1 lets you run a collection of shell or PowerShell scripts in a sequence.
 Your scripts can be located anywhere on your file system, and organised in a directory structure of your choosing.
 Pipeline1 will scan the parent directory and it's child directories, find all of your scripts and then create a registry of where they all are.
 It works on Linux, Windows (with or without WSL), and Macos.
@@ -37,6 +37,11 @@ To add a collection of scripts to P1, switch to the directory where they are, an
 The scripts don't all have to be in the same directory, but they should be underneath one parent directory,
 
 `p1 install` adds the current directory to the file `$HOME/.pipeline1/project_registry.csv`.
+Every script file (files with a .sh or .ps1 extension) within the current directory or its child directories
+will be cataloged and made available for you to run in your pipelines. These scripts are called steps.
+The exception are scripts in a directory named `lib`. These will not be considered steps.
+They will be `sourced` and made available for use in all your steps.
+The `lib` directory is for common functions like logging routines or startup and tear down processes.
 
 # Working directory
 
