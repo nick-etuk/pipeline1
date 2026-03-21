@@ -17,11 +17,11 @@ invoke_commands() {
         exit_status=$?
 
         if [ "$exit_status" -ne 0 ]; then
-            echo "Command failed: $command"
+            echo "bash command failed: $command"
             echo "status: $exit_status"
             return 1
         fi
-        echo "Command successful: $command"
+        echo "bash command successful: $command"
     done
 
     return 0

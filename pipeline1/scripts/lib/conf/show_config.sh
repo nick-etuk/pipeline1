@@ -13,7 +13,7 @@ show_config_base() {
 }
 
 show_config_unix() {
-    echo "SHELL: $SHELL_NAME version: $SHELL_VERSION"
+    echo "Shell: $SHELL_NAME version: $SHELL_VERSION"
     echo "P1_ROOT_UNIX: $P1_ROOT_UNIX"
     echo "CURRENT_USER: $P1_USER_UNIX"
 }
@@ -24,6 +24,7 @@ show_config_wsl() {
 }
 
 show_p1_config() {
+    echo '--- P1 Shell Config ---'
     show_config_base
     show_config_unix
     [ "$VM" = 'wsl' ] && show_config_wsl
