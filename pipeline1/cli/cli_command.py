@@ -24,7 +24,7 @@ def cli_command(args: list[str]):
         return 
     
     if command == 'install':
-        add_project(command_args[0])
+        add_project(command_args[0] if command_args else '')
         scan_all_steps()
         return
     

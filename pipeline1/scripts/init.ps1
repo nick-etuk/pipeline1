@@ -2,6 +2,7 @@
 Set-StrictMode -Version 3.0
 
 if (Test-Path variable:INIT_WIN) { return }
+write-Output "=>init.ps1"
 
 $Script:INIT_WIN = 1
 $Script:CURRENT_STEP = ''

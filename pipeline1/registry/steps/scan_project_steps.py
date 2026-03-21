@@ -30,8 +30,14 @@ def scan_project_steps(project_id: str, project_path: str) -> Optional[list[dict
     for step_config_file in step_dir.rglob('*.json'):
         if any(part in ['lib','shared'] for part in step_config_file.parts[:-1]):
             continue
+        
         if '__test' in str(step_config_file):
             continue
+        
+        base_filename = step_config_file.stem.lower().replace('-', '_')
+        if base_filename == 'project.json':
+            continue
+
         with open(step_config_file, 'r') as f:
             content = f.read()
         try:
@@ -40,7 +46,6 @@ def scan_project_steps(project_id: str, project_path: str) -> Optional[list[dict
             log.warn(f"Warning: Could not parse JSON in {step_config_file}")
             continue
 
-        base_filename = step_config_file.stem.lower().replace('-', '_')
         step_id = step_config.get('id', base_filename)
         menu = step_config.get('menu', '')
         title = step_config.get('title', get_step_title(step_id))
