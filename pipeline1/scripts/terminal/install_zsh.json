@@ -1,6 +1,6 @@
 {
   "os": ["unix"],
   "checks": {
-    "unix": ["test -f ~/.zshrc"]
+    "unix": ["echo ~", "test -f ~/.zshrc"]
   }
 }

@@ -14,6 +14,9 @@ def show_config() -> None:
         'my_download_dir',
         'indentation',
         'debug']
+    
+    print('--- P1 Python config ---')
+    
     for key, value in config.items():
         if key not in excluded:
             print(f"{key}:{' ' * (25 - len(key))}{value}")

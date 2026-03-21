@@ -71,4 +71,4 @@ if (!(Test-Path -PathType Leaf $LOG_FILE)) {
 # $GCM_PATH_WSL = Get-Unix-Path $GCM_PATH_WIN
 
 get_context
-
+show_config

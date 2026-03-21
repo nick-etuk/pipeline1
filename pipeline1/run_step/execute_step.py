@@ -7,6 +7,7 @@ from pipeline1.run_step.invoke_commands import invoke_step_commands
 from pipeline1.run_step.get_step import get_step
 from pipeline1.run_step.invoke_step import invoke_step
 from pipeline1.run_step.open_new_tab import open_new_tab
+from pipeline1.run_step.correct_os import correct_os
 from pipeline1.lib.logging import log
 from pipeline1.step_done.check_dependencies import check_dependencies
 from pipeline1.step_done.step_entry import step_entry
@@ -44,8 +45,7 @@ def execute_step(step: dict[str, Any], args: list[str], overrides: list[str], ne
     # pylint: disable=too-many-branches, too-many-statements, too-many-return-statements
     step_id = step['stepId']
 
-    if 'os' in step and step['os'] != config['my_os'] and step['os'] != 'unix':
-        log.end(f"Step {step_id} not for {config['my_os']}")
+    if not correct_os(step):
         return True
     
     if 'isActive' in step and str(step['isActive']).lower() == 'false':

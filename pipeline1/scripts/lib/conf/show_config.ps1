@@ -1,4 +1,5 @@
 function show_config {
+    Write-Output '--- P1 PowerShell Config ---'
     Write-Output "REPO_DIR: $REPO_DIR"
     Write-Output "WORKING_DIR: $WORKING_DIR"
     Write-Output "LOG_DIR: $LOG_DIR"
