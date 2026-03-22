@@ -1,5 +1,7 @@
 from pipeline1.lib.config import config
 from pipeline1.lib.context import get_context
+from pipeline1.lib.logging import log
+
 
 def show_config() -> None:
     excluded = [
@@ -15,11 +17,11 @@ def show_config() -> None:
         'indentation',
         'debug']
     
-    print('--- P1 Python config ---')
+    log.debug('--- P1 Python config ---')
     
     for key, value in config.items():
         if key not in excluded:
-            print(f"{key}:{' ' * (25 - len(key))}{value}")
+            log.debug(f"{key}:{' ' * (25 - len(key))}{value}")
 
 
     context = {
@@ -27,4 +29,4 @@ def show_config() -> None:
         'default_step_path': get_context('default_step_path')
     }
     for key, value in context.items():
-        print(f"{key}:{' ' * (25 - len(key))}{value}")
+        log.debug(f"{key}:{' ' * (25 - len(key))}{value}")

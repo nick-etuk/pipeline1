@@ -6,7 +6,6 @@ import difflib
 from pipeline1.lib.config import config
 from pipeline1.registry.add_project.list_projects import list_projects
 from pipeline1.registry.create_blank_registry import create_blank_registry
-# from pipeline1.registry.get_registries import get_project_registry
 from pipeline1.registry.steps.scan_steps_without_config import scan_steps_without_config
 from pipeline1.registry.steps.scan_project_steps import scan_project_steps
 from pipeline1.lib.logging import log

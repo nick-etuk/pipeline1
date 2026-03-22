@@ -1,5 +1,5 @@
 function daily_tasks() {
-    $flag="$WORKING_DIR/daily_tasks.txt"
+    $flag="$WORKING_DIR/context/global/daily_tasks.txt"
     if (Test-Path -Path $flag -PathType Leaf) {
         $last_update = Get-Content -Path $flag
         if ((Get-Date $last_update) -ge (Get-Date).AddDays(-1)) {
