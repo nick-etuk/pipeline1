@@ -1,14 +1,10 @@
 #!/usr/bin/env bash
 
 daily_tasks() {
-    # Should update_remote_steps be done in python? Also check_for_os_updates?
-    # Yes, it should be done in Python because the logic is complex.
-    # No, check_for_os_updates should be done in bash 
-    # because it is close to the OS, should be done before invoking Python, and is not complex.
     local last_update
     local flag
     
-    flag="$WORKING_DIR/daily_tasks.txt"
+    flag="$WORKING_DIR/context/global/daily_tasks.txt"
     if [ -f "$flag" ] && [ -s "$flag" ]; then
         last_update=$(cat "$flag")
         if [ "$MY_OS" = 'macos' ]; then

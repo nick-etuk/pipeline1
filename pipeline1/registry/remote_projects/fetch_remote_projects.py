@@ -35,6 +35,14 @@ def fetch_remote_projects(force: bool = False) -> None:
             continue
         project_dir = os.path.join(remotes_dir, project_basename)
 
+        registry_entry = {
+            'projectId': project_id,
+            'title': project.get('title', project_id),
+            'sourceCodeRoot': project.get('sourceCodeRoot', ''),
+            'p1ProjectPath': project_dir,
+            'sortOrder': project_sort_order(project_id),
+        }
+        add_project_registry_entry(registry_entry)
 
         if os.path.exists(project_dir) and not force:
             log.info(f"Project {git_url} already exists at {project_dir}. Skipping download.")
@@ -49,13 +57,5 @@ def fetch_remote_projects(force: bool = False) -> None:
 
         log.info(f"Remote project {git_url} cloned to {project_dir}.")
 
-        registry_entry = {
-            'projectId': project_id,
-            'title': project.get('title', project_id),
-            'sourceCodeRoot': project.get('sourceCodeRoot', ''),
-            'p1ProjectPath': project_dir,
-            'sortOrder': project_sort_order(project_id),
-        }
-        add_project_registry_entry(registry_entry)
 
 

@@ -1,10 +1,8 @@
 {
+  "os": ["unix"],
   "runOnce": true,
   "steps": [
     "install_ttab",
-    "install_zsh",
-    "install_oh_my_zsh",
-    "install_powerlevel10k",
-    "install_zoxide"
+    "install_zsh"
   ]
 }

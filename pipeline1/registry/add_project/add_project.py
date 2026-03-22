@@ -12,7 +12,7 @@ from pipeline1.lib.logging import log
 def add_project_registry_entry(new_project_entry: dict[str, str]) -> None:
     project_registry = list_projects()
     if any(x['projectId'] == new_project_entry['projectId'] for x in project_registry):
-        log.info(f"Project {new_project_entry['projectId']} already exists in the registry.")
+        log.debug(f"Project {new_project_entry['projectId']} already exists in the registry.")
         return
 
     project_registry.append(new_project_entry)

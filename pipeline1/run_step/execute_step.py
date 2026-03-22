@@ -1,5 +1,4 @@
 from typing import Any
-from pipeline1.lib.config import config
 from pipeline1.lib.context import get_context, set_context
 from pipeline1.run_step.remove_docker_containers import remove_docker_containers
 from pipeline1.run_step.schedule_step import schedule_step
@@ -31,10 +30,6 @@ def run_child_steps(parent_step: dict[str, Any], parent_args: list[str], parent_
         child_step_args = child_args[1:]
         child_step = get_step(child_step_id)
         
-        # if child_step_args and len(child_step_args) > 0:
-            # debug(f"Running child step: {child_step['stepId']} with arguments: {child_step_args}")
-        # else:
-            # debug(f"Running child step: {child_step['stepId']}")
         log.set_indent(depth + 1)
         status = execute_step(step=child_step, args=child_step_args, overrides=parent_overrides, new_tab_active=False, depth=depth + 1)
         if not status:
