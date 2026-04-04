@@ -10,12 +10,13 @@
 [ "$TERM_PROGRAM" = 'vscode' ] && return
 
 set -u
-setopt shwordsplit
+# setopt shwordsplit
 
 required_libraries=(
     logging
     get_shell_version 
     detect_os
+    get_wsl_win_info
     config_dynamic 
     add_to_path
     add_aliases

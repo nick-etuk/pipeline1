@@ -1,10 +1,12 @@
 #!/usr/bin/env bash
 # shellcheck disable=SC1090,SC1091,SC2034
 
-libraries=$(find "$P1_ROOT_SCRIPT/lib" -name 'detect_os.sh' -o -name 'get_shell_version.sh' -o -name 'get_wsl_win_info.sh')
-for lib in $libraries; do
-    source "$lib"
-done
+# libraries=$(find "$P1_ROOT_SCRIPT/lib" -name 'detect_os.sh' -o -name 'get_shell_version.sh' -o -name 'get_wsl_win_info.sh')
+# # for lib in $libraries; do
+# for lib in "${libraries[@]}"; do
+#     echo "config_base: loading library: $lib"
+#     source "$lib"
+# done
 
 P1_VERSION='2.0'  # Update this when making changes that require users to update their profiles
 

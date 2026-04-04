@@ -16,11 +16,19 @@ def scantree(path):
             yield entry
 
 
-def scan_dir(directory: Path, last_scan_time: float) -> bool:
+def scan_dir(directory: Path, last_scan_time_param: float) -> bool:
+    last_scan_time = float(last_scan_time_param)
     for entry in scantree(directory):
-        if entry.name.endswith('.json') or entry.name.endswith('.sh') or entry.name.endswith('.ps1'):
-            if entry.stat().st_mtime > float(last_scan_time):
-                log.info(f"Step change detected: {entry.path}") 
+        if entry.name.endswith('.json'):
+            if entry.stat().st_mtime > last_scan_time:
+                log.info(f"Step config change: {entry.path}") 
+                return True
+        if entry.name.endswith('.sh') or entry.name.endswith('.ps1'):
+            # todo: this will detetct any change in a script file.
+            # find a way to detect only new or added script files, not changes to existing ones.
+            # might have to store step creation date in the step registry, and compare with that.
+            if entry.stat().st_mtime > last_scan_time:
+                log.info(f"Step script change: {entry.path}") 
                 return True
     return False
 
@@ -38,6 +46,12 @@ def scan_projects(last_scan_time: float) -> bool:
 
 
 def detect_step_changes() -> None:
+    '''
+    Look for any changes in .json files, 
+    or the addition or removal of .sh and ps1 files
+    in the project directories or the built-in steps directory since the last scan. 
+    If any changes are detected, rebuild the step registry.
+    '''
     last_scan_file = f"{config['working_dir']}/context/global/last_step_scan.txt"
     if not os.path.exists(last_scan_file):
         log.debug('No last scan file found, creating one')
