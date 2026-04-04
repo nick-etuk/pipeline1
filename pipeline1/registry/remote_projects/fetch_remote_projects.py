@@ -57,5 +57,12 @@ def fetch_remote_projects(force: bool = False) -> None:
 
         log.info(f"Remote project {git_url} cloned to {project_dir}.")
 
+        # make all script files executable
+        for root, _, files in os.walk(project_dir):
+            for file in files:
+                if file.endswith('.sh') or file.endswith('.py'):
+                    file_path = os.path.join(root, file)
+                    os.chmod(file_path, 0o755)
+
 
 
