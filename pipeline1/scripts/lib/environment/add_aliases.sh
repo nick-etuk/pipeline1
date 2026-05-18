@@ -24,6 +24,7 @@ function add_aliases {
 
     # alias cleanbuild='[ -n "$(docker images -aq)" ] && docker rmi -f "$(docker images -aq)"; docker system prune -f && cd "$REPO_DIR/nhsapp/web" && npm install && cd .. &&  make clean && make login && make build'
 
+    alias h='history|grep -i'
 
     startup_script=$(find "$P1_ROOT_UNIX" -name "p1.py" -not -path ".venv_p1/*")
     if [ -f "$startup_script" ] ; then
@@ -35,6 +36,9 @@ function add_aliases {
         p1xit() { python3 "$startup_script" xit "$@"; }
     fi
 
+    alias cdp1='cd "$P1_ROOT_UNIX"'
+    # todo: add cdweb, cdand etc. i.e cd<project> for all projects
+    
     EDITOR="$(command -v nano || command -v vi || command -v vim || echo "/usr/bin/nano")"
     export EDITOR
 }
