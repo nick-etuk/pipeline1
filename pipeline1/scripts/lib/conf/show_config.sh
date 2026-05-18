@@ -10,6 +10,7 @@ show_config_base() {
     echo "FORCE: $FORCE"
     echo "DEFAULT_STEP_ID: $DEFAULT_STEP_ID"
     echo "DEFAULT_STEP_PATH: $DEFAULT_STEP_PATH"
+    echo "NODE_MAJOR_VERSION: $NODE_MAJOR_VERSION"
 }
 
 show_config_unix() {
@@ -23,7 +24,7 @@ show_config_wsl() {
     echo "WORKING_DIR_WIN: $WORKING_DIR_WIN"
 }
 
-show_p1_config() {
+show_config() {
     echo '--- P1 Shell Config ---'
     show_config_base
     show_config_unix

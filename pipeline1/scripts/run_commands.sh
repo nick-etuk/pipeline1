@@ -13,8 +13,10 @@ invoke_commands() {
     commands=("$@")
 
     for command in ${commands[@]+"${commands[@]}"}; do
+        echo "Invoking command: $command"
         eval "$command" >/dev/null
         exit_status=$?
+        echo "Command exit status: $exit_status"
 
         if [ "$exit_status" -ne 0 ]; then
             echo "bash command failed: $command"
