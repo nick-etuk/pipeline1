@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
+function set_android_env_vars {
+    [ -z "${ANDROID_HOME+set}" ] && export ANDROID_HOME="$HOME/Library/Android/sdk"
+    [ -z "${ANDROID_SDK_ROOT+set}" ] && export ANDROID_SDK_ROOT="$HOME/Library/Android/sdk"
+}
+
 function add_to_path {
     local paths_to_add
 
@@ -18,4 +23,5 @@ function add_to_path {
             echo "Added $new_path to path"
         fi
     done
+    set_android_env_vars
 }

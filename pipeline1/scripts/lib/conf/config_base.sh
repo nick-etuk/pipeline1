@@ -60,8 +60,8 @@ macos)
 esac
 
 # Todo: This is project dependent configuration. Move these out of core.
-# DEFAULT_MOBILE_DEVICE="Pixel_8a_API_35"
-DEFAULT_MOBILE_DEVICE="Pixel_5_API_34"
+# ANDROID_DEFAULT_DEVICE="Pixel_8a_API_35"
+ANDROID_DEFAULT_DEVICE="Pixel_5_API_34"
 ANDROID_EMULATOR_PORT=5554
 LOGINENV=sandpit
 
