@@ -36,7 +36,16 @@ function Add-To-PowerShell-Path {
     Add-Content -Path $profile.CurrentUserCurrentHost -Value "`n$Banner`n$AddScriptsToPathCmd`n"
 }
 
-function Add-To-Path {
+function set_android_env_vars {
+    if (-not $env:ANDROID_HOME) {
+        $env:ANDROID_HOME = "F:\app\Android\Sdk"
+    }
+    if (-not $env:ANDROID_SDK_ROOT) {
+        $env:ANDROID_SDK_ROOT = "F:\app\Android\Sdk"
+    }
+}
+
+function add_path {
     param(
         [Parameter(Mandatory=$true)]
         [string] $Path,
@@ -66,9 +75,16 @@ function Add-To-Path {
     if ($envPaths -notcontains $PathToAdd) {
         $envPaths = "$envPaths;$PathToAdd" | Where-Object { $_ }
         $env:Path = $envPaths -join ';'
+        WriteInfo "Added [$PathToAdd] to PATH."
     }
 
     # $NewPath = "$CurrentPath;$PathToAdd"
     # Set-ItemProperty -Path "Registry::HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\Session Manager\Environment" -Name PATH -Value $NewPath
     # return $Result
+    set_android_env_vars
+}
+
+function add_to_path {
+    add_path -path F:\app\Android\Sdk\emulator
+    add_path -path F:\app\Android\Sdk\platform-tools
 }

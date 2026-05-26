@@ -8,6 +8,7 @@ function set_android_env_vars {
 function add_to_path {
     local paths_to_add
 
+    # todo: add the correct paths for Ubuntu
     paths_to_add=(
         "$(dirname "$login_script")"
         "$HOME/.local/bin"

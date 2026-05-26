@@ -35,6 +35,7 @@ $NoColor = @{
 
 # Todo: NHS App project configuration. Move these out of built-in config.
 $ANDROID_EMULATOR_PORT = '5554'
+$ANDROID_DEFAULT_DEVICE="Pixel_5_API_34"
 $LOGINENV = 'sandpit'
 
 $NODE_MAJOR_VERSION = '22'

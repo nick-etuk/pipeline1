@@ -12,8 +12,10 @@ if ($env:TERM_PROGRAM -and $env:TERM_PROGRAM -ne 'Windows Terminal') {
 }
 
 $required_libraries = @(
+    'logging.ps1',
     'config_dynamic.ps1',
     'add_aliases.ps1',
+    'add_to_path.ps1',
     'config_base.ps1'  # source this last since it is a script, not a function.
 )
 foreach ($lib in $required_libraries) {
@@ -28,7 +30,7 @@ foreach ($lib in $required_libraries) {
 & $P1_ROOT_SCRIPT\vm\dev_box\unschedule_first_login.ps1
 # "$P1_ROOT_SCRIPT\vm\dev_box\unschedule_first_login.ps1"
 add_aliases
-
+add_to_path
 
 
 $new_tab_queue="$WORKING_DIR/new_tab_queue"

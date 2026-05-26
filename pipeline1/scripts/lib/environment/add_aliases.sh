@@ -38,6 +38,9 @@ function add_aliases {
 
     alias cdp1='cd "$P1_ROOT_UNIX"'
     # todo: add cdweb, cdand etc. i.e cd<project> for all projects
+    alias cdweb='cd "$REPO_DIR/nhsapp/web"'
+    alias cdand='cd "$REPO_DIR/nhsapp-android"'
+    alias cdios='cd "$REPO_DIR/nhsapp-ios"'
     
     EDITOR="$(command -v nano || command -v vi || command -v vim || echo "/usr/bin/nano")"
     export EDITOR
