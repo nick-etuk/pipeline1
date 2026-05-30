@@ -10,17 +10,21 @@ cd "$current_dir" || exit
 
 
 if [ -z "${P1_ROOT_UNIX+set}" ]; then
-    echo 'Setting P1_ROOT_UNIX manually.'
-    echo 'printenv | grep P1_ROOT_UNIX:'
-    printenv | grep P1_ROOT_UNIX
+    echo "Setting P1 root directory manually to $current_dir"
     P1_ROOT_UNIX="$current_dir"
     P1_ROOT_SCRIPT="$P1_ROOT_UNIX/pipeline1/scripts"
     export P1_ROOT_UNIX
     export P1_ROOT_SCRIPT
 fi
 
-# init_script="$P1_ROOT_SCRIPT/init.sh" # Do we need to run init.sh here? Won't terminal_login do it?
-# [ -z "${INIT_UNIX+set}" ] && source "$init_script"
+if [ -z "${P1_ROOT_SCRIPT+set}" ]; then
+	P1_ROOT_SCRIPT="$P1_ROOT_UNIX/pipeline1/scripts"
+	echo "Setting P1 script root manually to $P1_ROOT_SCRIPT"
+	export P1_ROOT_SCRIPT
+fi
+
+# Check and to run init.sh here as terminal_login won't do it during fresh installations.
+# [ -z "${INIT_UNIX+set}" ] && source "$P1_ROOT_SCRIPT/init.sh"
 
 script="$P1_ROOT_SCRIPT/edit_login_profile.sh"
 if [ ! -f "$script" ]; then

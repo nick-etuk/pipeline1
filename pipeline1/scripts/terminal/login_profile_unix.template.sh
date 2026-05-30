@@ -1,7 +1,8 @@
 # Pipeline1_v{{P1_VERSION}} start
 export P1_ROOT_UNIX='{{P1_ROOT_UNIX}}'
 export REPO_DIR=$(dirname "$P1_ROOT_UNIX")
-export P1_ROOT_SCRIPT="$P1_ROOT_UNIX/pipeline1/scripts'
+export P1_ROOT_SCRIPT="$P1_ROOT_UNIX/pipeline1/scripts"
+export PATH="$PATH:$P1_ROOT_SCRIPT"
 export GPG_TTY=$(tty)
 
 export NVM_DIR="$HOME/.nvm"

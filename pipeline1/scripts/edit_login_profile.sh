@@ -10,6 +10,7 @@ parse_template() {
     [ "$template_file" ] || return
 
     template_content=$(<"$template_file")
+    template_content=${template_content//'{{P1_VERSION}}'/"$P1_VERSION"}
     template_content=${template_content//'{{P1_ROOT_UNIX}}'/"$P1_ROOT_UNIX"}
     template_content=${template_content//'{{WORKING_DIR}}'/"$WORKING_DIR"}
 
@@ -18,14 +19,14 @@ parse_template() {
 
 function add_to_profile {
     local target
-    local shell_name
 
     target=$1
-
     [ -f "$target" ] || return 0
 
-    grep -q "pipeline1_v$P1_VERSION" "$target" && return 0
-    grep -q "workstation1_v$P1_VERSION" "$target" && return 0
+	P1_VERSION='2.0'  # todo: remove this duplicate declaration
+
+    grep -iq "pipeline1_v$P1_VERSION" "$target" && return 0
+    grep -iq "workstation1_v$P1_VERSION" "$target" && return 0
 
     profile_content=$(parse_template)
 
@@ -35,19 +36,17 @@ function add_to_profile {
 
         printf "\n" | cat - "$target" >> "/tmp/zshrc.tmp"
         mv /tmp/zshrc.tmp "$target"
-        info "Added login script to top of $target"
+        echo "Added login script to top of $target"
     else
         printf "\n" >> "$target"
         echo "$profile_content" >> "$target"
-        info "Added login script to bottom of $target"
+        echo "Added login script to bottom of $target"
     fi
 }
 
 [ -f ~/.hushlogin ] || touch ~/.hushlogin
 
 # If there are multiple login profiles, modify them all.
-shell_name='zsh'
 add_to_profile ~/.zshrc
 add_to_profile ~/.config/fish/config.fish
-shell_name='bash'
 add_to_profile ~/.bashrc

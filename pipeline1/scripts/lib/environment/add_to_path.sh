@@ -10,7 +10,7 @@ function add_to_path {
 
     # todo: add the correct paths for Ubuntu
     paths_to_add=(
-        "$(dirname "$login_script")"
+        "$P1_ROOT_SCRIPT"
         "$HOME/.local/bin"
         "$HOME/Library/Android/sdk/emulator"
         "$HOME/Library/Android/sdk/platform-tools"
@@ -20,7 +20,8 @@ function add_to_path {
 
     for new_path in "${paths_to_add[@]}"; do
         if [[ ! $PATH == *$new_path* ]]; then
-            export PATH="$PATH:$new_path"
+			PATH="$PATH:$new_path"
+            export PATH
             echo "Added $new_path to path"
         fi
     done
