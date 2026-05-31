@@ -52,8 +52,8 @@ if [ -d "$new_tab_queue" ] && [ -n "$(ls "$new_tab_queue")" ]; then
         process_new_tab_file "$new_tab_queue/$oldest_file"
     fi
 else
-    # create_venv || echo 'Error creating Python virtual environment' && exit 1
-    # pip_install || echo 'Error installing Python packages' && exit 1
+    create_venv || echo 'Error creating Python virtual environment' && exit 1
+    pip_install || echo 'Error installing Python packages' && exit 1
     python3 "$P1_ROOT_UNIX/pipeline1/p1.py" "$@"
 fi
 

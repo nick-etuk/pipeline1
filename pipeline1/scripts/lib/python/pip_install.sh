@@ -1,22 +1,14 @@
 #!/usr/bin/env bash
 
-install_pip_ubuntu() {
+install_packages() {
 	if ! dpkg --get-selections | grep -q python3-pip; then
 		sudo apt-get -y install python3-pip
 	fi
-	
-	if ! dpkg --get-selections | grep -q python3-pip; then
-		sudo apt-get install python3.14-venv
-	fi
-}
-
-install_pip_macos() {
-	return
 }
 
 
 pip_install() {
-    install_pip_$MY_OS
+    # install_packages
 	
     if ! python3 -m pip list | grep -q pipeline1; then
         info "Installing Pipeline1 Python packages..."
