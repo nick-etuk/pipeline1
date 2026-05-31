@@ -12,7 +12,7 @@ export NVM_DIR="$HOME/.nvm"
 if [ -d "$HOME/.pyenv" ]; then
   export PYENV_ROOT="$HOME/.pyenv"
   [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
-  eval "$(pyenv init - zsh)"
+  eval "$(pyenv init - {{SHELL_NAME}})"
 fi
 
 . "$P1_ROOT_UNIX/.venv_p1/bin/activate"

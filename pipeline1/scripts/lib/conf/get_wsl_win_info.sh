@@ -2,8 +2,8 @@
 # shellcheck disable=SC1091
 
 get_wsl_win_info() {
-    if [ -s "$WORKING_DIR/P1_USER_UNIXnames.sh" ]; then
-        source "$WORKING_DIR/P1_USER_UNIXnames.sh"
+    if [ -s "$WORKING_DIR/P1_USER_UNIX/names.sh" ]; then
+        source "$WORKING_DIR/P1_USER_UNIX/names.sh"
         return
     fi
 

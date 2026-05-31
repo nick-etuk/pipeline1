@@ -8,7 +8,8 @@ install_packages() {
 
 
 pip_install() {
-    # install_packages
+    # install_packages	# This should be done by Pyenv
+	pip install --upgrade pip
 	
     if ! python3 -m pip list | grep -q pipeline1; then
         info "Installing Pipeline1 Python packages..."

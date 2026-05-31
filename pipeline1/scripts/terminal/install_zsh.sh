@@ -21,6 +21,8 @@ if [ $exit_status -ne 0 ]; then
     echo "Failed to install zsh. Exit status: $exit_status"
     exit $exit_status
 fi
-sudo chsh -s /usr/bin/zsh "$P1_USER_UNIX"
 
-# echo "$zshrc_content" > "$HOME"/.zshrc
+# sudo chsh -s /usr/bin/zsh "$P1_USER_UNIX"
+sudo chsh -s /usr/bin/zsh
+
+echo "$zshrc_content" > "$HOME"/.zshrc

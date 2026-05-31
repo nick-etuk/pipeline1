@@ -13,6 +13,7 @@ parse_template() {
     template_content=${template_content//'{{P1_VERSION}}'/"$P1_VERSION"}
     template_content=${template_content//'{{P1_ROOT_UNIX}}'/"$P1_ROOT_UNIX"}
     template_content=${template_content//'{{WORKING_DIR}}'/"$WORKING_DIR"}
+	template_content=${template_content//'{{SHELL_NAME}}'/"$SHELL_NAME"}
 
     echo "$template_content"
 }

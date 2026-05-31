@@ -1,15 +1,18 @@
 #!/usr/bin/env bash
 
 install_packages() {
-	if ! dpkg --get-selections | grep -q python3-pip; then
-		sudo apt-get install "python3.$PYTHON_MINOR_VERSION-venv"
+	if ! dpkg --get-selections | grep -q python3-venv; then
+		# sudo apt-get install "python3.$PYTHON_MINOR_VERSION-venv"
+		sudo apt-get install "python3-venv"
 	fi
 }
 
 create_venv() {
-    venv_dir="$P1_ROOT_UNIX/.venv_p1"
+	local venv_dir
 	
-	[ $MY_OS = 'ubuntu' ] && install_packages
+	# [ $MY_OS = 'ubuntu' ] && install_packages 	# This should be bone by Pyenv
+
+    venv_dir="$P1_ROOT_UNIX/.venv_p1"
 	
     if [ ! -d "$venv_dir" ]; then
         # prompt before creating venv

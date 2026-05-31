@@ -24,6 +24,7 @@ required_libraries=(
     daily_tasks
     split_string
     process_new_tab_file
+	install_pyenv
     create_venv
     pip_install
     get_config
@@ -52,8 +53,21 @@ if [ -d "$new_tab_queue" ] && [ -n "$(ls "$new_tab_queue")" ]; then
         process_new_tab_file "$new_tab_queue/$oldest_file"
     fi
 else
-    create_venv || echo 'Error creating Python virtual environment' && exit 1
-    pip_install || echo 'Error installing Python packages' && exit 1
+	if ! install_pyenv; then
+		read -rp  "Warning error installing Python $PYTHON_MAJOR_VERSION.$PYTHON_MINOR_VERSION via Pyenv. Continue (y/n)? " prompt
+		[ ! "$prompt" = "y" ] && exit 1
+	fi
+	
+    if ! create_venv; then
+		echo 'Error creating Python virtual environment' 
+		exit 1
+	fi
+	
+    if ! pip_install; then
+		echo 'Error installing Python packages'
+		exit 1
+	fi
+	
     python3 "$P1_ROOT_UNIX/pipeline1/p1.py" "$@"
 fi
 

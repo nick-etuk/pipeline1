@@ -44,7 +44,7 @@ fi
 
 detect_os
 
-[ "$VM" = 'wsl' ] && get_wsl_win_info
+# [ "$VM" = 'wsl' ] && get_wsl_win_info	# todo: why is get_wsl_win_info not found?
 
 
 case $MY_OS in
@@ -67,7 +67,7 @@ LOGINENV=sandpit
 NODE_MAJOR_VERSION=22
 DOTNET_MAJOR_VERSION=8
 PYTHON_MAJOR_VERSION=3
-PYTHON_MINOR_VERSION=12
+PYTHON_MINOR_VERSION=9
 GNUPG_VERSION=2.4.8
 LIBGPG_ERROR_VERSION=1.56
 LIBKSBA_VERSION=1.6.7
