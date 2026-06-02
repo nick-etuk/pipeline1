@@ -1,10 +1,25 @@
 #!/usr/bin/env bash
 
-P1_USER_UNIX=$(cat /var/tmp/wsl-users.txt)
-if [ -z "$P1_USER_UNIX" ]; then
-    echo "No WSL user file. Using WSL default user."
-    P1_USER_UNIX=$(getent passwd 1000 | cut -d: -f1)
-fi
-info "Adding user $P1_USER_UNIX to sudoers"
+# Must be run as a superuser
 
-echo "$P1_USER_UNIX ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers.d/90-sudo-nopasswd
+add_to_sudoers(){
+	echo '=>add_to_sudoers'
+	
+	local os_param
+	local my_sudoers_file
+	
+	os_param=$1
+	[ $os_param = 'macos' ] && return
+
+	P1_USER_UNIX=$(cat /var/tmp/wsl-users.txt)
+	[ -z "$P1_USER_UNIX" ] && P1_USER_UNIX=$(whoami)
+	
+	my_sudoers_file='/etc/sudoers.d/90-sudo-nopasswd'
+	
+	[ -f $my_sudoers_file ] && grep -q "$P1_USER_UNIX" $my_sudoers_file && return
+	
+	echo "Adding user $P1_USER_UNIX to sudoers"
+
+	echo "$P1_USER_UNIX ALL=(ALL) NOPASSWD: ALL" >> $my_sudoers_file
+}
+add_to_sudoers "$@"

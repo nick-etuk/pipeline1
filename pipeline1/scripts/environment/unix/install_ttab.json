@@ -1,6 +1,6 @@
 {
-  "os": ["unix"],
+  "os": ["macos"],
   "checks": {
-    "unix": ["command -v ttab"]
+    "macos": ["command -v ttab"]
   }
 }

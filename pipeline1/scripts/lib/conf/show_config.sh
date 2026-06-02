@@ -28,5 +28,7 @@ show_config() {
     echo '--- P1 Shell Config ---'
     show_config_base
     show_config_unix
-    [ "$VM" = 'wsl' ] && show_config_wsl
+    if [ "$VM" = 'wsl' ];then # don't use a one-liner here. It will leave an error state.
+		show_config_wsl
+	fi
 }

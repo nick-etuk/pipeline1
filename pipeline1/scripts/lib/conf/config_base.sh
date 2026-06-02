@@ -2,10 +2,9 @@
 # shellcheck disable=SC1090,SC1091,SC2034
 
 # libraries=$(find "$P1_ROOT_SCRIPT/lib" -name 'detect_os.sh' -o -name 'get_shell_version.sh' -o -name 'get_wsl_win_info.sh')
-# # for lib in $libraries; do
 # for lib in "${libraries[@]}"; do
-#     echo "config_base: loading library: $lib"
-#     source "$lib"
+#    echo "config_base loading $lib..."
+#    source "$lib"
 # done
 
 P1_VERSION='2.0'  # Update this when making changes that require users to update their profiles
@@ -45,7 +44,7 @@ fi
 
 detect_os
 
-[ "$VM" = 'wsl' ] && get_wsl_win_info
+# [ "$VM" = 'wsl' ] && get_wsl_win_info	# todo: why is get_wsl_win_info not found?
 
 
 case $MY_OS in
@@ -67,7 +66,8 @@ LOGINENV=sandpit
 
 NODE_MAJOR_VERSION=22
 DOTNET_MAJOR_VERSION=8
-PYTHON_MAJOR_VERSION=3.10
+PYTHON_MAJOR_VERSION=3
+PYTHON_MINOR_VERSION=9
 GNUPG_VERSION=2.4.8
 LIBGPG_ERROR_VERSION=1.56
 LIBKSBA_VERSION=1.6.7

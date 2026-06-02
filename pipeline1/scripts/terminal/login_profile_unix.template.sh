@@ -1,7 +1,8 @@
 # Pipeline1_v{{P1_VERSION}} start
 export P1_ROOT_UNIX='{{P1_ROOT_UNIX}}'
 export REPO_DIR=$(dirname "$P1_ROOT_UNIX")
-export P1_ROOT_SCRIPT="$P1_ROOT_UNIX/pipeline1/scripts'
+export P1_ROOT_SCRIPT="$P1_ROOT_UNIX/pipeline1/scripts"
+export PATH="$PATH:$P1_ROOT_SCRIPT"
 export GPG_TTY=$(tty)
 
 export NVM_DIR="$HOME/.nvm"
@@ -11,7 +12,7 @@ export NVM_DIR="$HOME/.nvm"
 if [ -d "$HOME/.pyenv" ]; then
   export PYENV_ROOT="$HOME/.pyenv"
   [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
-  eval "$(pyenv init - zsh)"
+  eval "$(pyenv init - {{SHELL_NAME}})"
 fi
 
 . "$P1_ROOT_UNIX/.venv_p1/bin/activate"
