@@ -33,7 +33,11 @@ if [ ! -f "$script" ]; then
         echo "Warning: edit_login_profile.sh not found in $P1_ROOT_SCRIPT"
     fi
 fi
-[ -f "$script" ] && source "$script"
+
+if [ -f "$script" ]; then
+	source "$script"
+	edit_login_profile
+fi
 
 script="$P1_ROOT_SCRIPT/terminal_login.sh"
 if [ ! -f "$script" ]; then
@@ -44,4 +48,4 @@ if [ ! -f "$script" ]; then
     fi
 fi
 
-source "$script"
+source "$script" "$@"

@@ -8,6 +8,7 @@ install_packages() {
 }
 
 create_venv() {
+	echo '=>create_venv'
 	local venv_dir
 	
 	# [ $MY_OS = 'ubuntu' ] && install_packages 	# This should be bone by Pyenv

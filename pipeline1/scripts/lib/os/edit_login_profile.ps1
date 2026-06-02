@@ -36,5 +36,5 @@ function edit_login_profile {
     Get-Content -Path $profile.CurrentUserCurrentHost | WriteInfo
     $env:PATH += ";$P1_ROOT_WIN"
 }
-edit_login_profile
+# edit_login_profile
 

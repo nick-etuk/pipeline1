@@ -1,6 +1,5 @@
 {
   "os": ["unix"],
-  "prompt": "Enhance terminal with oh-my-zsh?",
   "runOnce": true,
   "steps": [
     "install_oh_my_zsh",

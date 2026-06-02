@@ -26,14 +26,14 @@ function add_aliases {
 
     alias h='history|grep -i'
 
-    startup_script=$(find "$P1_ROOT_UNIX" -name "p1.py" -not -path ".venv_p1/*")
-    if [ -f "$startup_script" ] ; then
-        p1() { python3 "$startup_script" "$@"; }
-        menu() { python3 "$startup_script" "$@"; }
-        p1web() { python3 "$startup_script" web "$@"; }
-        p1bdd() { python3 "$startup_script" bdd "$@"; }
-        p1and() { python3 "$startup_script" and "$@"; }
-        p1xit() { python3 "$startup_script" xit "$@"; }
+    P1_STARTUP=$(find "$P1_ROOT_UNIX" -name "p1.sh" -not -path ".venv_p1/*")
+    if [ -f "$P1_STARTUP" ] ; then
+        p1() { "$P1_STARTUP" "$@"; }
+        menu() { "$P1_STARTUP" "$@"; }
+        p1web() { "$P1_STARTUP" web "$@"; }
+        p1bdd() { "$P1_STARTUP" bdd "$@"; }
+        p1and() { "$P1_STARTUP" and "$@"; }
+        p1xit() { "$P1_STARTUP" xit "$@"; }
     fi
 
     alias cdp1='cd "$P1_ROOT_UNIX"'

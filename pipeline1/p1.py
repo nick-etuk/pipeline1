@@ -21,6 +21,7 @@ def main():
     show_config()
 
     run_step_by_id('setup_terminal', [], step_registry)
+    run_step_by_id('enhance_terminal', [], step_registry)
 
     show_menu_main(project_registry=project_registry, step_registry=step_registry)
 

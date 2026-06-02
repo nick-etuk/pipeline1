@@ -8,7 +8,7 @@ setopt autocd extendedglob nomatch notify
 bindkey -e
 # End of lines configured by zsh-newuser-install
 # The following lines were added by compinstall
-zstyle :compinstall filename '/home/$P1_USER_UNIX/.zshrc'
+zstyle :compinstall filename '/home/{{P1_USER_UNIX}}/.zshrc'
 
 autoload -Uz compinit
 compinit
@@ -25,4 +25,7 @@ fi
 # sudo chsh -s /usr/bin/zsh "$P1_USER_UNIX"
 sudo chsh -s /usr/bin/zsh
 
+template_content=$(<"$template_file")
+    zshrc_content=${zshrc_content//'{{P1_USER_UNIX}}'/"$P1_USER_UNIX"}
 echo "$zshrc_content" > "$HOME"/.zshrc
+edit_login_profile

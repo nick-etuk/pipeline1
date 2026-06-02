@@ -17,7 +17,7 @@ required_libraries=(
     get_shell_version 
     detect_os
     get_wsl_win_info
-    config_dynamic 
+    config_dynamic
     add_to_path
     add_aliases
     check_for_os_updates
@@ -37,6 +37,11 @@ done
 
 get_shell_version
 detect_os
+
+script=$(find "$P1_ROOT_SCRIPT" -name "add_to_sudoers.sh" -type f)
+echo "add to sudoers script: $script"
+sudo $script $MY_OS
+
 add_to_path
 add_aliases
 daily_tasks
@@ -67,7 +72,7 @@ else
 		echo 'Error installing Python packages'
 		exit 1
 	fi
-	
+	echo '->post pip install'
     python3 "$P1_ROOT_UNIX/pipeline1/p1.py" "$@"
 fi
 
