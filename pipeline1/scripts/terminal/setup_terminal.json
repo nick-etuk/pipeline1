@@ -1,6 +1,6 @@
 {
   "os": ["unix"],
-  "runOnce": true,
+  "runOnce": false,
   "steps": [
     "install_ttab",
     "install_zsh"

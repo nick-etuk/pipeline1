@@ -1,5 +1,5 @@
-from datetime import datetime
 import os
+from datetime import datetime
 from pathlib import Path
 from pipeline1.lib.config import config
 from pipeline1.registry.add_project.list_projects import list_projects
@@ -60,6 +60,10 @@ def detect_step_changes() -> None:
     If any changes are detected, rebuild the step registry.
     '''
     last_scan_file = f"{config['working_dir']}/context/global/last_step_scan.txt"
+    parent_dir = os.path.dirname(last_scan_file)
+    if not os.path.exists(parent_dir):
+        os.makedirs(parent_dir, exist_ok=True)
+    
     if not os.path.exists(last_scan_file):
         log.debug('No last scan file found, creating one')
         last_scan_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')

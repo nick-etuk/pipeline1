@@ -21,7 +21,7 @@ parse_template() {
     echo "$template_content"
 }
 
-function add_to_profile {
+add_to_profile() {
     local target
 	local pyenv_shell
 
@@ -29,28 +29,27 @@ function add_to_profile {
     [ -f "$target" ] || return 0
 
 	P1_VERSION='2.0'  # todo: remove this duplicate declaration
-
     grep -iq "pipeline1_v$P1_VERSION" "$target" && return 0
 
 	case $target in
-		~/.zshrc)
+		"$HOME/.zshrc")
 			pyenv_shell='zsh'
 			;;
-		~/bashrc)
+		"$HOME/.bashrc")
 			pyenv_shell='bash'
 			;;
-		~/.config/fish/config.fish)
+		"$HOME/.config/fish/config.fish")
 			pyenv_shell='fish'
 			;;
 		*)
-			echo "Edit login profile: Unknown Pyenv shell for $target"
+			echo "Edit login profile: Unknown Pyenv shell for target [$target]"
 			return
 			;;
 	esac
 	
     profile_content=$(parse_template $pyenv_shell)
 
-    if [ "$target" = ~/.zshrc ]; then
+    if [ "$target" = "$HOME/.zshrc" ]; then
         # Add commands to top of file to avoid problems with p10k-instant-prompt
         echo "$profile_content" > "/tmp/zshrc.tmp"
 
@@ -65,10 +64,10 @@ function add_to_profile {
 }
 
 edit_login_profile() {
-	[ -f ~/.hushlogin ] || touch ~/.hushlogin
+	[ -f "$HOME/.hushlogin" ] || touch "$HOME/.hushlogin"
 
 	# If there are multiple login profiles, modify them all.
-	add_to_profile ~/.bashrc
-	add_to_profile ~/.zshrc
-	add_to_profile ~/.config/fish/config.fish
+	add_to_profile "$HOME/.bashrc"
+	add_to_profile "$HOME/.zshrc"
+	add_to_profile "$HOME/.config/fish/config.fish"
 }
