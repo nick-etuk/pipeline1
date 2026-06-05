@@ -15,7 +15,7 @@ def detect_os() -> tuple[str, str]:
     os_name = platform.system().lower()
     vm = 'unknown'
     if 'linux' in os_name:
-        os = 'linux'
+        os = 'ubuntu'
         # if detect_wsl():
         if 'microsoft' in platform.release().lower():
             vm = 'wsl'

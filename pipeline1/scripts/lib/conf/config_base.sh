@@ -49,10 +49,12 @@ detect_os
 
 case $MY_OS in
 ubuntu)
-    source "$P1_ROOT_SCRIPT"/lib/conf/config_ubuntu.sh
+    # source "$P1_ROOT_SCRIPT"/lib/conf/config_ubuntu.sh
+    config_ubuntu
     ;;
 macos)
-    source "$P1_ROOT_SCRIPT"/lib/conf/config_macos.sh
+    # source "$P1_ROOT_SCRIPT"/lib/conf/config_macos.sh
+    config_macos
     ;;
 *)
     echo "config_base: unsupported OS $MY_OS"

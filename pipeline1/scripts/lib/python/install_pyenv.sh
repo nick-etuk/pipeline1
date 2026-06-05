@@ -32,7 +32,7 @@ install_pyenv(){
         current_minor=$(echo "$current_version" | cut -d. -f2)
 
         if [ "$current_major" -eq "$PYTHON_MAJOR_VERSION" ] && [ "$current_minor" -eq "$PYTHON_MINOR_VERSION" ]; then
-            echo "Python $PYTHON_MAJOR_VERSION.$PYTHON_MINOR_VERSION installed and active."
+            # echo "Python $PYTHON_MAJOR_VERSION.$PYTHON_MINOR_VERSION installed and active."
             return
         fi
     fi

@@ -15,12 +15,11 @@ def correct_os(step: dict) -> bool:
     if config['my_os'] in os_array:
         return True
     
-    if 'unix' in os_array and config['my_os'] == 'win':
-        log.end(f"Step {step['stepId']} not for {config['my_os']}")
-        return False
+    if 'unix' in os_array and config['my_os'] in ['ubuntu', 'debian', 'macos']:
+        return True
     
-    if 'win' in os_array and config['my_os'] != 'win':
-        log.end(f"Step {step['stepId']} not for {config['my_os']}")
-        return False
+    if 'win' in os_array and config['my_os'] == 'win':
+        return True
     
-    return True
+    log.end(f"Step {step['stepId']} not for {config['my_os']}")
+    return False

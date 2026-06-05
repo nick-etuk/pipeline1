@@ -3,13 +3,11 @@
 # Must be run as a superuser
 
 add_to_sudoers(){
-	echo '=>add_to_sudoers'
-	
 	local os_param
 	local my_sudoers_file
 	
 	os_param=$1
-	[ $os_param = 'macos' ] && return
+	[ "$os_param" = 'macos' ] && return
 
 	P1_USER_UNIX=$(cat /var/tmp/wsl-users.txt)
 	[ -z "$P1_USER_UNIX" ] && P1_USER_UNIX=$(whoami)

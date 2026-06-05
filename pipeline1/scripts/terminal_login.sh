@@ -17,6 +17,8 @@ required_libraries=(
     get_shell_version 
     detect_os
     get_wsl_win_info
+    config_ubuntu
+    config_macos
     config_dynamic
     add_to_path
     add_aliases
@@ -28,6 +30,7 @@ required_libraries=(
     create_venv
     pip_install
     get_config
+    edit_login_profile
     config_base # source this last as it is a script, not a function
 )
 for lib in "${required_libraries[@]}"; do
@@ -39,11 +42,11 @@ get_shell_version
 detect_os
 
 script=$(find "$P1_ROOT_SCRIPT" -name "add_to_sudoers.sh" -type f)
-echo "add to sudoers script: $script"
-sudo $script $MY_OS
+sudo "$script" "$MY_OS"
 
 add_to_path
 add_aliases
+edit_login_profile
 daily_tasks
 new_tab_queue="$HOME/.pipeline1/working/new_tab_queue"
 if [ -d "$new_tab_queue" ] && [ -n "$(ls "$new_tab_queue")" ]; then
@@ -59,7 +62,7 @@ if [ -d "$new_tab_queue" ] && [ -n "$(ls "$new_tab_queue")" ]; then
     fi
 else
 	if ! install_pyenv; then
-		read -rp  "Warning error installing Python $PYTHON_MAJOR_VERSION.$PYTHON_MINOR_VERSION via Pyenv. Continue (y/n)? " prompt
+		read -r  "Warning error installing Python $PYTHON_MAJOR_VERSION.$PYTHON_MINOR_VERSION via Pyenv. Continue (y/n)? " prompt
 		[ ! "$prompt" = "y" ] && exit 1
 	fi
 	
@@ -72,7 +75,6 @@ else
 		echo 'Error installing Python packages'
 		exit 1
 	fi
-	echo '->post pip install'
     python3 "$P1_ROOT_UNIX/pipeline1/p1.py" "$@"
 fi
 

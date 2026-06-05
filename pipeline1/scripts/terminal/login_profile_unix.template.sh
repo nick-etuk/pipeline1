@@ -15,6 +15,11 @@ if [ -d "$HOME/.pyenv" ]; then
   eval "$(pyenv init - {{SHELL_NAME}})"
 fi
 
+if [ -f "$HOME/.local/bin/zoxide" ]; then
+	export PATH="$PATH:$HOME/.local/bin"
+	eval "$(zoxide init {{SHELL_NAME}} --cmd cd)"
+fi
+
 . "$P1_ROOT_UNIX/.venv_p1/bin/activate"
 login_script="$P1_ROOT_SCRIPT/terminal_login.sh"
 

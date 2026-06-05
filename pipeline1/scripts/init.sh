@@ -19,12 +19,16 @@ if [ -z "${P1_ROOT_SCRIPT+set}" ];then
 fi
 
 echo -n 'p1'
-libraries=$(find "$P1_ROOT_SCRIPT/lib" -name '*.sh' -type f ! -name 'config_ubuntu.sh' ! -name 'config_macos.sh' ! -name 'z*.sh')
+libraries=$(find "$P1_ROOT_SCRIPT/lib" -name '*.sh' -type f ! -name 'config_base.sh' ! -name 'z*.sh')
 for library in $libraries; do
     source "$library"
     echo -n "."
 done
 echo ''
+
+# Run config_base.sh last, as it is script, not a library.
+script=$(find "$P1_ROOT_SCRIPT/lib" -name 'config_base.sh' -type f)
+source "$script"
 
 get_next_run_id
 LOG_DIR="$LOG_BASE/$RUN_ID"
