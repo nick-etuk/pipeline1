@@ -3,6 +3,7 @@ from datetime import datetime
 from pathlib import Path
 from pipeline1.lib.config import config
 from pipeline1.registry.add_project.list_projects import list_projects
+from pipeline1.registry.remote_projects.fetch_remote_projects import fetch_remote_projects
 from pipeline1.registry.steps.scan_all_steps import scan_all_steps
 from pipeline1.lib.logging import log
 
@@ -43,8 +44,10 @@ def scan_projects(last_scan_time: float) -> bool:
     project_registry = list_projects()
     for project in project_registry:
         if not os.path.exists(project['p1ProjectPath']):
-            log.warn(f"Project {project['projectId']} - path does not exist: {project['p1ProjectPath']}")
-            continue
+            fetch_remote_projects()
+            if not os.path.exists(project['p1ProjectPath']):
+                log.warn(f"Project {project['projectId']} - path does not exist: {project['p1ProjectPath']}")
+                continue
         project_dir = Path(project['p1ProjectPath']) # do we need to use Path here or can we just use os.scandir with the string path? --- IGNORE ---
         has_changed = scan_dir(project_dir, last_scan_time)
         if has_changed:
