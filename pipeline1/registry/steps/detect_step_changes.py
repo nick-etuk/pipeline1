@@ -76,7 +76,7 @@ def detect_step_changes() -> None:
 
     core_changes = scan_core(last_scan_time)
     lib_changes = scan_script_libraries(last_scan_time)
-    if core_changes or lib_changes:
+    if core_changes or lib_changes or True:
         run_smoke_tests()
 
     project_changes = scan_projects(last_scan_time)

@@ -59,7 +59,7 @@ def fetch_remote_projects(force: bool = False) -> None:
         invoke_commands([command])
         if not os.path.exists(project_dir):
             log.warn(f"Failed to clone {git_url}.")
-            sys.exit(1)
+            # sys.exit(1)
             continue
 
         log.info(f"Remote project {git_url} cloned to {project_dir}.")
