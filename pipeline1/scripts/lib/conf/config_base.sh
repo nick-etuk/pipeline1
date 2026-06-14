@@ -44,7 +44,7 @@ fi
 
 detect_os
 
-# [ "$VM" = 'wsl' ] && get_wsl_win_info	# todo: why is get_wsl_win_info not found?
+[ "$VM" = 'wsl' ] && get_wsl_win_info
 
 
 case $MY_OS in

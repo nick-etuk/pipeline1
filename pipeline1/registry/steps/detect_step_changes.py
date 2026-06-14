@@ -4,17 +4,12 @@ from pathlib import Path
 from pipeline1.lib.config import config
 from pipeline1.registry.add_project.list_projects import list_projects
 from pipeline1.registry.remote_projects.fetch_remote_projects import fetch_remote_projects
+from pipeline1.registry.steps.run_smoke_tests import run_smoke_tests
 from pipeline1.registry.steps.scan_all_steps import scan_all_steps
 from pipeline1.lib.logging import log
-
-
-def scantree(path):
-    # Recursively yield DirEntry objects for given directory.
-    for entry in os.scandir(path):
-        if entry.is_dir(follow_symlinks=False):
-            yield from scantree(entry.path)  
-        else:
-            yield entry
+from pipeline1.registry.steps.scan_core import scan_core
+from pipeline1.registry.steps.scan_libs import scan_script_libraries
+from pipeline1.registry.steps.scan_tree import scantree
 
 
 def scan_dir(directory: Path, last_scan_time_param: float) -> bool:
@@ -79,14 +74,16 @@ def detect_step_changes() -> None:
 
     last_scan_time = datetime.strptime(raw_time_string, '%Y-%m-%d %H:%M:%S').timestamp()
 
+    core_changes = scan_core(last_scan_time)
+    lib_changes = scan_script_libraries(last_scan_time)
+    if core_changes or lib_changes:
+        run_smoke_tests()
+
     project_changes = scan_projects(last_scan_time)
-    if project_changes:
+    built_in_dir = Path(config['script_root'])
+    built_in_changes = scan_dir(built_in_dir, last_scan_time)
+    if project_changes or built_in_changes:
         scan_all_steps()
-    else:
-        built_in_dir = Path(config['script_root'])
-        built_in_changes = scan_dir(built_in_dir, last_scan_time)
-        if built_in_changes:
-            scan_all_steps()
 
     last_scan_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     with open(last_scan_file, 'w', encoding='utf-8') as file:

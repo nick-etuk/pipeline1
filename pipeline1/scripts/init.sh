@@ -35,4 +35,4 @@ LOG_DIR="$LOG_BASE/$RUN_ID"
 mkdir -p "$LOG_DIR"
 
 get_context
-show_config
+# show_config
