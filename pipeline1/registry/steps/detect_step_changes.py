@@ -18,20 +18,16 @@ def scan_dir(directory: Path, last_scan_time_param: float) -> bool:
         update_time = entry.stat().st_mtime
         if entry.name.endswith('.json'):
             if update_time > last_scan_time:
-                log.info('Step config change detected')
-                log.info(f"File: {entry.path}")
-                log.info(f"Update time: {datetime.fromtimestamp(update_time).strftime('%Y-%m-%d %H:%M')}")
-                log.info(f"Last scan time: {datetime.fromtimestamp(last_scan_time).strftime('%Y-%m-%d %H:%M')}")
+                log.info(f"Config changed: {entry.path}")
+                log.info(f"Updated at {datetime.fromtimestamp(update_time).strftime('%Y-%m-%d %H:%M')}")
                 return True
         if entry.name.endswith('.sh') or entry.name.endswith('.ps1'):
             # todo: this will detetct any change in a script file.
             # find a way to detect only new or added script files, not changes to existing ones.
             # might have to store step creation date in the step registry, and compare with that.
             if update_time > last_scan_time:
-                log.info('Step change detected')
-                log.info(f"File: {entry.path}")
-                log.info(f"Update time: {datetime.fromtimestamp(update_time).strftime('%Y-%m-%d %H:%M')}")
-                log.info(f"Last scan time: {datetime.fromtimestamp(last_scan_time).strftime('%Y-%m-%d %H:%M')}")
+                log.info(f"Step changed: {entry.path}")
+                log.info(f"Updated at {datetime.fromtimestamp(update_time).strftime('%Y-%m-%d %H:%M')}")
                 return True
     return False
 
@@ -76,7 +72,7 @@ def detect_step_changes() -> None:
 
     core_changes = scan_core(last_scan_time)
     lib_changes = scan_script_libraries(last_scan_time)
-    if core_changes or lib_changes or True:
+    if core_changes or lib_changes:
         run_smoke_tests()
 
     project_changes = scan_projects(last_scan_time)

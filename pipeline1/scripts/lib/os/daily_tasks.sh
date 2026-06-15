@@ -28,12 +28,12 @@ daily_tasks() {
     if [ "$MY_OS" = 'macos' ]; then
         # macOS date command uses -j and -f for parsing, and +%s for epoch time
         if [ "$(date -j -f "%Y-%m-%dT%H:%M:%S" "$last_update" +"%s")" -ge "$(date -v-1d +"%s")" ]; then
-            echo "Daily tasks done today ($(date -j -f "%Y-%m-%dT%H:%M:%S" "$last_update" +"%A %d %B %Y at %H:%M"))"
+            # echo "Daily tasks already done in the last 24 hours on $(date -j -f "%Y-%m-%dT%H:%M:%S" "$last_update" +"%A %d %B %Y at %H:%M")"
             return
         fi
     else
         if [ "$(date -d "$last_update" +%s)" -ge "$(date +%s --date '1 day ago')" ]; then
-            echo "Daily tasks done today ($(date -d "$last_update" +'%A %d %B %Y at %H:%M'))"
+            # echo "Daily tasks already done in the last 24 hours on $(date -d "$last_update" +'%A %d %B %Y at %H:%M')"
             return
         fi
     fi

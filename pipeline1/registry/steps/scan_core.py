@@ -16,10 +16,8 @@ def scan_core(last_scan_time_param: float) -> bool:
             continue
         update_time = entry.stat().st_mtime
         if update_time > last_scan_time:
-            log.info('Core file change detected')
-            log.info(f"File: {entry.path}")
-            log.info(f"Update time: {datetime.fromtimestamp(update_time).strftime('%Y-%m-%d %H:%M')}")
-            log.info(f"Last scan time: {datetime.fromtimestamp(last_scan_time).strftime('%Y-%m-%d %H:%M')}")
+            log.info(f"Core file changed: {entry.path}")
+            log.info(f"Updated at {datetime.fromtimestamp(update_time).strftime('%Y-%m-%d %H:%M')}")
             return True
     
     return False
