@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# shellcheck disable=SC2016,SC2129
+# shellcheck disable=SC2016,SC2129,SC1090
 
 parse_template() {
     local template_file
@@ -61,6 +61,8 @@ add_to_profile() {
         echo "$profile_content" >> "$target"
         echo "Added login script to bottom of $target"
     fi
+
+    source "$target"
 }
 
 edit_login_profile() {

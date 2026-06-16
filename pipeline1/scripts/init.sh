@@ -15,7 +15,7 @@ CURRENT_STEP=''
 if [ -z "${P1_ROOT_SCRIPT+set}" ];then
     P1_ROOT_SCRIPT=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
     echo "Init.sh set P1_ROOT_SCRIPT to $P1_ROOT_SCRIPT"
-    cd "$P1_ROOT_SCRIPT" || exit 1
+    cd "$P1_ROOT_SCRIPT" || { echo "Could not switch to directory $P1_ROOT_SCRIPT"; exit 1; }
 fi
 
 echo -n 'p1'

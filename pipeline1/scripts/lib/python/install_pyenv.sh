@@ -25,7 +25,10 @@ install_pyenv(){
     local current_major
     local current_minor
 
-    # Only install pyenv if Python 3.10 or above is not installed
+    # No need to change macos Python installation.
+    [ "$MY_OS" = 'macos' ] && return
+
+    # Only install pyenv if required Python version or above is not installed
     if command -v python3 >/dev/null; then
         current_version=$(python3 --version | awk '{print $2}')
         current_major=$(echo "$current_version" | cut -d. -f1)
