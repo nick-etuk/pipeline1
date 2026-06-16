@@ -7,10 +7,7 @@ install_packages() {
 }
 
 
-pip_install() {
-	echo '=>pip_install'
-    # install_packages	# This should be done by Pyenv
-	
+pip_install() {	
     if ! python3 -m pip list 2> /dev/null | grep -q pipeline1; then
         info "Installing Pipeline1 Python packages..."
         python3 -m pip install -r "$P1_ROOT_UNIX/requirements.txt"

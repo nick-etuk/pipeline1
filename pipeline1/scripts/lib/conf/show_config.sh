@@ -2,6 +2,9 @@
 
 show_config_base() {
     echo "MY_OS: $MY_OS"
+    echo "VM: $VM"
+    echo "SHELL_NAME: $SHELL_NAME"
+    echo "SHELL_VERSION: $SHELL_VERSION"
     echo "BASE_DIR: $BASE_DIR"
     echo "WORKING_DIR: $WORKING_DIR"
     echo "LOG_DIR: $LOG_DIR"
@@ -22,6 +25,8 @@ show_config_unix() {
 show_config_wsl() {
     echo "P1_USER_WIN: $P1_USER_WIN"
     echo "WORKING_DIR_WIN: $WORKING_DIR_WIN"
+    echo "ONEDRIVE_HOME: $ONEDRIVE_HOME"
+    echo "WORKING_DIR_ONEDRIVE: $WORKING_DIR_ONEDRIVE"
 }
 
 show_config() {

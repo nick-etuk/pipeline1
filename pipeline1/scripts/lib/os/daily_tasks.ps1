@@ -3,7 +3,7 @@ function daily_tasks() {
     if (Test-Path -Path $flag -PathType Leaf) {
         $last_update = Get-Content -Path $flag
         if ((Get-Date $last_update) -ge (Get-Date).AddDays(-1)) {
-            Write-Output "Daily tasks already completed on $(Get-Date $last_update -Format 'dddd dd MMMM yyyy at HH:mm')"
+            Write-Output "Daily tasks done today ($(Get-Date $last_update -Format 'dddd dd MMMM yyyy at HH:mm'))"
             return
         }
     }

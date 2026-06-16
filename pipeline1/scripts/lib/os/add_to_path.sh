@@ -12,9 +12,9 @@ function add_to_path {
     paths_to_add=(
         "$P1_ROOT_SCRIPT"
         "$HOME/.local/bin"
-        "$HOME/Library/Android/sdk/emulator"
-        "$HOME/Library/Android/sdk/platform-tools"
     )
+        # "$HOME/Library/Android/sdk/emulator"
+        # "$HOME/Library/Android/sdk/platform-tools"
 
     [ "$MY_OS" = 'macos' ] && paths_to_add+=("/Applications/Visual Studio Code.app/Contents/Resources/app/bin")
 
@@ -25,5 +25,5 @@ function add_to_path {
             echo "Added $new_path to path"
         fi
     done
-    set_android_env_vars
+    # set_android_env_vars
 }

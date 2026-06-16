@@ -1,9 +1,7 @@
 {
   "os": ["unix"],
-  "runOnce": true,
   "steps": [
-    "install_oh_my_zsh",
-    "install_powerlevel10k",
-    "install_zoxide"
+    "install_zoxide",
+    "install_oh_my_zsh"
   ]
 }

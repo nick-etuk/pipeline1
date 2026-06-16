@@ -1,5 +1,6 @@
 import json
 import os
+import sys
 from pipeline1.registry.remote_projects.configure_builtin_remotes import configure_builtin_remotes
 from pipeline1.lib.config import config
 from pipeline1.lib.logging import log
@@ -49,10 +50,16 @@ def fetch_remote_projects(force: bool = False) -> None:
             continue
 
         log.info(f"Cloning remote project from {git_url}...")
+        
+        parent_dir = os.path.dirname(project_dir)
+        if not os.path.exists(parent_dir):
+            os.makedirs(parent_dir, exist_ok=True)
+
         command = f"git clone {git_url} {project_dir}"
         invoke_commands([command])
         if not os.path.exists(project_dir):
             log.warn(f"Failed to clone {git_url}.")
+            # sys.exit(1)
             continue
 
         log.info(f"Remote project {git_url} cloned to {project_dir}.")

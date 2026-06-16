@@ -44,15 +44,17 @@ fi
 
 detect_os
 
-# [ "$VM" = 'wsl' ] && get_wsl_win_info	# todo: why is get_wsl_win_info not found?
+[ "$VM" = 'wsl' ] && get_wsl_win_info
 
 
 case $MY_OS in
 ubuntu)
-    source "$P1_ROOT_SCRIPT"/lib/conf/config_ubuntu.sh
+    # source "$P1_ROOT_SCRIPT"/lib/conf/config_ubuntu.sh
+    config_ubuntu
     ;;
 macos)
-    source "$P1_ROOT_SCRIPT"/lib/conf/config_macos.sh
+    # source "$P1_ROOT_SCRIPT"/lib/conf/config_macos.sh
+    config_macos
     ;;
 *)
     echo "config_base: unsupported OS $MY_OS"
@@ -65,7 +67,7 @@ ANDROID_EMULATOR_PORT=5554
 LOGINENV=sandpit
 
 NODE_MAJOR_VERSION=22
-DOTNET_MAJOR_VERSION=8
+DOTNET_MAJOR_VERSION=10
 PYTHON_MAJOR_VERSION=3
 PYTHON_MINOR_VERSION=9
 GNUPG_VERSION=2.4.8

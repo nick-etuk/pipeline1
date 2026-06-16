@@ -33,7 +33,7 @@ def scan_steps_without_config(project_id: str, project_path: str, existing_steps
             continue
 
         step_id = base_filename
-        log.warn(f"Warning: no config file for {step_file}")
+        # log.warn(f"Warning: no config file for {step_file}")
         new_steps.append({ 
             'stepId': step_id, 
             'projectId': project_id, 

@@ -1,4 +1,4 @@
-import sys
+# import sys
 import unittest
 from unittest.mock import patch, MagicMock, mock_open
 from io import StringIO
@@ -43,7 +43,7 @@ class TestExecuteStep(unittest.TestCase):
         # mock_open_fn.return_value.__enter__.return_value = StringIO('{}')
         execute_step(step=my_step, args=[], overrides=[])
         # Should early return without running subprocess
-        mock_log_end.assert_any_call('sample_step not for linux')
+        mock_log_end.assert_any_call('Step sample_step not for ubuntu')
 
     
 
