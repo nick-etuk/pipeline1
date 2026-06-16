@@ -20,14 +20,18 @@ def run_smoke_tests():
         try:
             os.remove(results_file)
         except OSError as e:
-            log.warn(f"Error deleting results file {results_file}: {e}")
+            log.warn(f"Error deleting smoke test results file {results_file}: {e}")
+            log.info(e)
             log.info('Trying again after a short delay...')
             time.sleep(3)
             try:
                 os.remove(results_file)
             except OSError as e:
-                log.error(f"Failed to delete results file {results_file} after retry: {e}")
+                log.warn(f"Failed to delete smoke test results file {results_file} after retry")
+                log.info(e)
                 sys.exit(1)
+            else:
+                log.info(f"Successfully deleted smoke test results file {results_file} after retry.")
 
     results = []
     results.append(pytest.main(["-x", f"{smoke_tests_dir}", "-m", "smoke_test", "-q"]))
