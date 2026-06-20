@@ -73,7 +73,7 @@ def execute_step(step: dict[str, Any], args: list[str], overrides: list[str], ne
         status = get_context(step_key, 'status')
 
         if status == 'done':
-            if 'runonce' in overrides:
+            if 'runOnce' in overrides:
                 log.info(f"Overriding run once for step {step_id}")
             else:
                 log.end(f"{step['title']} already done")

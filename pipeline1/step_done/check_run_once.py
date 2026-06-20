@@ -7,7 +7,7 @@ def check_run_once(step: dict[str, Any], args: list[str], overrides: list[str]) 
     Returns True if the step is a 'run once' step and has already been run.
     Returns False otherwise.
     '''
-    if 'runonce' in overrides: 
+    if 'runOnce' in overrides: 
         return False
     if 'runOnce' not in step: 
         return False
