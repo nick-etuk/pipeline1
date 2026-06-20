@@ -22,8 +22,8 @@ else
     ZSH_THEME="robbyrussell"
 fi
 
-plugins='plugins=(git zsh-syntax-highlighting zsh-autocomplete)'
+plugins='plugins=(git zsh-syntax-highlighting zsh-autosuggestions)'
 
-[ -f "$ZSH/oh-my-zsh.sh" ] && source $ZSH/oh-my-zsh.sh
+[ -f "$ZSH/oh-my-zsh.sh" ] && source "$ZSH/oh-my-zsh.sh"
 
 [ -f "$HOME/.p10k.zsh" ] && source "$HOME/.p10k.zsh"
