@@ -2,15 +2,12 @@
 # shellcheck disable=SC3054,SC1090,SC3030,SC1091,SC2012
 
 # Initially, we will use the user's default shell, zsh.
-# After setting the environment variables
-# we will switch to bash for greater POSIX compatibility.
 
 # Exit if running in an IDE terminal
 [ -n "${INTELLIJ_ENVIRONMENT_READER+empty_string}" ] && return
 [ "$TERM_PROGRAM" = 'vscode' ] && return
 
 set -u
-# setopt shwordsplit
 
 required_libraries=(
     logging
@@ -39,6 +36,10 @@ for lib in "${required_libraries[@]}"; do
 done
 
 get_shell_version
+if [ "$SHELL_NAME" = 'zsh' ]; then
+    setopt shwordsplit # In zsh, this is will add newlines to arrays when writing arrays to a file.
+fi
+
 detect_os
 
 script=$(find "$P1_ROOT_SCRIPT" -name "add_to_sudoers.sh" -type f)
