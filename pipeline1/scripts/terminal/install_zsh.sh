@@ -18,7 +18,7 @@ fi
 template_content=$(<"$template_file")
 template_content=${template_content//'{{P1_USER_UNIX}}'/"$P1_USER_UNIX"}
 echo "$template_content" > "$HOME"/.zshrc
-# sed -i 's/plugins=(git)/plugins=(git zsh-syntax-highlighting zsh-autocomplete)/' ~/.zshrc
+# sed -i 's/plugins=(git)/plugins=(git zsh-syntax-highlighting zsh-autosuggestions)/' ~/.zshrc
 source "$HOME/.zshrc"
 
 edit_login_profile
