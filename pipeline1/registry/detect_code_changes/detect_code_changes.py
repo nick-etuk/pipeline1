@@ -7,14 +7,14 @@ from pipeline1.registry.remote_projects.fetch_remote_projects import fetch_remot
 from pipeline1.registry.steps.run_smoke_tests import run_smoke_tests
 from pipeline1.registry.steps.scan_all_steps import scan_all_steps
 from pipeline1.lib.logging import log
-from pipeline1.registry.steps.scan_core import scan_core
-from pipeline1.registry.steps.scan_libs import scan_script_libraries
-from pipeline1.registry.steps.scan_tree import scantree
+from pipeline1.registry.detect_code_changes.check_core import check_core
+from pipeline1.registry.detect_code_changes.check_libs import check_libraries
+from pipeline1.registry.detect_code_changes.scan_sub_directories import scan_sub_directories
 
 
 def scan_dir(directory: Path, last_scan_time_param: float) -> bool:
     last_scan_time = float(last_scan_time_param)
-    for entry in scantree(directory):
+    for entry in scan_sub_directories(directory):
         update_time = entry.stat().st_mtime
         if entry.name.endswith('.json'):
             if update_time > last_scan_time:
@@ -46,7 +46,7 @@ def scan_projects(last_scan_time: float) -> bool:
     return False
 
 
-def detect_step_changes() -> None:
+def detect_code_changes() -> None:
     '''
     Look for any changes in .json files, 
     or the addition or removal of .sh and ps1 files
@@ -70,8 +70,8 @@ def detect_step_changes() -> None:
 
     last_scan_time = datetime.strptime(raw_time_string, '%Y-%m-%d %H:%M:%S').timestamp()
 
-    core_changes = scan_core(last_scan_time)
-    lib_changes = scan_script_libraries(last_scan_time)
+    core_changes = check_core(last_scan_time)
+    lib_changes = check_libraries(last_scan_time)
     if core_changes or lib_changes:
         run_smoke_tests()
 

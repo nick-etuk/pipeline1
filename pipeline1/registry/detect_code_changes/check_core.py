@@ -2,14 +2,14 @@ from datetime import datetime
 
 from pipeline1.lib.config import config
 from pipeline1.lib.logging import log
-from pipeline1.registry.steps.scan_tree import scantree
+from pipeline1.registry.detect_code_changes.scan_sub_directories import scan_sub_directories
 
 
-def scan_core(last_scan_time_param: float) -> bool:
+def check_core(last_scan_time_param: float) -> bool:
     core_dir = config['p1_root']
 
     last_scan_time = float(last_scan_time_param)
-    for entry in scantree(core_dir):
+    for entry in scan_sub_directories(core_dir):
         if '__test' in str(entry.path):
             continue
         if not entry.name.endswith('.py'):

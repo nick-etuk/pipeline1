@@ -2,15 +2,15 @@ from datetime import datetime
 
 from pipeline1.lib.config import config
 from pipeline1.lib.logging import log
-from pipeline1.registry.steps.scan_tree import scantree
+from pipeline1.registry.detect_code_changes.scan_sub_directories import scan_sub_directories
 
 
-def scan_script_libraries(last_scan_time_param: float) -> bool:
+def check_libraries(last_scan_time_param: float) -> bool:
     lib_dir = f"{config['script_root']}/lib"
 
     last_scan_time = float(last_scan_time_param)
     included_extensions = ['.sh', '.ps1']
-    for entry in scantree(lib_dir):
+    for entry in scan_sub_directories(lib_dir):
         if not any(entry.name.endswith(ext) for ext in included_extensions):
             continue
         update_time = entry.stat().st_mtime
