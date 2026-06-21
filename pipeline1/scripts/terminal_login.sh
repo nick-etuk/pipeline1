@@ -36,10 +36,6 @@ for lib in "${required_libraries[@]}"; do
 done
 
 get_shell_version
-if [ "$SHELL_NAME" = 'zsh' ]; then
-    setopt shwordsplit # In zsh, this is will add newlines to arrays when writing arrays to a file.
-fi
-
 detect_os
 
 script=$(find "$P1_ROOT_SCRIPT" -name "add_to_sudoers.sh" -type f)
@@ -56,7 +52,7 @@ if [ -d "$new_tab_queue" ] && [ -n "$(ls "$new_tab_queue")" ]; then
     cd "$P1_ROOT_SCRIPT" || return
     . ./init.sh
 
-    oldest_file=$(ls -tr "$new_tab_queue" | head -n 1)
+    oldest_file="$(ls -tr "$new_tab_queue" | head -n 1)"
     echo "Oldest file in new tab queue: $oldest_file"
     if [ -f "$new_tab_queue/$oldest_file" ]; then
         process_new_tab_file "$new_tab_queue/$oldest_file"
