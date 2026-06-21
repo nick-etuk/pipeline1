@@ -18,9 +18,13 @@ if [ -z "${P1_ROOT_SCRIPT+set}" ];then
     cd "$P1_ROOT_SCRIPT" || { echo "Could not switch to directory $P1_ROOT_SCRIPT"; exit 1; }
 fi
 
-echo -n 'p1'
-libraries=$(find "$P1_ROOT_SCRIPT/lib" -name '*.sh' -type f ! -name 'config_base.sh' ! -name 'z*.sh')
-for library in $libraries; do
+echo -n 'P1'
+libraries=()
+while IFS=  read -r -d $'\0'; do
+    libraries+=("$REPLY")
+done < <(find "$P1_ROOT_SCRIPT/lib" -name '*.sh' -type f ! -name 'config_base.sh' ! -name 'z*.sh' -print0)
+
+for library in "${libraries[@]}"; do
     source "$library"
     echo -n "."
 done
