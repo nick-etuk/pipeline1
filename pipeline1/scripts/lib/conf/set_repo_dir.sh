@@ -3,9 +3,9 @@
 save_directories() {
     # Saves the current P1_ROOT_UNIX and REPO_DIR as configuration values.
 
-    set_config p1_root_unix "$P1_ROOT_UNIX"
+    set_context p1_root_unix "$P1_ROOT_UNIX"
     REPO_DIR="$(dirname "$P1_ROOT_UNIX")"
-    set_config repo_dir "$REPO_DIR" # todo: this is never read. Consider removing it.
+    set_context repo_dir "$REPO_DIR" # todo: this is never read. Consider removing it.
 }
 
 set_repo_dir() {
@@ -14,7 +14,7 @@ set_repo_dir() {
     
     local old_root_path
     
-    old_root_path=$(get_config p1_root_unix)
+    old_root_path=$(get_context p1_root_unix)
     if [ -z "$old_root_path" ]; then
         save_directories
         return

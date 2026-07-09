@@ -1,4 +1,4 @@
-function Get-Config {
+function get_context {
     switch($args.Length) {
         1 {
             $Key = $args[0]
@@ -9,7 +9,7 @@ function Get-Config {
             $Group = $args[1]
         }
         default {
-            WriteError "Invalid number of arguments for Get-Config: $($args.Length) arguments - $($args -join ', ')"
+            WriteError "Invalid number of arguments for get_context: $($args.Length) arguments - $($args -join ', ')"
             # writeError "$($args.Length) arguments - $($args -join ', ')"
         }
     }
@@ -28,7 +28,7 @@ function Get-Config {
     return $Value
 }
 
-function Set-Config {
+function set_context {
     switch($args.Length) {
         2 {
             $Key = $args[0]
@@ -41,12 +41,12 @@ function Set-Config {
             $Group = $args[2]
         }
         default {
-            Write-Error "Invalid number of arguments for Set-Config: $($args.Length) arguments - $($args -join ', ')"
+            Write-Error "Invalid number of arguments for set_context: $($args.Length) arguments - $($args -join ', ')"
             # writeError "$($args.Length) arguments - $($args -join ', ')"
         }
     }
 
-    if ($(Get-Config $args) -eq $Value) {
+    if ($(get_context $args) -eq $Value) {
         # WriteDebug "$($args -join ' ') unchanged from '$Value'"
         return
     }

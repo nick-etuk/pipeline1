@@ -5,7 +5,7 @@ function Get-ScriptRootUnix {
         }
     }
     
-    $Script:P1_ROOT_UNIX = Get-Config 'P1_ROOT_UNIX'
+    $Script:P1_ROOT_UNIX = get_context 'P1_ROOT_UNIX'
     if ($Script:P1_ROOT_UNIX) { 
         return 
     }
@@ -14,7 +14,7 @@ function Get-ScriptRootUnix {
     $Script:P1_ROOT_UNIX = $(wsl -u $P1_USER_UNIX find ~ -type d -name 'pipeline1')
 
     if ($Script:P1_ROOT_UNIX) {
-        Set-Config 'P1_ROOT_UNIX' $Script:P1_ROOT_UNIX
+        set_context 'P1_ROOT_UNIX' $Script:P1_ROOT_UNIX
         return
     }
     WriteInfo "Cannot find pipeline1 directory in WSL"

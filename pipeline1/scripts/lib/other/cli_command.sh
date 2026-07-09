@@ -48,7 +48,7 @@ cli_command() {
                 error "Usage: get <key>"
                 exit 1
             fi
-            info "${args[*]} is set to $(get_config "${args[@]}")"
+            info "${args[*]} is set to $(get_context "${args[@]}")"
             exit 0
         ;;
         set)
@@ -56,7 +56,7 @@ cli_command() {
                 error "Usage: set <key> <value>"
                 exit 1
             fi
-            set_config "${args[@]}"
+            set_context "${args[@]}"
             info "${args[0]} set to ${args[*]:1}"
             exit 0
         ;;
@@ -83,9 +83,9 @@ cli_command() {
     if grep -q "^\"$command\"," "$activity_registry"; then
         info "Running activity $command"
         activity_id=$command
-        CURRENT_PROJECT=$(get_config 'activity_id_project' "$activity_id") #todo: what is this for? activity ids are unique across all projects.
-        set_config 'current_project' "$CURRENT_PROJECT"
-        set_config 'current_activity' "$activity_id"
+        CURRENT_PROJECT=$(get_context 'activity_id_project' "$activity_id") #todo: what is this for? activity ids are unique across all projects.
+        set_context 'current_project' "$CURRENT_PROJECT"
+        set_context 'current_activity' "$activity_id"
         run_activity "$activity_id" "${args[@]+"${args[@]}"}"
         exit 0
     fi
@@ -168,15 +168,15 @@ cli_command() {
 
     if [ "$start" -eq 0 ]; then
         # debug "option_num: $option_num"
-        project_activity_id=$(get_config 'activity_id' "$option_num")
+        project_activity_id=$(get_context 'activity_id' "$option_num")
         [ -z "$project_activity_id" ] && error "Unknown menu option $option_num"
         split_string "$project_activity_id" "."
         CURRENT_PROJECT="${SPLIT_STRING[0]}"
         [ "$SHELL_NAME" = 'zsh' ] && CURRENT_PROJECT="${SPLIT_STRING[1]}"
-        set_config 'current_project' "$CURRENT_PROJECT"
+        set_context 'current_project' "$CURRENT_PROJECT"
         activity_id="${SPLIT_STRING[1]}"
         [ "$SHELL_NAME" = 'zsh' ] && activity_id="${SPLIT_STRING[2]}"
-        set_config 'current_activity' "$activity_id"
+        set_context 'current_activity' "$activity_id"
         run_activity "$activity_id" "${activity_args[@]+"${activity_args[@]}"}"
     fi
 

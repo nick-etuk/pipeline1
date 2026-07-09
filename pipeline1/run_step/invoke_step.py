@@ -9,6 +9,7 @@ from pipeline1.lib.logging import log
 
 def invoke_step(step: dict[str, Any], args: list[str]) -> None:
     parent_step_id = step['stepId']
+    log.debug(f"=>step '{parent_step_id}'")
     
     base_filename = os.path.join(step['path'], f"{step['baseFilename']}")
     python_executable = 'python' if config['my_os'] == 'win' else 'python3'

@@ -15,5 +15,5 @@ get_first_activity() {
     matching_activity=$(printf '%s\n' "$matching_activity" | sed 's/"//g')
 
     CURRENT_ACTIVITY="$matching_activity"
-    set_config 'current_activity' "$CURRENT_ACTIVITY"
+    set_context 'current_activity' "$CURRENT_ACTIVITY"
 }

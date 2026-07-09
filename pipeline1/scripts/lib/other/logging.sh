@@ -31,27 +31,29 @@ function info {
 
     # echo "[$(date +'%Y-%m-%d %H:%M:%S')] $modified_message"
     echo "$modified_message"
+    echo "$modified_message" >> "$LOG_DIR/$CURRENT_STEP.log"
+    echo "$modified_message" >> "$LOG_DIR/z_all_steps.log"
 }
 
 function error {
     echo -e "${RED}Error in ${FUNCNAME[1]}:$*${NC}"
     echo "$*" >> "$LOG_DIR/$CURRENT_STEP.log"
-    echo "$*" >> "$LOG_DIR/debug_$CURRENT_STEP.log"
-    echo "$*" >> "$LOG_DIR/debug_all_steps.log"
+    # echo "$*" >> "$LOG_DIR/debug_$CURRENT_STEP.log"
+    echo "$*" >> "$LOG_DIR/z_all_steps.log"
     exit 1
 }
 
 function warn {
     echo -e "${YELLOW}$*${NC}"
     echo "$*" >> "$LOG_DIR/$CURRENT_STEP.log"
-    echo "$*" >> "$LOG_DIR/debug_$CURRENT_STEP.log"
-    echo "$*" >> "$LOG_DIR/debug_all_steps.log"
+    # echo "$*" >> "$LOG_DIR/debug_$CURRENT_STEP.log"
+    echo "$*" >> "$LOG_DIR/z_all_steps.log"
 }
 
 function debug {
-    if [ "$DEBUG" -eq 1 ]; then
-        echo -e "${YELLOW}$*${NC}"
-        echo "$*" >> "$LOG_DIR/debug_$CURRENT_STEP.log"
-        echo "$*" >> "$LOG_DIR/debug_all_steps.log"
-    fi
+    # [ "$DEBUG" -ne 1 ] && return
+    echo -e "${YELLOW}$*${NC}"
+    echo "$*" >> "$LOG_DIR/$CURRENT_STEP.log"
+    # echo "$*" >> "$LOG_DIR/debug_$CURRENT_STEP.log"
+    echo "$*" >> "$LOG_DIR/z_all_steps.log"
 }

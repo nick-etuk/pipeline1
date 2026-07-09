@@ -14,6 +14,10 @@ P1_USER_UNIX=''
 P1_USER_WIN=''
 WINDOWS_HOME=''
 WORKING_DIR_WIN=''
+ONEDRIVE_HOME=''
+WORKING_DIR_ONEDRIVE=''
+
+
 VM=''
 
 if [ -f /var/tmp/wsl-users.txt ]; then

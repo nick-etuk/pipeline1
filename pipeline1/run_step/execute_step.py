@@ -13,6 +13,7 @@ from pipeline1.lib.logging import log
 from pipeline1.step_done.check_dependencies import check_dependencies
 from pipeline1.step_done.step_entry import step_entry
 from pipeline1.step_done.step_exit import step_exit
+from pipeline1.run_step.step_timer import start_timer, stop_timer
 
 
 def run_child_steps(parent_step: dict[str, Any], parent_args: list[str], parent_overrides: list[str], depth: int = 0) -> bool:
@@ -99,14 +100,19 @@ def execute_step(step: dict[str, Any], args: list[str], overrides: list[str], ne
         log.end(f"{step['title']} running in parallel")
         return True
             
+    log.debug(f"=>execute step {step_id}")
     all_passed = True
     
+    start_time = start_timer(step_key)
+
     invoke_step_commands(step)
 
     if 'steps' in step:
         all_passed = run_child_steps(parent_step=step, parent_args=args, parent_overrides=overrides, depth=depth) and all_passed
 
     invoke_step(step=step, args=args)
+
+    stop_timer(step_key, start_time)
 
     if not run_always:
         if not step_exit(step=step, step_args=args, new_tab_active=new_tab_active):

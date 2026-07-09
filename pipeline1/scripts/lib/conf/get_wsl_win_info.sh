@@ -2,32 +2,51 @@
 # shellcheck disable=SC1091
 
 get_wsl_win_info() {
-    if [ -s "$WORKING_DIR/P1_USER_UNIX/names.sh" ]; then
-        source "$WORKING_DIR/P1_USER_UNIX/names.sh"
-        return
+
+    ## what is this?
+    # if [ -s "$WORKING_DIR/P1_USER_UNIX/names.sh" ]; then
+    #     source "$WORKING_DIR/P1_USER_UNIX/names.sh"
+    #     return
+    # fi
+
+    if [ -n "$P1_USER_WIN" ]; then 
+        P1_USER_WIN=$(get_context 'p1_user_win'); 
+        if [ -n "$P1_USER_WIN" ]; then
+            P1_USER_WIN=$(cmd.exe /c "echo %USERNAME%" | tr -d '\r')
+            set_context 'p1_user_win' "$P1_USER_WIN"
+        fi
     fi
 
-    P1_USER_WIN=$(get_config 'p1_user_win')
-    if [ -n "$P1_USER_WIN" ]; then
-        WORKING_DIR_WIN=$(get_config 'working_dir_win')
-        WINDOWS_HOME=$(get_config 'windows_home')
-        ONEDRIVE_HOME=$(get_config 'onedrive_home')
-        WORKING_DIR_ONEDRIVE=$(get_config 'working_dir_onedrive')
-        return
+    if [ -n "$WINDOWS_HOME" ]; then 
+        WINDOWS_HOME=$(get_context 'windows_home');
+        if [ -n "$WINDOWS_HOME" ]; then
+            WINDOWS_HOME=$(cmd.exe /c "echo %USERPROFILE%" | tr -d '\r')
+            set_context 'windows_home' "$WINDOWS_HOME"
+        fi
     fi
 
-    ONEDRIVE_HOME=$(cmd.exe /c "echo %OneDrive%" | tr -d '\r')
-    ONEDRIVE_HOME=$(wslpath "$ONEDRIVE_HOME")
-    # "$env:onedrive"
-    WORKING_DIR_ONEDRIVE="$ONEDRIVE_HOME/Documents/working"
+    if [ -n "$WORKING_DIR_WIN" ]; then 
+        WORKING_DIR_WIN=$(get_context 'working_dir_win');
+        if [ -n "$WORKING_DIR_WIN" ]; then
+            WORKING_DIR_WIN=$(wslpath "$WINDOWS_HOME\\.pipeline1\\working")
+            set_context 'working_dir_win' "$WORKING_DIR_WIN"
+        fi
+    fi
 
-    echo "No config entries found, using CMD.exe to capture P1_USER_WIN"
-    P1_USER_WIN=$(cmd.exe /c "echo %USERNAME%" | tr -d '\r')
-    WINDOWS_HOME=$(cmd.exe /c "echo %USERPROFILE%" | tr -d '\r')
-    WORKING_DIR_WIN=$(wslpath "$WINDOWS_HOME\\.pipeline1\\working")
-    [ -n "$P1_USER_WIN" ] && set_config 'p1_user_win' "$P1_USER_WIN"
-    [ -n "$WORKING_DIR_WIN" ] && set_config 'working_dir_win' "$WORKING_DIR_WIN"
-    [ -n "$WINDOWS_HOME" ] && set_config 'windows_home' "$WINDOWS_HOME"
-    [ -n "$ONEDRIVE_HOME" ] && set_config 'onedrive_home' "$ONEDRIVE_HOME"
-    [ -n "$WORKING_DIR_ONEDRIVE" ] && set_config 'working_dir_onedrive' "$WORKING_DIR_ONEDRIVE"
+    if [ -n "$ONEDRIVE_HOME" ]; then 
+        ONEDRIVE_HOME=$(get_context 'onedrive_home'); 
+        if [ -n "$ONEDRIVE_HOME" ]; then
+            ONEDRIVE_HOME=$(cmd.exe /c "echo %OneDrive%" | tr -d '\r')
+            ONEDRIVE_HOME=$(wslpath "$ONEDRIVE_HOME")
+            set_context 'onedrive_home' "$ONEDRIVE_HOME"
+        fi
+    fi
+    if [ -n "$WORKING_DIR_ONEDRIVE" ]; then 
+        WORKING_DIR_ONEDRIVE=$(get_context 'working_dir_onedrive');
+        if [ -n "$WORKING_DIR_ONEDRIVE" ]; then
+            # "$env:onedrive"
+            WORKING_DIR_ONEDRIVE="$ONEDRIVE_HOME/Documents/working"
+            set_context 'working_dir_onedrive' "$WORKING_DIR_ONEDRIVE"
+        fi
+    fi
 }

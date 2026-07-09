@@ -15,7 +15,7 @@ write-output "run_step_script.ps1 running $script_file with args: $step_args"
 . $script_file -Arguments $step_args
 
 
-$default_step_path=$(Get-Config 'default_step_path')
+$default_step_path=$(get_context 'default_step_path')
 if ($default_step_path -and (Test-Path -Path $default_step_path -PathType Container)) {
     Set-Location -Path $default_step_path
 }

@@ -26,6 +26,6 @@ function get_first_activity($ProjectID) {
         return
     }
     $CURRENT_ACTIVITY = $first_activity.activity_id
-    Set-Config 'current_activity' "$CURRENT_ACTIVITY"
+    set_context 'current_activity' "$CURRENT_ACTIVITY"
     echo "First activity for project $ProjectID is $CURRENT_ACTIVITY"
 }

@@ -35,7 +35,7 @@ computed_config: dict[str, Any] = {
     'new_tab_dir': str(base_dir / static_config['working_dir_name'] / static_config['new_tab_dir_name']),
     'log_base': str(base_dir / 'log'),
     'my_download_dir': str(base_dir / 'downloads'),
-    'remotes_dir': str(base_dir / 'remotes')
+    'remotes_dir': str(base_dir / 'remote_projects'),
 }
 
 config = {**static_config, **computed_config}
