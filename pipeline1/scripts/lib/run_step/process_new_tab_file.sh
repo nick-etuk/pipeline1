@@ -19,7 +19,15 @@ process_new_tab_file() {
         source "${SPLIT_STRING[@]}"
 
     done <  <(echo "$file_content")
-    debug '<=process_new_tab_file'
-    # todo: if step has an 'exitTo', cd to that directory here.
 
+    debug '<=process_new_tab_file'
+    # Switch to path of the default step
+    # in order to prevent the parallel process exiting
+    # to the Pipeline1 directory.
+    default_step_path=$(get_context 'default_step_path')
+    if [ -n "$default_step_path" ] && [ -d "$default_step_path" ]; then
+        cd "$default_step_path" || exit 1
+    fi
+
+    set +u
 }

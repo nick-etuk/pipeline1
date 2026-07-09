@@ -53,7 +53,7 @@ class TestExecuteStep(unittest.TestCase):
             'path': '/tmp/sample_step/config.json',
             'dir': '/tmp/sample_step'
         } | self.registry_entry
-        mock_step_entry.return_value = {'status': False, 'reason': ''}
+        mock_step_entry.return_value = {'run_once': False, 'reason': ''}
         with patch('subprocess.run') as mock_run:
             # execute_step(step=self.registry_entry, args=[], overrides=[])
             execute_step(step=my_step, args=[], overrides=[])
@@ -66,7 +66,7 @@ class TestExecuteStep(unittest.TestCase):
     @pytest.mark.skip(reason="todo: fix and unskip.")
     def test_subprocess_called_for_unix(self, mock_step_exit: MagicMock, mock_step_entry: MagicMock, mock_enrich: MagicMock, mock_open_fn: MagicMock):
         mock_open_fn.return_value.__enter__.return_value = StringIO('{}')
-        mock_step_entry.return_value = {'status': True, 'reason': ''}
+        mock_step_entry.return_value = {'run_once': True, 'reason': ''}
         mock_step_exit.return_value = True
         # config = {}
         # mock_enrich.return_value = config | {
@@ -96,7 +96,7 @@ class TestExecuteStep(unittest.TestCase):
     def test_new_tab_queue_creation_and_open_new_tab(self, mock_step_entry: MagicMock, mock_enrich: MagicMock, mock_open_fn: MagicMock):
         print('=>test_new_tab_queue_creation_and_open_new_tab')
         mock_open_fn.return_value.__enter__.return_value = StringIO('{}')
-        mock_step_entry.return_value = {'status': True, 'reason': ''}
+        mock_step_entry.return_value = {'run_once': True, 'reason': ''}
         config = {'newTab': True}
         mock_enrich.return_value = config | {
             'stepId': 'sample_step',
@@ -148,7 +148,7 @@ class TestExecuteStep(unittest.TestCase):
     @pytest.mark.skip(reason="todo: fix and unskip.")
     def test_step_exit_failure_logs_failure(self, mock_step_exit: MagicMock, mock_step_entry: MagicMock, mock_enrich: MagicMock, mock_open_fn: MagicMock):
         mock_open_fn.return_value.__enter__.return_value = StringIO('{}')
-        mock_step_entry.return_value = {'status': True, 'reason': ''}
+        mock_step_entry.return_value = {'run_once': True, 'reason': ''}
         mock_step_exit.return_value = False
         config = {}
         mock_enrich.return_value = config | {

@@ -1,6 +1,5 @@
 from typing import Any
 
-from icecream import ic
 from pipeline1.lib.context import get_context, set_context
 from pipeline1.run_step.remove_docker_containers import remove_docker_containers
 from pipeline1.run_step.schedule_step import schedule_step
@@ -61,17 +60,17 @@ def execute_step(step: dict[str, Any], args: list[str], overrides: list[str], ne
         run_always = True
         log.debug(f"runAlways is true for step {step_id}")
 
-    step_key = f"step_{step_id}"
+    step_key = f"{step_id}"
 
     if len(args) > 0:
         fomatted_args = "_".join(args)
-        step_key = f"step_{step_id}_{fomatted_args}"
+        step_key = f"{step_id}_{fomatted_args}"
 
     run_once = False
     status = None
     if 'runOnce' in step and str(step['runOnce']).lower() == 'true':
         run_once = True
-        status = get_context(step_key, 'status')
+        status = get_context(step_key, 'run_once')
 
         if status == 'done':
             if 'runOnce' in overrides:
@@ -82,11 +81,11 @@ def execute_step(step: dict[str, Any], args: list[str], overrides: list[str], ne
     
     if not run_always and 'dependencies' not in overrides:
         ok_to_proceed = step_entry(step=step, step_args=args)
-        if ok_to_proceed['status'] is False:
+        if ok_to_proceed['run_once'] is False:
             if ok_to_proceed['reason'] == 'done':
                 log.end(f"{step['title']} already done")
                 if run_once:
-                    set_context(step_key, 'done', 'status')
+                    set_context(step_key, 'done', 'run_once')
                 return True
 
             log.end(f"{step['title']} not attempted")
@@ -121,7 +120,7 @@ def execute_step(step: dict[str, Any], args: list[str], overrides: list[str], ne
     if all_passed:
         log.end(f"{step['title']} step completed")
         if run_once:
-            set_context(step_key, 'done', 'status')
+            set_context(step_key, 'done', 'run_once')
     else:
         if new_tab_active:
             log.end(f"{step['title']} parallel step failed")
