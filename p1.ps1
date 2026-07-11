@@ -2,8 +2,8 @@
 # Sets P1_ROOT_WIN, then hands over to terminal_login.ps1, 
 # which will set up the environment and launch the main p1.py script.
 
-$ErrorActionPreference = "Stop"
-
+# $ErrorActionPreference = "Stop"
+write-host 'bp1'
 if (!(Test-Path variable:P1_ROOT_WIN)) { 
     Write-output "Setting P1_ROOT_WIN manually"
     $Script:P1_ROOT_WIN = (get-item $PSScriptRoot)
@@ -11,16 +11,16 @@ if (!(Test-Path variable:P1_ROOT_WIN)) {
 
 }
 
-$script="$P1_ROOT_SCRIPT/edit_login_profile.ps1"
-if (!(Test-Path -Path $script -PathType Leaf)) {
-    $script = Get-Childitem -Path "$P1_ROOT_SCRIPT" -Include 'edit_login_profile.ps1' -Recurse
-    if (Test-Path -Path $script -PathType Leaf) {
-        # & $script
-        . $script.FullName
-    } else {
-        Write-Output "Could not find edit_login_profile.ps1 in $P1_ROOT_SCRIPT"
-    }
-}
+# $script="$P1_ROOT_SCRIPT/edit_login_profile.ps1"
+# if (!(Test-Path -Path $script -PathType Leaf)) {
+#     $script = Get-Childitem -Path "$P1_ROOT_SCRIPT" -Include 'edit_login_profile.ps1' -Recurse
+#     if (Test-Path -Path $script -PathType Leaf) {
+#         ## & $script
+#         # . $script.FullName
+#     } else {
+#         Write-Output "Could not find edit_login_profile.ps1 in $P1_ROOT_SCRIPT"
+#     }
+# }
 
 $script="$P1_ROOT_SCRIPT/terminal_login.ps1"
 if (!(Test-Path -Path $script -PathType Leaf)) {

@@ -55,7 +55,7 @@ if (Test-Path variable:DEBUG) {
     }
 }
 
-$LOG_FILE = Join-Path $LOG_DIR -ChildPath "init.log"
+$LOG_FILE = "$LOG_DIR\ps1_default.log"
 if (!(Test-Path -PathType Leaf $LOG_FILE)) {
     New-Item -Path $LOG_FILE -ItemType File -Force | Out-Null
 }

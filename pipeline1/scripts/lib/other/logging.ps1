@@ -28,16 +28,22 @@ function WriteLog {
         Verbose { Write-Verbose "$Message" }
         Warning { 
             Write-Warning $Message
+            Add-Content -Path $LOG_FILE -Value "$Message"
             if ($EventLogEnabled) { Write-EventLog -LogName Application -Source 'pipeline1' -EntryType Warning -EventId 1 -Message $Message }
         }
         Error { 
             Write-Warning "$Message"
+            Add-Content -Path $LOG_FILE -Value "$Message"
             if ($EventLogEnabled) { Write-EventLog -LogName Application -Source 'pipeline1' -EntryType Error -EventId 1 -Message $Message }
         }
-        Debug { Write-Debug "$Message" }
+        Debug { 
+            Write-Debug "$Message"
+            Add-Content -Path $LOG_FILE -Value "$Message"
+        }
         Info { 
             Write-Information "$Message"   -InformationAction Continue
             # if ($EventLogEnabled) { Write-EventLog -LogName Application -Source 'pipeline1' -EntryType Warning -EventId 1 -Message $Message }
+            Add-Content -Path $LOG_FILE -Value "$Message"
         }
         default { WriteInfo "$Message" }
     }
