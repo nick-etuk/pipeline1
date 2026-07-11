@@ -41,7 +41,7 @@ def scan_steps_without_config(project_id: str, project_path: str, existing_steps
             'title': get_step_title(step_id),
             'sortOrder': project_sort_order(project_id),
             'baseFilename': base_filename,
-            'path': step_file.parent,
+            'path': step_file.parent
         })
     
     return new_steps

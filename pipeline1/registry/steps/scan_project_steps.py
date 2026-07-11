@@ -53,14 +53,18 @@ def scan_project_steps(project_id: str, project_path: str) -> Optional[list[dict
         if 'sortOrder' in step_config:
             my_sort_order = my_sort_order + step_config['sortOrder'] / 10
         
-        step_registry.append({ 
+        step = { 
             'stepId': step_id, 
             'projectId': project_id,
             'menu': menu,
             'title': title,
             'sortOrder': my_sort_order,
             'baseFilename': base_filename,
-            'path': step_config_file.parent,
-        })
+            'path': step_config_file.parent
+        }
+        
+        if 'child_steps' in step_config:
+            step['child_steps'] = step_config['child_steps']
+        step_registry.append(step)
     
     return step_registry
