@@ -37,11 +37,12 @@ function Add-To-PowerShell-Path {
 }
 
 function set_android_env_vars {
-    if (-not $env:ANDROID_HOME) {
-        $env:ANDROID_HOME = "F:\app\Android\Sdk"
-    }
     if (-not $env:ANDROID_SDK_ROOT) {
-        $env:ANDROID_SDK_ROOT = "F:\app\Android\Sdk"
+        $env:ANDROID_SDK_ROOT = $ANDROID_SDK_ROOT
+    }
+
+    if (-not $env:ANDROID_HOME) {
+        $env:ANDROID_HOME = $ANDROID_SDK_ROOT
     }
 }
 
@@ -66,25 +67,31 @@ function add_path {
         $CurrentPath = Get-Current-Path -Scope $Scope
 
         if ($CurrentPath -notcontains $PathToAdd) {
-            $CurrentPath = "$CurrentPath;$PathToAdd" | Where-Object { $_ }
+            # $CurrentPath = "$CurrentPath;$PathToAdd" | Where-Object { $_ }
+            $CurrentPath = "$CurrentPath;$PathToAdd"
             [Environment]::SetEnvironmentVariable('Path', $CurrentPath -join ';', $ScopeType)
+            $CurrentPath = "$CurrentPath;$PathToAdd"
+            WriteInfo "Added [$PathToAdd] to registry path."
         }
     }
 
+    # The path has been updated in the registry, but the current session may not have the updated path.
     $envPaths = $env:Path -split ';'
     if ($envPaths -notcontains $PathToAdd) {
-        $envPaths = "$envPaths;$PathToAdd" | Where-Object { $_ }
+        # $envPaths = "$envPaths;$PathToAdd" | Where-Object { $_ }
+        $envPaths = "$envPaths;$PathToAdd"
         $env:Path = $envPaths -join ';'
-        WriteInfo "Added [$PathToAdd] to PATH."
+        WriteInfo "Added [$PathToAdd] to current session path."
     }
 
     # $NewPath = "$CurrentPath;$PathToAdd"
     # Set-ItemProperty -Path "Registry::HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\Session Manager\Environment" -Name PATH -Value $NewPath
     # return $Result
-    set_android_env_vars
 }
 
 function add_to_path {
-    add_path -path F:\app\Android\Sdk\emulator
-    add_path -path F:\app\Android\Sdk\platform-tools
+    set_android_env_vars
+    add_path -path "$P1_ROOT_SCRIPT"
+    add_path -path "$env:ANDROID_SDK_ROOT\emulator"
+    add_path -path "$env:ANDROID_SDK_ROOT\platform-tools"
 }

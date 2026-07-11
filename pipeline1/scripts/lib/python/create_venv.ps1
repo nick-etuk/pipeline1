@@ -20,7 +20,7 @@ function create_venv($project_id) {
 
     Write-output "Virtual environment not found for $project_id. Create venv? (y/n)"
     $prompt = Read-Host
-    if ($prompt -eq "y") {
+    if ($prompt.ToLower() -eq "y") {
         Write-output "Creating virtual environment..."
         $venv_dir = "$project_root\.venv_$project_id"
         python -m venv "$venv_dir"

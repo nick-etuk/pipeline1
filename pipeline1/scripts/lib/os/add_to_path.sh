@@ -1,20 +1,38 @@
 #!/usr/bin/env bash
 
-function set_android_env_vars {
-    [ -z "${ANDROID_HOME+set}" ] && export ANDROID_HOME="$HOME/Library/Android/sdk"
-    [ -z "${ANDROID_SDK_ROOT+set}" ] && export ANDROID_SDK_ROOT="$HOME/Library/Android/sdk"
+set_android_sdk_path() {
+    [ -n "${ANDROID_SDK_ROOT+set}" ] && return
+
+    if [ "$MY_OS" = 'macos' ]; then
+        export ANDROID_SDK_ROOT="$HOME/Library/Android/sdk"
+        return
+    fi
+    
+    if [ "$VM" = 'wsl' ]; then
+        export ANDROID_SDK_ROOT="$WINDOWS_APP_INSTALL_DIR/android_sdk"
+        return
+    fi
+}
+
+set_android_home() {
+    [ -n "${ANDROID_HOME+set}" ] && return
+
+    export ANDROID_HOME="$ANDROID_SDK_ROOT"
 }
 
 function add_to_path {
     local paths_to_add
 
-    # todo: add the correct paths for Ubuntu
+
+    set_android_sdk_path
+    set_android_home
+    
     paths_to_add=(
         "$P1_ROOT_SCRIPT"
         "$HOME/.local/bin"
+        "$ANDROID_SDK_ROOT/emulator"
+        "$ANDROID_SDK_ROOT/platform-tools"
     )
-        # "$HOME/Library/Android/sdk/emulator"
-        # "$HOME/Library/Android/sdk/platform-tools"
 
     [ "$MY_OS" = 'macos' ] && paths_to_add+=("/Applications/Visual Studio Code.app/Contents/Resources/app/bin")
 
@@ -25,5 +43,4 @@ function add_to_path {
             echo "Added $new_path to path"
         fi
     done
-    # set_android_env_vars
 }
