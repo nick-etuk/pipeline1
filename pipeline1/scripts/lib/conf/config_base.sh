@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 # shellcheck disable=SC1090,SC1091,SC2034
 
+[ -z "${FORCE+set}" ] && FORCE=0
+[ -z "${DEBUG+set}" ] && DEBUG=1
+CURRENT_STEP='core'
+
 # libraries=$(find "$P1_ROOT_SCRIPT/lib" -name 'detect_os.sh' -o -name 'get_shell_version.sh' -o -name 'get_wsl_win_info.sh')
 # for lib in "${libraries[@]}"; do
 #    echo "config_base loading $lib..."
@@ -16,7 +20,7 @@ WINDOWS_HOME=''
 WORKING_DIR_WIN=''
 ONEDRIVE_HOME=''
 WORKING_DIR_ONEDRIVE=''
-
+GIT_PATH_WIN=''
 
 VM=''
 
@@ -47,8 +51,7 @@ else
 fi
 
 detect_os
-
-[ "$VM" = 'wsl' ] && get_wsl_win_info
+# [ "$VM" = 'wsl' ] && get_wsl_win_info
 
 
 case $MY_OS in

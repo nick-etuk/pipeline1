@@ -99,7 +99,6 @@ def execute_step(step: dict[str, Any], args: list[str], overrides: list[str], ne
         log.end(f"{step['title']} running in parallel")
         return True
             
-    log.debug(f"=>execute step {step_id}")
     all_passed = True
     
     start_time = start_timer(step_key)

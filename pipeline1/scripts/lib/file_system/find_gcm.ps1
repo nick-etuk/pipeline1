@@ -40,11 +40,3 @@ function Find-GCM-Executable {
     return $Path
 }
 
-function get_context-New {
-    # todo: implement this
-    param (
-        $Parameter
-    )
-    Get-Content $CONFIG_FILE | foreach-object -begin {$h=@{}} -process { $k = [regex]::split($_,'='); if(($k[0].CompareTo("") -ne 0) -and ($k[0].StartsWith("[") -ne $True)) { $h.Add($k[0], $k[1]) } }
-    # return ($h.Get_Item($Parameter)).*
-}
