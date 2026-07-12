@@ -8,10 +8,15 @@ set_android_sdk_path() {
         return
     fi
     
-    if [ "$VM" = 'wsl' ]; then
-        export ANDROID_SDK_ROOT="$WINDOWS_APP_INSTALL_DIR/android_sdk"
-        return
-    fi
+    # todo: I don't think this should only be done in wsl. Only windows, MacOS and Ubuntu.
+    # if [ "$VM" = 'wsl' ]; then
+        # WINDOWS_APP_INSTALL_DIR=$(get_context 'windows_app_install_dir');
+        # export ANDROID_SDK_ROOT="$WINDOWS_APP_INSTALL_DIR/android_sdk"
+    #     return
+    # fi
+    
+    WINDOWS_APP_INSTALL_DIR=$(get_context 'windows_app_install_dir');
+    export ANDROID_SDK_ROOT="$WINDOWS_APP_INSTALL_DIR/android_sdk"
 }
 
 set_android_home() {

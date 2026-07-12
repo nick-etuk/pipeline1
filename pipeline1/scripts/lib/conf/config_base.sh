@@ -14,13 +14,13 @@ CURRENT_STEP='core'
 P1_VERSION='2.0'  # Update this when making changes that require users to update their profiles
 
 get_shell_version
-P1_USER_UNIX=''
-P1_USER_WIN=''
-WINDOWS_HOME=''
-WORKING_DIR_WIN=''
-ONEDRIVE_HOME=''
-WORKING_DIR_ONEDRIVE=''
-GIT_PATH_WIN=''
+# P1_USER_UNIX=''
+# P1_USER_WIN=''
+# WINDOWS_HOME=''
+# WORKING_DIR_WIN=''
+# ONEDRIVE_HOME=''
+# WORKING_DIR_ONEDRIVE=''
+# GIT_PATH_WIN=''
 
 VM=''
 
@@ -51,7 +51,7 @@ else
 fi
 
 detect_os
-# [ "$VM" = 'wsl' ] && get_wsl_win_info
+[ "$VM" = 'wsl' ] && get_wsl_win_info
 
 
 case $MY_OS in

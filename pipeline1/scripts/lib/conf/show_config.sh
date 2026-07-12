@@ -27,6 +27,8 @@ show_config_wsl() {
     debug "WORKING_DIR_WIN: $WORKING_DIR_WIN"
     debug "ONEDRIVE_HOME: $ONEDRIVE_HOME"
     debug "WORKING_DIR_ONEDRIVE: $WORKING_DIR_ONEDRIVE"
+    debug "GIT_PATH_WIN: $GIT_PATH_WIN"
+    debug "COMPUTER_NAME_WIN: $COMPUTER_NAME_WIN"
 }
 
 show_config() {

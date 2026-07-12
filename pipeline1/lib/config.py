@@ -32,6 +32,8 @@ if not os.path.exists(working_dir):
 
 def local_get_context(key:str) -> str:
     '''Based on pipeline1.lib.context.get_context. Created to avoid circular imports.'''
+    # todo: refactor to avoid circular imports. maybe move get_context to config.py
+    # pylint: disable=duplicate-code
     
     key = key.strip().lower()
 

@@ -38,9 +38,8 @@ done
 
 get_shell_version
 detect_os
-if [ "$VM" = 'wsl' ]; then
-    get_wsl_win_info
-fi
+# [ "$VM" = 'wsl' ] && get_wsl_win_info # done in config_base.sh
+
 
 if [ "$MY_OS" != 'macos' ]; then
     script=$(find "$P1_ROOT_SCRIPT" -name 'add_to_sudoers.sh' -type f)

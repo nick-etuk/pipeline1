@@ -10,8 +10,7 @@ set_log_dir() {
     mkdir -p "$LOG_DIR"
 }
 
-log() {
-    echo "$*"
+write_log() {
     [ -z "${LOG_DIR+set}" ] && set_log_dir
     echo "$*" >> "$LOG_DIR/$CURRENT_STEP.log"
     echo "$*" >> "$LOG_DIR/z_all_steps.log"
@@ -47,22 +46,23 @@ function info {
     modified_message=$(echo -e "${modified_message/step failed/$CROSS_MARK}")
 
     # log "[$(date +'%Y-%m-%d %H:%M:%S')] $modified_message"
-    log "$modified_message"
+    echo "$modified_message"
+    write_log "$modified_message"
 }
 
 function error {
     echo -e "${RED}Error in ${FUNCNAME[1]}:$*${NC}"
-    log "$*"
+    write_log "$*"
     exit 1
 }
 
 function warn {
     echo -e "${YELLOW}$*${NC}"
-    log "$*"
+    write_log "$*"
 }
 
 function debug {
     # [ "$DEBUG" -ne 1 ] && return
     echo -e "${YELLOW}$*${NC}"
-    log "$*"
+    write_log "$*"
 }
