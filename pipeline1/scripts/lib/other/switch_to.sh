@@ -11,7 +11,7 @@ function check_repo_dir {
     # fi
 
     # read -rp 'Please enter the correct repo path: ' REPO_DIR
-    # set_config repo_dir "$REPO_DIR"
+    # set_context repo_dir "$REPO_DIR"
     # info 'Please re-run nshapp.sh to try again'
     # exit 1
 }

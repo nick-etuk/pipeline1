@@ -21,8 +21,8 @@ function WriteLog {
     $Message = $Message -replace 'step failed', $CROSS_MARK
 
     $EventLogEnabled = $false
-    # WriteDebug "Get-Config event_log_source: $(Get-Config event_log_source)"
-    if($(Get-Config event_log_source) -eq 'pipeline1') { $EventLogEnabled = $true }
+    # WriteDebug "get_context event_log_source: $(get_context event_log_source)"
+    if($(get_context event_log_source) -eq 'pipeline1') { $EventLogEnabled = $true }
     # WriteDebug "EventLogEnabled: $EventLogEnabled"
     switch ($Level) {
         Verbose { Write-Verbose "$Message" }

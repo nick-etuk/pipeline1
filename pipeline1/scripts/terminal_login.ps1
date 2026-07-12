@@ -80,7 +80,7 @@ if ($startup_script -eq $null) {
 # create_venv
 # pip_install
 
-$default_step_path=$(Get-Config 'default_step_path')
+$default_step_path=$(get_context 'default_step_path')
 if ($default_step_path -and (Test-Path -Path $default_step_path -PathType Container)) {
     Set-Location -Path $default_step_path
 }

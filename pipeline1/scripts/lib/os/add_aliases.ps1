@@ -9,12 +9,12 @@ function gls { git log --show-signature }
 
 function p1 { python $P1_ROOT_SCRIPT/../p1.py $args }
 function p1pf { p1 pf }
-function cdpf { cd "$(get-config repo_dir)\portfolio" }
-function cdp1 { cd "$(get-config repo_dir)\pipeline1" }
+function cdpf { cd "$(get_context repo_dir)\portfolio" }
+function cdp1 { cd "$(get_context repo_dir)\pipeline1" }
 
-function cdweb { cd "$(get-config repo_dir)\nhsapp\web" }
-function cdand { cd "$(get-config repo_dir)\nhsapp-android" }
-function cdios { cd "$(get-config repo_dir)\nhsapp-ios" }
+function cdweb { cd "$(get_context repo_dir)\nhsapp\web" }
+function cdand { cd "$(get_context repo_dir)\nhsapp-android" }
+function cdios { cd "$(get_context repo_dir)\nhsapp-ios" }
 
 remove-alias -name h -ErrorAction SilentlyContinue
 function h { 

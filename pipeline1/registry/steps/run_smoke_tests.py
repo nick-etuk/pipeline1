@@ -8,7 +8,6 @@ from pipeline1.lib.logging import log
 
 def run_smoke_tests():
     log.info("Running smoke tests...")
-    # smoke_tests_dir = os.path.join(config['p1_root'], 'pipeline1', 'tests', 'smoke')
     smoke_tests_dir = os.path.join(config['p1_root'], 'pipeline1', 'tests')
     results_dir = os.path.join(config['working_dir'], 'tests')
     if not os.path.exists(results_dir):
@@ -21,14 +20,14 @@ def run_smoke_tests():
             os.remove(results_file)
         except OSError as e:
             log.warn(f"Error deleting smoke test results file {results_file}: {e}")
-            log.info(e)
+            log.info(str(e))
             log.info('Trying again after a short delay...')
             time.sleep(3)
             try:
                 os.remove(results_file)
             except OSError as e:
                 log.warn(f"Failed to delete smoke test results file {results_file} after retry")
-                log.info(e)
+                log.info(str(e))
                 sys.exit(1)
             else:
                 log.info(f"Successfully deleted smoke test results file {results_file} after retry.")

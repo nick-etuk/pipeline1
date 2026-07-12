@@ -7,7 +7,7 @@ echo "*** installing powerlevel10k"
 git clone --depth=1 https://github.com/romkatv/powerlevel10k.git "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"/themes/powerlevel10k
 template_file=$(find "$P1_ROOT_UNIX" -name 'p10k_template.zsh' -not -path '.venv_p1/*')
 if [ ! -f "$template_file" ]; then
-    echo "zshrc template not found at $template_file"
+    echo "Powerlevel10k template not found at $template_file"
     return
 fi
 cp "$template_file" "$HOME"/.p10k.zsh

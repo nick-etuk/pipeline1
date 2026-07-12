@@ -4,11 +4,13 @@ invoke_commands() {
     local commands
     local exit_status
 
-    if [ -z "${INIT_UNIX+set}" ]; then
+    if [ -z "${INIT_UNIX+set}" ]; then # todo: remove this check and always source init.sh
         script_dir=$(dirname "$(realpath "$0")")
         cd "$script_dir" || exit
         . ./init.sh || exit 1
     fi
+
+    CURRENT_STEP=$(get_context 'current_step') # Used by logging.
 
     commands=("$@")
 

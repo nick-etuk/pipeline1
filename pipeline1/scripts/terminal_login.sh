@@ -10,6 +10,7 @@
 set -u
 
 required_libraries=(
+    get_next_run_id
     logging
     get_shell_version 
     detect_os
@@ -26,7 +27,7 @@ required_libraries=(
 	install_pyenv
     create_venv
     pip_install
-    get_config
+    get_context
     edit_login_profile
     config_base # source this last as it is a script, not a function
 )
@@ -37,9 +38,13 @@ done
 
 get_shell_version
 detect_os
+# [ "$VM" = 'wsl' ] && get_wsl_win_info # done in config_base.sh
 
-script=$(find "$P1_ROOT_SCRIPT" -name "add_to_sudoers.sh" -type f)
-sudo "$script" "$MY_OS"
+
+if [ "$MY_OS" != 'macos' ]; then
+    script=$(find "$P1_ROOT_SCRIPT" -name 'add_to_sudoers.sh' -type f)
+    sudo "$script" "$MY_OS"
+fi
 
 add_to_path
 add_aliases
@@ -75,7 +80,7 @@ else
     python3 "$P1_ROOT_UNIX/pipeline1/p1.py" "$@"
 fi
 
-default_step_path=$(get_config 'default_step_path')
+default_step_path=$(get_context 'default_step_path')
 if [ -n "$default_step_path" ] && [ -d "$default_step_path" ]; then
     cd "$default_step_path" || exit 1
 fi

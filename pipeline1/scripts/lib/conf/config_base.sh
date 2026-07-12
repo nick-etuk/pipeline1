@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 # shellcheck disable=SC1090,SC1091,SC2034
 
+[ -z "${FORCE+set}" ] && FORCE=0
+[ -z "${DEBUG+set}" ] && DEBUG=1
+CURRENT_STEP='core'
+
 # libraries=$(find "$P1_ROOT_SCRIPT/lib" -name 'detect_os.sh' -o -name 'get_shell_version.sh' -o -name 'get_wsl_win_info.sh')
 # for lib in "${libraries[@]}"; do
 #    echo "config_base loading $lib..."
@@ -10,10 +14,14 @@
 P1_VERSION='2.0'  # Update this when making changes that require users to update their profiles
 
 get_shell_version
-P1_USER_UNIX=''
-P1_USER_WIN=''
-WINDOWS_HOME=''
-WORKING_DIR_WIN=''
+# P1_USER_UNIX=''
+# P1_USER_WIN=''
+# WINDOWS_HOME=''
+# WORKING_DIR_WIN=''
+# ONEDRIVE_HOME=''
+# WORKING_DIR_ONEDRIVE=''
+# GIT_PATH_WIN=''
+
 VM=''
 
 if [ -f /var/tmp/wsl-users.txt ]; then
@@ -43,7 +51,6 @@ else
 fi
 
 detect_os
-
 [ "$VM" = 'wsl' ] && get_wsl_win_info
 
 

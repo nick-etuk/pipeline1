@@ -1,8 +1,0 @@
-{
-  "id": "parent",
-  "steps": [
-    "child1 vscode",
-    "child2 arg1 arg2",
-    "child3"
-  ]
-}

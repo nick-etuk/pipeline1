@@ -7,6 +7,7 @@ from pipeline1.run_step.run_step import run_step
 from pipeline1.registry.add_project.add_project import add_project
 from pipeline1.cli.list_steps import list_steps
 from pipeline1.lib.logging import log
+from pipeline1.cli.permissive_match import permissive_match
 
 # from icecream import ic
 
@@ -37,10 +38,14 @@ def cli_command(args: list[str]):
         return
         
     project_registry, step_registry = get_registries()
-    for step in step_registry:
-        if step['stepId'] == command:
-            set_default_step(project_registry=project_registry, step_registry_entry=step)
-            run_step(step_registry_entry=step, step_args=command_args, overrides=[], new_tab_active=False)
-            return
+    step_ids = [step['stepId'] for step in step_registry]
+    matching_step_id = permissive_match(command, step_ids)
+
+    if matching_step_id:
+        for step in step_registry:
+            if step['stepId'] == matching_step_id:
+                set_default_step(project_registry=project_registry, step_registry_entry=step)
+                run_step(step_registry_entry=step, step_args=command_args, overrides=[], new_tab_active=False)
+                return
     log.info(f"{command} is not a recognized command or step_id. Use 'list' to see available steps.")
     

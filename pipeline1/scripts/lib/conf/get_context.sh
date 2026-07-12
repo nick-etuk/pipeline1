@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-get_config() {
+get_context() {
     local key
     local value
     local group
@@ -17,8 +17,8 @@ get_config() {
         ;;
     *)
         # args=( "$@" )
-        # error "Invalid number of arguments for get_config: ${args[*]}"
-        echo "Invalid number of arguments for get_config"
+        # error "Invalid number of arguments for get_context: ${args[*]}"
+        echo "Invalid number of arguments for get_context"
         return 1
         ;;
     esac

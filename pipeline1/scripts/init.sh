@@ -6,11 +6,6 @@ set -u
 [ -n "${INIT_UNIX+set}" ] && return
 
 INIT_UNIX=1
-CURRENT_STEP=''
-
-[ -z "${FORCE+set}" ] && FORCE=0
-[ -z "${DEBUG+set}" ] && DEBUG=1
-
 
 if [ -z "${P1_ROOT_SCRIPT+set}" ];then
     P1_ROOT_SCRIPT=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
@@ -22,7 +17,7 @@ echo -n 'P1'
 libraries=()
 while IFS=  read -r -d $'\0'; do
     libraries+=("$REPLY")
-done < <(find "$P1_ROOT_SCRIPT/lib" -name '*.sh' -type f ! -name 'config_base.sh' ! -name 'z*.sh' -print0)
+done < <(find "$P1_ROOT_SCRIPT/lib" -name '*.sh' -type f ! -name 'config_base.sh' ! -name 'z_*.sh' -print0)
 
 for library in "${libraries[@]}"; do
     source "$library"
@@ -38,5 +33,4 @@ get_next_run_id
 LOG_DIR="$LOG_BASE/$RUN_ID"
 mkdir -p "$LOG_DIR"
 
-get_context
-# show_config
+show_config

@@ -15,12 +15,12 @@ def check_run_once(step: dict[str, Any], args: list[str], overrides: list[str]) 
         return False
 
     step_id = step['stepId']
-    step_key = f"step_{step_id}"
+    step_key = f"{step_id}"
     if len(args) > 0:
         formatted_args = "_".join(args)
-        step_key = f"step_{step_id}_{formatted_args}"
+        step_key = f"{step_id}_{formatted_args}"
 
-    if get_context(step_key, 'status') == 'done':
+    if get_context(step_key, 'run_once') == 'done':
         # log.debug(f"=>check run once: step {step_key} step already done")
         return True
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set_config() {
+set_context() {
     local key
     local value
     local group
@@ -22,14 +22,14 @@ set_config() {
         group=$3
         ;;
     *)
-        echo "Invalid number of arguments ($#) for set_config: ${args[*]}"
+        echo "Invalid number of arguments ($#) for set_context: ${args[*]}"
         return 1
         ;;
     esac
 
-    current_value=$(get_config "$key" "$group")
+    current_value=$(get_context "$key" "$group")
     if [ "$current_value" = "$value" ]; then
-        # debug "set_config: ${args[*]} unchanged from '$value'"
+        # debug "set_context: ${args[*]} unchanged from '$value'"
         return
     fi
 

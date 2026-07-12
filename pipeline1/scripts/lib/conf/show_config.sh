@@ -1,36 +1,38 @@
 #!/usr/bin/env bash
 
 show_config_base() {
-    echo "MY_OS: $MY_OS"
-    echo "VM: $VM"
-    echo "SHELL_NAME: $SHELL_NAME"
-    echo "SHELL_VERSION: $SHELL_VERSION"
-    echo "BASE_DIR: $BASE_DIR"
-    echo "WORKING_DIR: $WORKING_DIR"
-    echo "LOG_DIR: $LOG_DIR"
-    echo "REPO_DIR: $REPO_DIR"
-    echo "DEBUG: $DEBUG"
-    echo "FORCE: $FORCE"
-    echo "DEFAULT_STEP_ID: $DEFAULT_STEP_ID"
-    echo "DEFAULT_STEP_PATH: $DEFAULT_STEP_PATH"
-    echo "NODE_MAJOR_VERSION: $NODE_MAJOR_VERSION"
+    debug "MY_OS: $MY_OS"
+    debug "VM: $VM"
+    debug "SHELL_NAME: $SHELL_NAME"
+    debug "SHELL_VERSION: $SHELL_VERSION"
+    debug "BASE_DIR: $BASE_DIR"
+    debug "WORKING_DIR: $WORKING_DIR"
+    debug "LOG_DIR: $LOG_DIR"
+    debug "REPO_DIR: $REPO_DIR"
+    debug "DEBUG: $DEBUG"
+    debug "FORCE: $FORCE"
+    # debug "DEFAULT_STEP_ID: $DEFAULT_STEP_ID"
+    # debug "DEFAULT_STEP_PATH: $DEFAULT_STEP_PATH"
+    debug "NODE_MAJOR_VERSION: $NODE_MAJOR_VERSION"
 }
 
 show_config_unix() {
-    echo "Shell: $SHELL_NAME version: $SHELL_VERSION"
-    echo "P1_ROOT_UNIX: $P1_ROOT_UNIX"
-    echo "CURRENT_USER: $P1_USER_UNIX"
+    debug "Shell: $SHELL_NAME version: $SHELL_VERSION"
+    debug "P1_ROOT_UNIX: $P1_ROOT_UNIX"
+    debug "CURRENT_USER: $P1_USER_UNIX"
 }
 
 show_config_wsl() {
-    echo "P1_USER_WIN: $P1_USER_WIN"
-    echo "WORKING_DIR_WIN: $WORKING_DIR_WIN"
-    echo "ONEDRIVE_HOME: $ONEDRIVE_HOME"
-    echo "WORKING_DIR_ONEDRIVE: $WORKING_DIR_ONEDRIVE"
+    debug "P1_USER_WIN: $P1_USER_WIN"
+    debug "WORKING_DIR_WIN: $WORKING_DIR_WIN"
+    debug "ONEDRIVE_HOME: $ONEDRIVE_HOME"
+    debug "WORKING_DIR_ONEDRIVE: $WORKING_DIR_ONEDRIVE"
+    debug "GIT_PATH_WIN: $GIT_PATH_WIN"
+    debug "COMPUTER_NAME_WIN: $COMPUTER_NAME_WIN"
 }
 
 show_config() {
-    echo '--- P1 Shell Config ---'
+    debug '--- P1 Shell Config ---'
     show_config_base
     show_config_unix
     if [ "$VM" = 'wsl' ];then # don't use a one-liner here. It will leave an error state.

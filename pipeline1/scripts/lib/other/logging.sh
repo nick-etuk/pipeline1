@@ -1,4 +1,20 @@
 #!/usr/bin/env bash
+set_log_dir() {
+    if [ -z "${LOG_BASE+set}" ]; then
+        LOG_BASE="$P1_ROOT_SCRIPT/log"
+    fi
+    if [ -z "${RUN_ID+set}" ]; then
+        get_next_run_id
+    fi
+    LOG_DIR="$LOG_BASE/$RUN_ID"
+    mkdir -p "$LOG_DIR"
+}
+
+write_log() {
+    [ -z "${LOG_DIR+set}" ] && set_log_dir
+    echo "$*" >> "$LOG_DIR/$CURRENT_STEP.log"
+    echo "$*" >> "$LOG_DIR/z_all_steps.log"
+}
 
 function info {
     # todo: get stage (filename of calling script) automatically
@@ -29,29 +45,24 @@ function info {
     modified_message=$(echo -e "${modified_message/step already done/$TICK_MARK}")
     modified_message=$(echo -e "${modified_message/step failed/$CROSS_MARK}")
 
-    # echo "[$(date +'%Y-%m-%d %H:%M:%S')] $modified_message"
+    # log "[$(date +'%Y-%m-%d %H:%M:%S')] $modified_message"
     echo "$modified_message"
+    write_log "$modified_message"
 }
 
 function error {
     echo -e "${RED}Error in ${FUNCNAME[1]}:$*${NC}"
-    echo "$*" >> "$LOG_DIR/$CURRENT_STEP.log"
-    echo "$*" >> "$LOG_DIR/debug_$CURRENT_STEP.log"
-    echo "$*" >> "$LOG_DIR/debug_all_steps.log"
+    write_log "$*"
     exit 1
 }
 
 function warn {
     echo -e "${YELLOW}$*${NC}"
-    echo "$*" >> "$LOG_DIR/$CURRENT_STEP.log"
-    echo "$*" >> "$LOG_DIR/debug_$CURRENT_STEP.log"
-    echo "$*" >> "$LOG_DIR/debug_all_steps.log"
+    write_log "$*"
 }
 
 function debug {
-    if [ "$DEBUG" -eq 1 ]; then
-        echo -e "${YELLOW}$*${NC}"
-        echo "$*" >> "$LOG_DIR/debug_$CURRENT_STEP.log"
-        echo "$*" >> "$LOG_DIR/debug_all_steps.log"
-    fi
+    # [ "$DEBUG" -ne 1 ] && return
+    echo -e "${YELLOW}$*${NC}"
+    write_log "$*"
 }

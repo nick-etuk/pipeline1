@@ -14,14 +14,14 @@ function ProcessCLIcommand([string]$Command, [string[]]$Arguments) {
             if ($ArgCount -lt 1) {
                 WriteError "Usage: get <key>"
             }
-            WriteInfo "$($Arguments -join ' ') is set to $(get-config $Arguments)"
+            WriteInfo "$($Arguments -join ' ') is set to $(get_context $Arguments)"
             exit 0
         }
         set {
             if ($ArgCount -lt 2) {
                 WriteError "Usage: set <key> <value>"
             }
-            set-config $Arguments
+            set_context $Arguments
             $ArgStr = $Arguments[0..$ArgCount] -join ' '
             WriteInfo "Set $ArgStr"
             exit 0

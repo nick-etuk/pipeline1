@@ -2,6 +2,7 @@
   "os": ["unix"],
   "steps": [
     "install_zoxide",
-    "install_oh_my_zsh"
+    "install_oh_my_zsh",
+    "configure_zshrc"
   ]
 }

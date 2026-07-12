@@ -31,7 +31,7 @@ foreach ($Library in $Libraries) {
 . $PSScriptRoot\lib\conf\config_base.ps1 # Load config last since it is not just a function definiton.
 
 set_repo_dir
-$Script:REPO_DIR = Get-Config repo_dir
+$Script:REPO_DIR = get_context repo_dir
 
 Get-Next-Run-ID
 if (!(Test-Path variable:RUN_ID)) {

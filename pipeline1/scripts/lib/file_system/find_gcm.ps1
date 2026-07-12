@@ -1,5 +1,5 @@
 function Find-GCM-Executable {
-    $CachedPath = Get-Config 'file_paths' 'git-credential-manager.exe'
+    $CachedPath = get_context 'file_paths' 'git-credential-manager.exe'
     if ($CachedPath) {
         WriteDebug "Git Credential Manager found in cache: $CachedPath"
         return $CachedPath
@@ -19,7 +19,7 @@ function Find-GCM-Executable {
     foreach ($Path in $ExpectedPaths) {
         if (Test-Path -PathType Leaf $Path) {
             WriteDebug "Found GCM at expected path $Path"
-            Set-Config 'git-credential-manager.exe' $Path  'file_paths'
+            set_context 'git-credential-manager.exe' $Path  'file_paths'
             return $Path
         }
     }
@@ -40,11 +40,3 @@ function Find-GCM-Executable {
     return $Path
 }
 
-function Get-Config-New {
-    # todo: implement this
-    param (
-        $Parameter
-    )
-    Get-Content $CONFIG_FILE | foreach-object -begin {$h=@{}} -process { $k = [regex]::split($_,'='); if(($k[0].CompareTo("") -ne 0) -and ($k[0].StartsWith("[") -ne $True)) { $h.Add($k[0], $k[1]) } }
-    # return ($h.Get_Item($Parameter)).*
-}
