@@ -26,7 +26,7 @@ def set_step_exit_path(step: dict[str, Any], project_registry: list[dict[str, An
         step['exitTo'] = step['path']
         log.debug(f"Using step path ({step['path']}) as exitTo")
         
-    if is_absolute_path(step['exitTo']):
+    if is_absolute_path(step['exitTo']) and os.path.isdir(step['exitTo']):
         log.debug(f"Setting default step exit path to absolute path {step['exitTo']}")
         set_context('default_step_path', expand_path(step['exitTo']))
         return
@@ -40,6 +40,9 @@ def set_step_exit_path(step: dict[str, Any], project_registry: list[dict[str, An
             # The two are not always the same.
             project_root = project['source_code_path'] if 'source_code_path' in project else project['p1ProjectPath']
             exit_to_path = os.path.join(project_root, str(step['exitTo']))
+            if not os.path.isdir(exit_to_path):
+                log.warn(f"Path {exit_to_path} does not exist. Cannot set default step exit path.")
+                return
             log.debug(f"Setting default step exit path to {exit_to_path}")
             set_context('default_step_path', expand_path(exit_to_path))
             break
