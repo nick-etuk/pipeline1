@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 
 function show_help {
+    # todo: do this in Python. Check for the existence of help files before executing the step.
+    # If the help file exists, show it, prompt to continue, then continue.
+
     local step
     local filename
     local file_path=''
@@ -10,10 +13,10 @@ function show_help {
     arg_len="$#"
 
 
-    filename="$step.help.txt"
+    filename="$step.txt"
     if [ "$arg_len" -eq 2 ]; then 
         event=$2
-        filename="$step.help.$event.txt"
+        filename="$step.$event.txt"
     fi
     
     if [ ! -z ${CURRENT_PROJECT+empty_string} ]; then

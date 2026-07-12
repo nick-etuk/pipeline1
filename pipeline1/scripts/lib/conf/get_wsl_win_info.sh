@@ -2,7 +2,6 @@
 # shellcheck disable=SC1091
 
 get_wsl_win_info() {
-    echo '=>get_wsl_win_info'
     if [ -z "${P1_USER_WIN+set}" ]; then 
         P1_USER_WIN=$(get_context 'p1_user_win'); 
         if [ -z "$P1_USER_WIN" ]; then
