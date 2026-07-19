@@ -16,12 +16,24 @@ def show_config() -> None:
         'my_download_dir',
         'indentation',
         'debug']
-    
+
+    wsl_only = [
+        'p1_user_win',
+        'windows_home',
+        'working_dir_win',
+        'onedrive_home',
+        'working_dir_onedrive',
+        'git_path_win'
+    ]
     log.debug('--- P1 Python config ---')
     
     for key, value in config.items():
-        if key not in excluded:
-            log.debug(f"{key}:{' ' * (25 - len(key))}{value}")
+        if key in excluded:
+            continue
+        if config['vm'] != 'wsl' and key in wsl_only:
+            continue
+        
+        log.debug(f"{key}:{' ' * (25 - len(key))}{value}")
 
 
     context = {
