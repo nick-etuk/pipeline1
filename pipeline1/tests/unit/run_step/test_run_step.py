@@ -8,10 +8,11 @@ import pytest
 
 from pipeline1.lib.config import config
 from pipeline1.run_step.execute_step import execute_step
+from pipeline1.run_step.run_step import run_step
 
 
-class TestExecuteStep(unittest.TestCase):
-    """Unit tests for the execute_step function."""
+class TestRunStep(unittest.TestCase):
+    """Unit tests for the run_step function."""
 
     def setUp(self) -> None:
         self.registry_entry: dict[str, Any] = {
@@ -29,7 +30,8 @@ class TestExecuteStep(unittest.TestCase):
         current_os = config['my_os']
         # Step specifies a different OS
         my_step = {'os': 'win'} | self.registry_entry
-        execute_step(step=my_step, args=[], overrides=[])
+        # execute_step(step=my_step, args=[], overrides=[])
+        run_step(step_registry_entry=my_step, step_args=[], overrides=[])
         # Should log the message "Step test_step not for {current_os}"
         mock_log_end.assert_any_call(f'Step test_step not for {current_os}')
 
@@ -55,7 +57,7 @@ class TestExecuteStep(unittest.TestCase):
         mock_step_entry.return_value = {'run_once': False, 'reason': ''}
         with patch('subprocess.run') as mock_run:
             # execute_step(step=self.registry_entry, args=[], overrides=[])
-            execute_step(step=my_step, args=[], overrides=[])
+            run_step(step_registry_entry=my_step, step_args=[], overrides=[])
             mock_run.assert_not_called()
 
     @patch('builtins.open')
@@ -83,7 +85,7 @@ class TestExecuteStep(unittest.TestCase):
         with patch('subprocess.run') as mock_run, patch('builtins.print'):
             mock_run.return_value = MagicMock(returncode=0, stdout='done')
             ic(my_step)
-            execute_step(step=my_step, args=['arg1'], overrides=[])
+            run_step(step_registry_entry=my_step, step_args=['arg1'], overrides=[])
             self.assertTrue(mock_run.called)
             args_passed = mock_run.call_args[0][0]
             self.assertIn(f"{config['script_root']}/run_step_script.sh", args_passed)
@@ -104,7 +106,7 @@ class TestExecuteStep(unittest.TestCase):
         mock_open_fn.return_value.__enter__.return_value = StringIO('{}')
         with patch('pipeline1.run_step.execute_step.log.info') as mock_info, \
              patch('subprocess.run') as mock_run:
-            execute_step(step=self.registry_entry, args=['x', 'y'], overrides=[])
+            run_step(step_registry_entry=self.registry_entry, step_args=['x', 'y'], overrides=[])
             # mock_info.assert_called_once()
             mock_run.assert_not_called()
 
@@ -129,7 +131,7 @@ class TestExecuteStep(unittest.TestCase):
              patch('pipeline1.run_step.execute_step.log.info') as mock_info, \
              patch('builtins.print'):
             mock_run.return_value = MagicMock(returncode=0, stdout='done')
-            execute_step(step=self.registry_entry, args=[], overrides=[])
+            run_step(step_registry_entry=self.registry_entry, step_args=[], overrides=[])
             # Expect a failure log message because step_exit returned False
             logged_failure = any('step failed' in call[0][0] for call in mock_info.call_args_list)
             self.assertTrue(logged_failure)
