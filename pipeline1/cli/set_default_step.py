@@ -8,12 +8,15 @@ from pipeline1.run_step.enrich_step import enrich_step
 from icecream import ic
 
 def is_absolute_path(path: str) -> bool:
-    return path == '/' or (len(path) >= 2 and path[1] == ':' and len(path) == 2)
+    return path == '/' or (len(path) >= 2 and path[1] == ':' and len(path) >= 2)
 
 def expand_path(path: str) -> str:
     expanded_path = os.path.expandvars(path)
+    if ('$' in path or '~' in path) and expanded_path == path:
+        log.warn(f"set_default_step: path contains unexpanded environment variable: {expanded_path}")
+
     if not os.path.isdir(expanded_path):
-        log.error(f"Path does not exist: {expanded_path}. Aborting.")
+        log.warn(f"set_default_step: path does not exist: {expanded_path}")
         return ''
     return expanded_path
 
