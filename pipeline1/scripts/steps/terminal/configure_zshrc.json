@@ -4,5 +4,7 @@
   "checks": {
     "unix": ["grep -q 'ZSH_THEME=\"powerlevel10k/powerlevel10k\"' \"$HOME/.zshrc\"",
              "grep -q 'plugins=(git zsh-syntax-highlighting zsh-autosuggestions)' \"$HOME/.zshrc\""]
-  }
+  },
+  "runOnce": true,
+  "prompt": "Configure zshrc with powerlevel10k theme and plugins?"
 }

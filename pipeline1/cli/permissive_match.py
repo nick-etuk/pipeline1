@@ -27,8 +27,8 @@ def permissive_match(term: str, item_list: list[str]) -> str:
     if len(partial_matches) == 1:
         log.info(f"{term} is a unique partial match of {item_dict[partial_matches[0]]}")
         return item_dict[partial_matches[0]]
-    else:
-        match_list = [item_dict[match] for match in partial_matches]
-        log.info(f"Do you mean: {', '.join(match_list)}?")
+
+    match_list = [item_dict[match] for match in partial_matches]
+    log.info(f"Do you mean: {', '.join(match_list)}?")
 
     return ""

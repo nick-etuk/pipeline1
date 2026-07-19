@@ -31,6 +31,7 @@ required_libraries=(
     edit_login_profile
     config_base # source this last as it is a script, not a function
 )
+
 for lib in "${required_libraries[@]}"; do
     script=$(find "$P1_ROOT_SCRIPT/lib" -name "$lib.sh" -type f)
     . "$script"

@@ -1,5 +1,5 @@
 import unittest
-from unittest.mock import patch, MagicMock, mock_open
+from unittest.mock import patch, MagicMock
 from io import StringIO
 from typing import Any
 
@@ -15,24 +15,23 @@ class TestExecuteStep(unittest.TestCase):
 
     def setUp(self) -> None:
         self.registry_entry: dict[str, Any] = {
-            'stepId': 'sample_step',
-            'title': 'Sample Step',
-            'baseFilename': 'sample_step',
-            'path': '/tmp/sample_step/config.json'
+            'stepId': 'test_step',
+            'title': 'Test Step',
+            'baseFilename': 'test_step',
+            'path': '/tmp/test_step/config.json'
         }
         self.base_config = {
             # minimal config loaded from file
         }
 
     @patch('pipeline1.lib.logging.log.end')
-    def test_os_mismatch_returns_early(self, mock_log_end: MagicMock):
+    def test_os_mismatch(self, mock_log_end: MagicMock):
+        current_os = config['my_os']
         # Step specifies a different OS
-        my_step = {'os': 'macos'} | self.registry_entry
-        # with patch('builtins.print') as mock_print:
+        my_step = {'os': 'win'} | self.registry_entry
         execute_step(step=my_step, args=[], overrides=[])
-        # Should early return without running subprocess
-        # mock_print.assert_any_call('Step sample_step not for ubuntu')
-        mock_log_end.assert_any_call('Step sample_step not for ubuntu')
+        # Should log the message "Step test_step not for {current_os}"
+        mock_log_end.assert_any_call(f'Step test_step not for {current_os}')
 
 
     @patch('builtins.open')
@@ -42,16 +41,16 @@ class TestExecuteStep(unittest.TestCase):
         mock_open_fn.return_value.__enter__.return_value = StringIO('{}')
         # config = {}
         # mock_enrich.return_value = config | {
-        #     'stepId': 'sample_step',
-        #     'title': 'Sample Step',
-        #     'path': '/tmp/sample_step/config.json',
-        #     'dir': '/tmp/sample_step'
+        #     'stepId': 'test_step',
+        #     'title': 'Test Step',
+        #     'path': '/tmp/test_step/config.json',
+        #     'dir': '/tmp/test_step'
         # }
         my_step = {
-            'stepId': 'sample_step',
-            'title': 'Sample Step',
-            'path': '/tmp/sample_step/config.json',
-            'dir': '/tmp/sample_step'
+            'stepId': 'test_step',
+            'title': 'Test Step',
+            'path': '/tmp/test_step/config.json',
+            'dir': '/tmp/test_step'
         } | self.registry_entry
         mock_step_entry.return_value = {'run_once': False, 'reason': ''}
         with patch('subprocess.run') as mock_run:
@@ -70,16 +69,16 @@ class TestExecuteStep(unittest.TestCase):
         mock_step_exit.return_value = True
         # config = {}
         # mock_enrich.return_value = config | {
-        #     'stepId': 'sample_step',
-        #     'title': 'Sample Step',
-        #     'path': '/tmp/sample_step/config.json',
-        #     'dir': '/tmp/sample_step'
+        #     'stepId': 'test_step',
+        #     'title': 'Test Step',
+        #     'path': '/tmp/test_step/config.json',
+        #     'dir': '/tmp/test_step'
         # }
         my_step = {
-            'stepId': 'sample_step',
-            'title': 'Sample Step',
-            'path': '/tmp/sample_step/config.json',
-            'dir': '/tmp/sample_step'
+            'stepId': 'test_step',
+            'title': 'Test Step',
+            'path': '/tmp/test_step/config.json',
+            'dir': '/tmp/test_step'
         } | self.registry_entry
         with patch('subprocess.run') as mock_run, patch('builtins.print'):
             mock_run.return_value = MagicMock(returncode=0, stdout='done')
@@ -88,40 +87,8 @@ class TestExecuteStep(unittest.TestCase):
             self.assertTrue(mock_run.called)
             args_passed = mock_run.call_args[0][0]
             self.assertIn(f"{config['script_root']}/run_step_script.sh", args_passed)
-            self.assertIn('/tmp/sample_step/sample_step.sh', args_passed)
-    '''
-    @patch('builtins.open')
-    @patch('pipeline1.run_step.enrich_step.enrich_step')
-    @patch('pipeline1.run_step.execute_step.step_entry')
-    def test_new_tab_queue_creation_and_open_new_tab(self, mock_step_entry: MagicMock, mock_enrich: MagicMock, mock_open_fn: MagicMock):
-        print('=>test_new_tab_queue_creation_and_open_new_tab')
-        mock_open_fn.return_value.__enter__.return_value = StringIO('{}')
-        mock_step_entry.return_value = {'run_once': True, 'reason': ''}
-        config = {'newTab': True}
-        mock_enrich.return_value = config | {
-            'stepId': 'sample_step',
-            'title': 'Sample Step',
-            'baseFilename': 'sample_step',
-            'path': '/tmp/sample_step/config.json',
-            'dir': '/tmp/sample_step'
-        }
-        test_step = {'newTab': True} | self.registry_entry
-        # Need a real JSON for first file open (config.json) but second open writes queue file; use side_effect
-        def open_side_effect(filename: str, *args: Any, **kwargs: Any):
-            if filename.endswith('config.json'):
-                return StringIO('{}')
-            # For write operations, return a mock file handle
-            m = mock_open()
-            return m()
+            self.assertIn('/tmp/test_step/test_step.sh', args_passed)
 
-        with patch('subprocess.run') as mock_run, \
-             patch('pipeline1.run_step.execute_step.open_new_tab') as mock_open_tab, \
-             patch('builtins.open', side_effect=open_side_effect):
-            execute_step(step=test_step, args=['a', 'b'], overrides=[])
-            mock_open_tab.assert_called_once()
-            mock_run.assert_not_called()  # early return before subprocess
-
-    '''
 
     @patch('builtins.open')
     @patch('pipeline1.run_step.enrich_step.enrich_step')
@@ -129,10 +96,10 @@ class TestExecuteStep(unittest.TestCase):
         # run_once True triggers early info log and return (status hardcoded to done)
         config = {'runOnce': True}
         mock_enrich.return_value = config | {
-            'stepId': 'sample_step',
-            'title': 'Sample Step',
-            'path': '/tmp/sample_step/config.json',
-            'dir': '/tmp/sample_step'
+            'stepId': 'test_step',
+            'title': 'Test Step',
+            'path': '/tmp/test_step/config.json',
+            'dir': '/tmp/test_step'
         }
         mock_open_fn.return_value.__enter__.return_value = StringIO('{}')
         with patch('pipeline1.run_step.execute_step.log.info') as mock_info, \
@@ -152,11 +119,11 @@ class TestExecuteStep(unittest.TestCase):
         mock_step_exit.return_value = False
         config = {}
         mock_enrich.return_value = config | {
-            'stepId': 'sample_step',
-            'title': 'Sample Step',
-            'path': '/tmp/sample_step/config.json',
-            'dir': '/tmp/sample_step',
-            'baseFilename': 'sample_step'
+            'stepId': 'test_step',
+            'title': 'Test Step',
+            'path': '/tmp/test_step/config.json',
+            'dir': '/tmp/test_step',
+            'baseFilename': 'test_step'
         }
         with patch('subprocess.run') as mock_run, \
              patch('pipeline1.run_step.execute_step.log.info') as mock_info, \

@@ -1,0 +1,12 @@
+The command used to start the backend docker containers is
+    make run WEB=host LOGINENV=<your login env, by default ext>
+
+If this fails with the error 'port is already allocated', 
+an old instance of the backend http server may still be running.
+
+Use the following command to kill it:
+docker kill $(docker ps -q --filter 'publish=8089')
+
+If the web container (web-init) fails to start, rebuild the web image using
+make -C web build
+
