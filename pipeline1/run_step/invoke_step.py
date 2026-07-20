@@ -17,14 +17,14 @@ def invoke_step(step: dict[str, Any], args: list[str]) -> bool:
         process = subprocess.run([python_executable, step_script] + args, capture_output=True, text=True, check=False)
         print(f"Step {step_id} exited with code {process.returncode}. Output:")
         print(process.stdout)
-        return True if process.returncode == 0 else False
+        return process.returncode == 0
     
     if os.path.exists(f"{base_filename}.pl"):
         step_script = f"{base_filename}.pl"
         process = subprocess.run(['perl', step_script] + args, capture_output=True, text=True, check=False)
         print(f"Step {step_id} exited with code {process.returncode}. Output:")
         print(process.stdout)
-        return True if process.returncode == 0 else False
+        return process.returncode == 0
     
     if config['my_os'] == 'win':
         startup_script = os.path.join(config['script_root'], 'run_script.ps1')
@@ -35,7 +35,7 @@ def invoke_step(step: dict[str, Any], args: list[str]) -> bool:
             if process.returncode != 0:
                 log.info(f"Step {step_id} exited with code {process.returncode}. Output:")
                 log.info(process.stdout)
-            return True if process.returncode == 0 else False
+            return process.returncode == 0
     
     startup_script = os.path.join(config['script_root'], 'run_script.sh')
     step_script = f"{base_filename}.sh"
@@ -46,7 +46,7 @@ def invoke_step(step: dict[str, Any], args: list[str]) -> bool:
         if process.returncode != 0:
             log.warn(f"Step {step_id} failed with code {process.returncode}. Output:")
             log.info(process.stdout)
-        return True if process.returncode == 0 else False
+        return process.returncode == 0
 
     # It is possible that a step has no script, but only child steps.
     # In that case, we return True to indicate that the step completed successfully.
