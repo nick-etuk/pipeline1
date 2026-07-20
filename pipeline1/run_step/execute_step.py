@@ -74,16 +74,20 @@ def execute_step(step: dict[str, Any], args: list[str], overrides: list[str], ne
     
     start_time = start_timer(step_key)
 
-    invoke_step_commands(step)
+    all_passed = invoke_step_commands(step) and all_passed
 
+    # Run child steps even if parent step fails.
+    # todo: Is this the right behavior? Should we stop if a parent step fails?
     if 'steps' in step:
         all_passed = run_child_steps(parent_step=step, parent_args=args, parent_overrides=overrides, depth=depth) and all_passed
 
-    invoke_step(step=step, args=args)
+    # Step must run with with a non-zero return code
+    # and pass its exit criteria to be considered successful 
+    all_passed = invoke_step(step=step, args=args) and all_passed
 
     stop_timer(step_key, start_time)
 
-    if not run_always:
+    if all_passed and not run_always:
         if not step_exit(step=step, step_args=args, new_tab_active=new_tab_active):
             all_passed = False
 

@@ -7,7 +7,7 @@ from icecream import ic
 import pytest
 
 from pipeline1.lib.config import config
-from pipeline1.run_step.execute_step import execute_step
+# from pipeline1.run_step.execute_step import execute_step
 from pipeline1.run_step.run_step import run_step
 
 
@@ -38,7 +38,7 @@ class TestRunStep(unittest.TestCase):
 
     @patch('builtins.open')
     @patch('pipeline1.run_step.enrich_step.enrich_step')
-    @patch('pipeline1.run_step.execute_step.step_entry')
+    @patch('pipeline1.step_done.step_entry')
     def test_step_entry_false_aborts(self, mock_step_entry: MagicMock, mock_enrich: MagicMock, mock_open_fn: MagicMock):
         mock_open_fn.return_value.__enter__.return_value = StringIO('{}')
         # config = {}
@@ -62,8 +62,8 @@ class TestRunStep(unittest.TestCase):
 
     @patch('builtins.open')
     @patch('pipeline1.run_step.enrich_step.enrich_step')
-    @patch('pipeline1.run_step.execute_step.step_entry')
-    @patch('pipeline1.run_step.execute_step.step_exit')
+    @patch('pipeline1.step_done.step_entry')
+    @patch('pipeline1.step_done.step_exit')
     @pytest.mark.skip(reason="todo: fix and unskip.")
     def test_subprocess_called_for_unix(self, mock_step_exit: MagicMock, mock_step_entry: MagicMock, mock_enrich: MagicMock, mock_open_fn: MagicMock):
         mock_open_fn.return_value.__enter__.return_value = StringIO('{}')
@@ -112,8 +112,8 @@ class TestRunStep(unittest.TestCase):
 
     @patch('builtins.open')
     @patch('pipeline1.run_step.enrich_step.enrich_step')
-    @patch('pipeline1.run_step.execute_step.step_entry')
-    @patch('pipeline1.run_step.execute_step.step_exit')
+    @patch('pipeline1.step_done.step_entry')
+    @patch('pipeline1.step_done.step_exit')
     @pytest.mark.skip(reason="todo: fix and unskip.")
     def test_step_exit_failure_logs_failure(self, mock_step_exit: MagicMock, mock_step_entry: MagicMock, mock_enrich: MagicMock, mock_open_fn: MagicMock):
         mock_open_fn.return_value.__enter__.return_value = StringIO('{}')
