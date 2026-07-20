@@ -1,16 +1,14 @@
 from typing import Any
 
-from pipeline1.lib.context import get_context, set_context
+from pipeline1.lib.context import set_context
+from pipeline1.run_step.check_preconditions import check_preconditions
 from pipeline1.run_step.remove_docker_containers import remove_docker_containers
 from pipeline1.run_step.schedule_step import schedule_step
 from pipeline1.run_step.invoke_commands import invoke_step_commands
 from pipeline1.run_step.get_step import get_step
 from pipeline1.run_step.invoke_step import invoke_step
 from pipeline1.run_step.open_new_tab import open_new_tab
-from pipeline1.run_step.correct_os import correct_os
 from pipeline1.lib.logging import log
-from pipeline1.step_done.check_dependencies import check_dependencies
-from pipeline1.step_done.step_entry import step_entry
 from pipeline1.step_done.step_exit import step_exit
 from pipeline1.run_step.step_timer import start_timer, stop_timer
 
@@ -33,63 +31,36 @@ def run_child_steps(parent_step: dict[str, Any], parent_args: list[str], parent_
         child_step = get_step(child_step_id)
         
         log.set_indent(depth + 1)
-        status = execute_step(step=child_step, args=child_step_args, overrides=parent_overrides, new_tab_active=False, depth=depth + 1)
-        if not status:
-            all_passed = False
+
+        if check_preconditions(step=child_step, args=child_step_args, overrides=parent_overrides):
+            status = execute_step(step=child_step, args=child_step_args, overrides=parent_overrides, new_tab_active=False, depth=depth + 1)
+            if not status:
+                all_passed = False
+    
     return all_passed
 
 def execute_step(step: dict[str, Any], args: list[str], overrides: list[str], new_tab_active: bool = False, depth: int = 0) -> bool:
-    # pylint: disable=too-many-branches, too-many-statements, too-many-return-statements
+    '''
+    Executes a given step, running child steps and one-line commands.
+    
+    Returns True if the step and all its child steps completed successfully, otherwise False.
+    '''
+
     step_id = step['stepId']
-
-    if not correct_os(step):
-        return True
-    
-    if 'isActive' in step and str(step['isActive']).lower() == 'false':
-        log.end(f"Step {step_id} is inactive")
-        return True
-
-    log.begin(step['title'])
-
-    if 'dependencies' not in overrides and not check_dependencies(step, args):
-        log.end(f"{step['stepId']} not attempted")
-        return False
-    
-    run_always = False
-    if ('runAlways' in step and str(step['runAlways']).lower() == 'true'):
-        run_always = True
-        log.debug(f"runAlways is true for step {step_id}")
-
     step_key = f"{step_id}"
 
     if len(args) > 0:
         fomatted_args = "_".join(args)
         step_key = f"{step_id}_{fomatted_args}"
 
+    run_always = False
+    if ('runAlways' in step and str(step['runAlways']).lower() == 'true'):
+        run_always = True
+        log.debug(f"runAlways is true for step {step_id}")
+
     run_once = False
-    status = None
     if 'runOnce' in step and str(step['runOnce']).lower() == 'true':
         run_once = True
-        status = get_context(step_key, 'run_once')
-
-        if status == 'done':
-            if 'runOnce' in overrides:
-                log.info(f"Overriding run once for step {step_id}")
-            else:
-                log.end(f"{step['title']} already done")
-                return True
-    
-    if not run_always and 'dependencies' not in overrides:
-        ok_to_proceed = step_entry(step=step, step_args=args)
-        if ok_to_proceed['run_once'] is False:
-            if ok_to_proceed['reason'] == 'done':
-                log.end(f"{step['title']} already done")
-                if run_once:
-                    set_context(step_key, 'done', 'run_once')
-                return True
-
-            log.end(f"{step['title']} not attempted")
-            return False
 
     remove_docker_containers(step)
 
@@ -103,16 +74,20 @@ def execute_step(step: dict[str, Any], args: list[str], overrides: list[str], ne
     
     start_time = start_timer(step_key)
 
-    invoke_step_commands(step)
+    all_passed = invoke_step_commands(step) and all_passed
 
+    # Run child steps even if parent step fails.
+    # todo: Is this the right behavior? Should we stop if a parent step fails?
     if 'steps' in step:
         all_passed = run_child_steps(parent_step=step, parent_args=args, parent_overrides=overrides, depth=depth) and all_passed
 
-    invoke_step(step=step, args=args)
+    # Step must run with with a non-zero return code
+    # and pass its exit criteria to be considered successful 
+    all_passed = invoke_step(step=step, args=args) and all_passed
 
     stop_timer(step_key, start_time)
 
-    if not run_always:
+    if all_passed and not run_always:
         if not step_exit(step=step, step_args=args, new_tab_active=new_tab_active):
             all_passed = False
 

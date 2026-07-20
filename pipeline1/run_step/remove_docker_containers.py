@@ -11,7 +11,13 @@ def remove_container(container_name: str) -> None:
     else:
         log.warn(f"Failed to remove old docker container '{container_name}': {process.stderr.strip()}")
 
+
 def remove_docker_containers(step: dict[str, Any]) -> None:
+    '''
+    Removes the step's Docker containers if they are running.
+    todo: why do we do this?
+    '''
+    
     commandline = ['docker', 'container', 'ls', '--format', '{{.Names}}']
 
     if not ('checks' in step and 'dockerContainers' in step['checks']):
@@ -27,7 +33,8 @@ def remove_docker_containers(step: dict[str, Any]) -> None:
         log.warn("Failed to list Docker containers. Is Docker running?")
         return
     
-    running_containers = process.stdout.strip().lower().split('\n')
+    running_containers = process.stdout.strip().split('\n')
+    running_containers = [item.lower() for item in running_containers]
     for expected in containers_to_remove:
         for actual in running_containers:
             if expected in actual:
