@@ -22,6 +22,7 @@ def main():
 
     run_step_by_id('setup_terminal', [], step_registry)
     run_step_by_id('enhance_terminal', [], step_registry)
+    # todo: run daily tasks as a step. Includes trimming log files, trimming timing files.
 
     show_menu_main(project_registry=project_registry, step_registry=step_registry)
 
