@@ -1,4 +1,4 @@
-Function Old-Get-Next-Run-ID {
+function old_get_next_run_id {
     if ($global:Debug) { return "001" }
     
     $LAST_RUN_ID_FILE = "$WORKING_DIR\last-runid.txt"
@@ -20,14 +20,14 @@ Function Old-Get-Next-Run-ID {
     return $Result
 }
 
-function Get-Next-Run-ID {
-    writedebug "=>Get-Next-Run-ID RUN_ID"
+function get_next_run_id {
     if ($DEBUG) { 
         $RUN_ID = "001"
         return
     }
+    write-output "Getting next run ID..."
     $LastRunId = (Get-ChildItem $LOG_BASE -Directory | Sort-Object | Select-Object -Last 1).Name
     $RUN_ID = ([Int]$LastRunId + 1).ToString("000")
-    writedebug "Get-Next-Run-ID RUN_ID: $RUN_ID"
+    write-output "RUN_ID: $RUN_ID"
     return
 }

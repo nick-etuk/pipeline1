@@ -33,32 +33,7 @@ foreach ($Library in $Libraries) {
 set_repo_dir
 $Script:REPO_DIR = get_context repo_dir
 
-Get-Next-Run-ID
-if (!(Test-Path variable:RUN_ID)) {
-    WriteInfo "RUN_ID not set, using default value: 001"
-    $RUN_ID = "001"
-}
-
-$LOG_DIR = "$LOG_BASE\$RUN_ID"
-if (!(Test-Path -PathType Container $LOG_DIR)) {
-    New-Item -Path $LOG_DIR -ItemType Directory -Force | Out-Null
-}
-
-if (Test-Path variable:DEBUG) {
-    WriteInfo "Debug mode" 
-    $DebugPreference = 'Continue'
-    $VerbosePreference = 'Continue'
-    try {
-        Get-ChildItem $LOG_DIR | Remove-Item -Recurse -ErrorAction SilentlyContinue
-    } catch {
-        Write-Output "Error deleting $_"
-    }
-}
-
-$LOG_FILE = "$LOG_DIR\ps1_default.log"
-if (!(Test-Path -PathType Leaf $LOG_FILE)) {
-    New-Item -Path $LOG_FILE -ItemType File -Force | Out-Null
-}
+get_next_run_id
 
 # if (!(Test-Path -PathType Container $WORKING_DIR)) {
 #     New-Item -Path $WORKING_DIR -ItemType Directory | Out-Null

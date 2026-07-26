@@ -1,19 +1,53 @@
 function Get-Current-Path {
     param(
-        [ValidateSet('Machine', 'User', 'Session' , 'PS')]
+        [ValidateSet('Machine', 'User', 'Session', 'PS')]
         [string] $Scope = 'User'
     )
 
-    # $ScopeMapping = @{
-    #     Machine = [EnvironmentVariableTarget]::Machine
-    #     User = [EnvironmentVariableTarget]::User
-    # }
+    if ($Scope -eq 'Machine') {
+        return [Environment]::GetEnvironmentVariable('Path', [EnvironmentVariableTarget]::Machine)
+    }
 
-    # $ScopeType = $ScopeMapping[$Scope]
-    # $CurrentPath = [Environment]::GetEnvironmentVariable('Path', $ScopeType) -split ';'
-    $CurrentPath = (get-item "HKCU:\Environment").GetValue("Path", $null, 'DoNotExpandEnvironmentNames')
+    if ($Scope -eq 'User') {
+        return [Environment]::GetEnvironmentVariable('Path', [EnvironmentVariableTarget]::User)
+    }
+
+    # Session/PS scopes do not have a persistent registry value.
+    $CurrentPath = $env:Path
 
     return $CurrentPath
+}
+
+function Get-PathEntries {
+    param(
+        [string] $PathValue
+    )
+
+    if ([string]::IsNullOrWhiteSpace($PathValue)) {
+        return @()
+    }
+
+    return $PathValue -split ';' | ForEach-Object { $_.Trim() } | Where-Object { -not [string]::IsNullOrWhiteSpace($_) }
+}
+
+function Add-Unique-PathEntry {
+    param(
+        [string[]] $Entries,
+        [string] $Entry
+    )
+
+    $NormalizedEntry = $Entry.Trim().TrimEnd('\\')
+    if ([string]::IsNullOrWhiteSpace($NormalizedEntry)) {
+        return ,$Entries
+    }
+
+    foreach ($ExistingEntry in $Entries) {
+        if ($ExistingEntry.Trim().TrimEnd('\\').ToLowerInvariant() -eq $NormalizedEntry.ToLowerInvariant()) {
+            return ,$Entries
+        }
+    }
+
+    return @($Entries + $Entry)
 }
 
 function Add-To-PowerShell-Path {
@@ -23,26 +57,42 @@ function Add-To-PowerShell-Path {
     )
 
     $PathToAdd = $Path
+    $ProfilePath = $profile.CurrentUserCurrentHost
+    $ProfileDirectory = Split-Path -Path $ProfilePath -Parent
+
+    if (-not (Test-Path -Path $ProfileDirectory)) {
+        New-Item -Path $ProfileDirectory -ItemType Directory -Force | Out-Null
+    }
     
-    if (!(Test-Path -PathType Leaf $profile.CurrentUserCurrentHost)) {
-        WriteInfo "Creating `$profile.CurrentUserCurrentHost at $($profile.CurrentUserCurrentHost)"
-        New-Item -Path $profile.CurrentUserCurrentHost -ItemType File | Out-Null
+    if (!(Test-Path -PathType Leaf $ProfilePath)) {
+        WriteInfo "Creating `$profile.CurrentUserCurrentHost at $ProfilePath"
+        New-Item -Path $ProfilePath -ItemType File | Out-Null
     }
 
     $Banner = 'WriteInfo "*** Profile CurrentUserCurrentHost  ***"'
     $AddScriptsToPathCmd = "`$env:PATH += `";$PathToAdd`""
-    WriteDebug "Adding [$AddScriptsToPathCmd] to $($profile.CurrentUserCurrentHost)"
+    # WriteDebug "Adding $AddScriptsToPathCmd to $ProfilePath"
 
-    Add-Content -Path $profile.CurrentUserCurrentHost -Value "`n$Banner`n$AddScriptsToPathCmd`n"
+    $CurrentProfile = Get-Content -Path $ProfilePath -Raw
+    if ($CurrentProfile -match [regex]::Escape($AddScriptsToPathCmd)) {
+        # WriteInfo "Path command already exists in $ProfilePath"
+        return
+    }
+
+    Add-Content -Path $ProfilePath -Value "`n$Banner`n$AddScriptsToPathCmd`n"
 }
 
 function set_android_env_vars {
     if (-not $env:ANDROID_SDK_ROOT) {
-        $env:ANDROID_SDK_ROOT = $ANDROID_SDK_ROOT
+        if (-not [string]::IsNullOrWhiteSpace($ANDROID_SDK_ROOT)) {
+            $env:ANDROID_SDK_ROOT = $ANDROID_SDK_ROOT
+        } elseif (-not [string]::IsNullOrWhiteSpace($env:ANDROID_HOME)) {
+            $env:ANDROID_SDK_ROOT = $env:ANDROID_HOME
+        }
     }
 
-    if (-not $env:ANDROID_HOME) {
-        $env:ANDROID_HOME = $ANDROID_SDK_ROOT
+    if (-not $env:ANDROID_HOME -and -not [string]::IsNullOrWhiteSpace($env:ANDROID_SDK_ROOT)) {
+        $env:ANDROID_HOME = $env:ANDROID_SDK_ROOT
     }
 }
 
@@ -51,13 +101,22 @@ function add_path {
         [Parameter(Mandatory=$true)]
         [string] $Path,
 
-        [ValidateSet('Machine', 'User', 'Session' , 'PS')]
+        [ValidateSet('Machine', 'User', 'Session', 'PS')]
         [string] $Scope = 'User'
     )
 
-    $PathToAdd = $Path
-    
-    if ($Scope -ne 'Session') {
+    $PathToAdd = $Path.Trim()
+    if ([string]::IsNullOrWhiteSpace($PathToAdd)) {
+        WriteInfo "Skipping empty path value."
+        return
+    }
+
+    if (-not (Test-Path -LiteralPath $PathToAdd -PathType Container)) {
+        WriteInfo "Skipping missing directory $PathToAdd"
+        return
+    }
+
+    if ($Scope -eq 'Machine' -or $Scope -eq 'User') {
         $ScopeMapping = @{
             Machine = [EnvironmentVariableTarget]::Machine
             User = [EnvironmentVariableTarget]::User
@@ -65,28 +124,23 @@ function add_path {
         $ScopeType = $ScopeMapping[$Scope]
 
         $CurrentPath = Get-Current-Path -Scope $Scope
+        $CurrentEntries = Get-PathEntries -PathValue $CurrentPath
+        $NewEntries = Add-Unique-PathEntry -Entries $CurrentEntries -Entry $PathToAdd
 
-        if ($CurrentPath -notcontains $PathToAdd) {
-            # $CurrentPath = "$CurrentPath;$PathToAdd" | Where-Object { $_ }
-            $CurrentPath = "$CurrentPath;$PathToAdd"
-            [Environment]::SetEnvironmentVariable('Path', $CurrentPath -join ';', $ScopeType)
-            $CurrentPath = "$CurrentPath;$PathToAdd"
-            WriteInfo "Added [$PathToAdd] to registry path."
+        if ($NewEntries.Count -ne $CurrentEntries.Count) {
+            write-output "Adding [$PathToAdd] to $Scope path in registry..."
+            [Environment]::SetEnvironmentVariable('Path', ($NewEntries -join ';'), $ScopeType)
+            WriteInfo "Added $PathToAdd to registry path."
         }
     }
 
     # The path has been updated in the registry, but the current session may not have the updated path.
-    $envPaths = $env:Path -split ';'
-    if ($envPaths -notcontains $PathToAdd) {
-        # $envPaths = "$envPaths;$PathToAdd" | Where-Object { $_ }
-        $envPaths = "$envPaths;$PathToAdd"
-        $env:Path = $envPaths -join ';'
-        WriteInfo "Added [$PathToAdd] to current session path."
+    $envPaths = Get-PathEntries -PathValue $env:Path
+    $newEnvPaths = Add-Unique-PathEntry -Entries $envPaths -Entry $PathToAdd
+    if ($newEnvPaths.Count -ne $envPaths.Count) {
+        $env:Path = $newEnvPaths -join ';'
+        WriteInfo "Added $PathToAdd to current session path."
     }
-
-    # $NewPath = "$CurrentPath;$PathToAdd"
-    # Set-ItemProperty -Path "Registry::HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\Session Manager\Environment" -Name PATH -Value $NewPath
-    # return $Result
 }
 
 function add_to_path {

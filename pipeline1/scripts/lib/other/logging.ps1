@@ -1,3 +1,31 @@
+function set_log_dir {
+    if (!(Test-Path variable:RUN_ID)) {
+        Write-output "RUN_ID not set, using default value: 001"
+        $Script:RUN_ID = "001"
+    }
+
+    $Script:LOG_DIR = "$LOG_BASE\$RUN_ID"
+    if (!(Test-Path -PathType Container $LOG_DIR)) {
+        New-Item -Path $LOG_DIR -ItemType Directory -Force | Out-Null
+    }
+
+    if (Test-Path variable:DEBUG) {
+        Write-output "Debug mode" 
+        $DebugPreference = 'Continue'
+        $VerbosePreference = 'Continue'
+        try {
+            Get-ChildItem $LOG_DIR | Remove-Item -Recurse -ErrorAction SilentlyContinue
+        } catch {
+            Write-Output "Error deleting $_"
+        }
+    }
+
+    $Script:LOG_FILE = "$LOG_DIR\ps1_default.log"
+    if (!(Test-Path -PathType Leaf $LOG_FILE)) {
+        New-Item -Path $LOG_FILE -ItemType File -Force | Out-Null
+    }
+}
+
 function CheckEventLogSource {
     [CmdletBinding()]
     param ($Source)
@@ -15,6 +43,8 @@ function WriteLog {
         [ValidateSet('Critical', 'Important', 'Output', 'Host', 'Significant', 'VeryVerbose', 'Verbose', 'SomewhatVerbose', 'System', 'Debug', 'InternalComment', 'Warning', 'Error', 'Info')]
         [string]$Level = 'Significant'
     )
+
+    if (!(Test-Path variable:LOG_FILE)) { set_log_dir }
 
     $Message = $Message -replace 'step already done', $TICK_MARK
     $Message = $Message -replace 'stage completed', $TICK_MARK

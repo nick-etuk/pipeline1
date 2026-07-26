@@ -3,7 +3,7 @@
 # which will set up the environment and launch the main p1.py script.
 
 # $ErrorActionPreference = "Stop"
-write-host 'bp1'
+
 if (!(Test-Path variable:P1_ROOT_WIN)) { 
     Write-output "Setting P1_ROOT_WIN manually"
     $Script:P1_ROOT_WIN = (get-item $PSScriptRoot)
@@ -24,8 +24,10 @@ if (!(Test-Path variable:P1_ROOT_WIN)) {
 
 $script="$P1_ROOT_SCRIPT/terminal_login.ps1"
 if (!(Test-Path -Path $script -PathType Leaf)) {
+    Write-Output "Searching for terminal_login.ps1 in p1.ps1..."
     $script = Get-Childitem -Path "$P1_ROOT_SCRIPT" -Include 'terminal_login.ps1' -Recurse
     if (Test-Path -Path $script -PathType Leaf) {
+        Write-Output "Found terminal_login.ps1"
         . $script.FullName
     } else {
         Write-Output "Could not find terminal_login.ps1 in $P1_ROOT_SCRIPT"

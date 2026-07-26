@@ -25,9 +25,9 @@ def run_smoke_tests():
             time.sleep(3)
             try:
                 os.remove(results_file)
-            except OSError as e:
+            except OSError as e2:
                 log.warn(f"Failed to delete smoke test results file {results_file} after retry")
-                log.info(str(e))
+                log.info(str(e2))
                 sys.exit(1)
             else:
                 log.info(f"Successfully deleted smoke test results file {results_file} after retry.")
