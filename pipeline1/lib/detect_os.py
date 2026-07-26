@@ -13,7 +13,7 @@ def detect_wsl() -> bool:
 
 def detect_os() -> tuple[str, str]:
     os_name = platform.system().lower()
-    vm = 'unknown'
+    vm = 'none'
     if 'linux' in os_name:
         os = 'ubuntu'
         # if detect_wsl():

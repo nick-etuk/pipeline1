@@ -11,6 +11,7 @@ function Search-For-Exe {
         )
     
     foreach ($Path in $LikelyPaths) {
+        WriteInfo "Searching likely path $Path for $FileName in find-executable.ps1 ..."
         $Result = Get-Childitem -Path $Path -Include $FileName -File -Recurse -ErrorAction SilentlyContinue | Select-Object FullName
         if ($Result) { 
             WriteDebug "$FileName found in likely path $Path"
@@ -20,6 +21,7 @@ function Search-For-Exe {
     }
 
     foreach ($Path in $env:Path) {
+        WriteInfo "Searching env:Path $Path for $FileName in find-executable.ps1 ..."
         $Result = Get-Childitem -Path $Path -Include $FileName -File -Recurse -ErrorAction SilentlyContinue | Select-Object FullName
         if ($Result) { 
             WriteDebug "$FileName found in environment path $Path"

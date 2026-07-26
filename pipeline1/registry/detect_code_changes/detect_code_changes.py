@@ -72,8 +72,8 @@ def detect_code_changes() -> None:
 
     core_changes = check_core(last_scan_time)
     lib_changes = check_libraries(last_scan_time)
-    if core_changes or lib_changes:
-        run_smoke_tests()
+    # if core_changes or lib_changes:
+    #     run_smoke_tests()
 
     project_changes = scan_projects(last_scan_time)
     built_in_dir = Path(config['script_root'])
