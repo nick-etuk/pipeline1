@@ -87,9 +87,8 @@ def execute_step(step: dict[str, Any], args: list[str], overrides: list[str], ne
 
     stop_timer(step_key, start_time)
 
-    if all_passed and not run_always:
-        if not step_exit(step=step, step_args=args, new_tab_active=new_tab_active):
-            all_passed = False
+    if all_passed and not run_always and not step_exit(step=step, step_args=args, new_tab_active=new_tab_active):
+        all_passed = False
 
     if all_passed:
         log.end(f"{step['title']} step completed")
