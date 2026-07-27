@@ -24,6 +24,7 @@ get_shell_version
 
 VM=''
 
+# todo: Do this once in login_profile.sh instead of here.
 if [ -f /var/tmp/wsl-users.txt ]; then
     P1_USER_UNIX=$(cat /var/tmp/wsl-users.txt)
 else

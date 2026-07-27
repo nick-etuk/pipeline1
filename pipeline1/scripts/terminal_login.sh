@@ -41,11 +41,12 @@ get_shell_version
 detect_os
 # [ "$VM" = 'wsl' ] && get_wsl_win_info # done in config_base.sh
 
-
-if [ "$MY_OS" != 'macos' ]; then
-    script=$(find "$P1_ROOT_SCRIPT" -name 'add_to_sudoers.sh' -type f)
-    sudo "$script" "$MY_OS"
-fi
+# todo: rethink this:
+# Is there a way of doing this once instead of every login? Perhaps set a context variable.
+# if [ "$MY_OS" != 'macos' ]; then
+#     script=$(find "$P1_ROOT_SCRIPT" -name 'add_to_sudoers.sh' -type f)
+#     sudo "$script" "$MY_OS"
+# fi
 
 add_to_path
 add_aliases
