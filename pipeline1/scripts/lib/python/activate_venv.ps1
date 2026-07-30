@@ -21,7 +21,7 @@ function activate_venv($project_id) {
         # }
     }
 
-    WriteInfo "Activating virtual environment for $project_id..."
+    WriteInfo "Activating $project_id virtual environment..."
 
     $activate_script = Get-Childitem -Path "$P1_ROOT_WIN\.venv_p1" -include 'Activate.ps1' -Recurse
     if (-not $activate_script) {

@@ -9,8 +9,7 @@ function get_context {
             $Group = $args[1]
         }
         default {
-            WriteError "Invalid number of arguments for get_context: $($args.Length) arguments - $($args -join ', ')"
-            # writeError "$($args.Length) arguments - $($args -join ', ')"
+            WriteWarn "Invalid number of arguments for get_context: $($args.Length) arguments - $($args -join ', ')"
         }
     }
 

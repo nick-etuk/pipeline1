@@ -28,7 +28,7 @@ create_venv() {
     fi
 
     if [ -z "${VIRTUAL_ENV+set}" ]; then
-        echo 'Activating virtual environment...'
+        echo 'Activating P1 virtual environment...'
         venv_activate="$P1_ROOT_UNIX/.venv_p1/bin/activate"
         [ -f "$venv_activate" ] && source "$venv_activate"
     fi

@@ -16,10 +16,13 @@ $required_libraries = @(
     'config_dynamic.ps1',
     'add_aliases.ps1',
     'add_to_path.ps1',
+    'process_new_tab_file.ps1',
     'install_pyenv.ps1',
+    'switch_python_version.ps1',
     'create_venv.ps1',
     'activate_venv.ps1',
     'pip_install.ps1',
+    'set_repo_dir.ps1',
     'config_base.ps1'  # source this last since it is a script, not a function.
 )
 
@@ -56,8 +59,8 @@ if ($queue_length -gt 0) {
     process_new_tab_file $oldest_file.FullName
     return
 } else {
-    if (!(Get-Command python -ErrorAction SilentlyContinue)) {
-		$continue = read-host "Install Python $PYTHON_MAJOR_VERSION.$PYTHON_MINOR_VERSION via Pyenv (y/n)?"
+    if (!((Get-Command python -ErrorAction SilentlyContinue) -and (Get-Command pyenv -ErrorAction SilentlyContinue))) {
+		$continue = read-host "Install Python $PYTHON_MAJOR_VERSION.$PYTHON_MINOR_VERSION using Pyenv (y/n)?"
         if ($continue.ToLower() -ne 'y') {
             Write-output "Skipping Python installation. Exiting..."
             exit 0
@@ -65,6 +68,7 @@ if ($queue_length -gt 0) {
 		install_pyenv
 	}
 	
+    switch_python_version
     create_venv 'p1'
     activate_venv 'p1'
     pip_install 'p1'
@@ -83,6 +87,7 @@ if ($queue_length -gt 0) {
 # create_venv
 # pip_install
 
+set_repo_dir
 $default_step_path=$(get_context 'default_step_path')
 if ($default_step_path -and (Test-Path -Path $default_step_path -PathType Container)) {
     Set-Location -Path $default_step_path

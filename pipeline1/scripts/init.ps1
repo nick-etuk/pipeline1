@@ -31,8 +31,6 @@ foreach ($Library in $Libraries) {
 . $PSScriptRoot\lib\conf\config_base.ps1 # Load config last since it is not just a function definiton.
 
 set_repo_dir
-$Script:REPO_DIR = get_context repo_dir
-
 get_next_run_id
 
 # if (!(Test-Path -PathType Container $WORKING_DIR)) {
@@ -46,5 +44,4 @@ get_next_run_id
 # $GCM_PATH_WIN = Find-GCM-Executable
 # $GCM_PATH_WSL = Get-Unix-Path $GCM_PATH_WIN
 
-get_context
 show_config

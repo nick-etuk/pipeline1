@@ -25,7 +25,10 @@ login_script="$P1_ROOT_SCRIPT/terminal_login.sh"
 
 # if any scripts in $P1_ROOT_SCRIPT are not executable, make them so
 for file in "$P1_ROOT_SCRIPT"/*.sh; do
-  [ ! -x "$file" ] && chmod +x "$file"
+  if [ ! -x "$file" ]; then
+    echo "Making $file executable"
+    chmod +x "$file"
+  fi
 done
 
 [ -f "$login_script" ] && . "$login_script"
