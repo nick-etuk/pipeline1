@@ -143,8 +143,20 @@ function add_path {
     }
 }
 
+function set_java_home {
+    if (-not $env:JAVA_HOME) {
+        if ("CPC-NIET2-AY8UE DESKTOP-2022".Contains($env:ComputerName)) { 
+            $env:JAVA_HOME = 'C:\Program Files\Amazon Corretto\jdk17.0.12_7'
+        }
+        else {
+            $env:JAVA_HOME = 'C:\app\Android Studio\jbr'
+        }
+    }
+}
 function add_to_path {
     set_android_env_vars
+    set_java_home
+    add_path -path "$env:JAVA_HOME\bin"
     add_path -path "$P1_ROOT_SCRIPT"
     add_path -path "$env:ANDROID_SDK_ROOT\emulator"
     add_path -path "$env:ANDROID_SDK_ROOT\platform-tools"
