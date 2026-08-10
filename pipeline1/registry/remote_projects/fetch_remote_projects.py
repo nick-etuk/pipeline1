@@ -39,7 +39,7 @@ def fetch_remote_projects(force: bool = False) -> None:
         registry_entry = {
             'projectId': project_id,
             'title': project.get('title', project_id),
-            'sourceCodePath': project.get('sourceCodePath', ''),
+            'sourceCodeRoot': project.get('sourceCodeRoot', project.get('sourceCodePath', '')),
             'p1ProjectPath': project_dir,
             'sortOrder': project_sort_order(project_id),
         }

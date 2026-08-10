@@ -15,6 +15,8 @@ function cdp1 { cd "$(get_context repo_dir)\pipeline1" }
 function cdweb { cd "$(get_context repo_dir)\nhsapp\web" }
 function cdand { cd "$(get_context repo_dir)\nhsapp-android" }
 function cdios { cd "$(get_context repo_dir)\nhsapp-ios" }
+function cdparbac { cd "$(get_context repo_dir)\1-sent-backend-proto" }
+function cdparand { cd "$(get_context repo_dir)\1-sent-android-proto" }
 
 remove-alias -name h -ErrorAction SilentlyContinue
 function h { 
