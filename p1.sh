@@ -5,6 +5,8 @@
 # Sets P1_ROOT_UNIX, then hands over to terminal_login.sh, 
 # which will set up the environment and launch the main p1.py script.
 
+invoke_dir=$(pwd)
+export P1_INVOKE_DIR="$invoke_dir"
 current_dir=$(dirname "$(realpath "$0")")
 cd "$current_dir" || exit
 
