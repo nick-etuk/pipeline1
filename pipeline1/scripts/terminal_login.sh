@@ -48,6 +48,8 @@ detect_os
 #     sudo "$script" "$MY_OS"
 # fi
 
+set_context 'p1_invoke_dir' "$P1_INVOKE_DIR"
+
 add_to_path
 add_aliases
 edit_login_profile

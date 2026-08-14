@@ -41,6 +41,9 @@ function add_aliases {
     alias cdweb='cd "$REPO_DIR/nhsapp/web"'
     alias cdand='cd "$REPO_DIR/nhsapp-android"'
     alias cdios='cd "$REPO_DIR/nhsapp-ios"'
+
+    alias cdparbac='cd "$REPO_DIR/1-sent-backend-proto"'
+    alias cdparand='cd "$REPO_DIR/1-sent-android-proto"'
     
     EDITOR="$(command -v nano || command -v vi || command -v vim || echo "/usr/bin/nano")"
     export EDITOR
