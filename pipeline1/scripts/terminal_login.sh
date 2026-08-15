@@ -12,12 +12,13 @@ set -u
 required_libraries=(
     get_next_run_id
     logging
+    get_context
+    set_context
     get_shell_version 
     detect_os
     get_wsl_win_info
     config_ubuntu
     config_macos
-    config_dynamic
     add_to_path
     add_aliases
     check_for_os_updates
@@ -27,7 +28,7 @@ required_libraries=(
 	install_pyenv
     create_venv
     pip_install
-    get_context
+
     edit_login_profile
     config_base # source this last as it is a script, not a function
 )
@@ -48,7 +49,7 @@ detect_os
 #     sudo "$script" "$MY_OS"
 # fi
 
-set_context 'p1_invoke_dir' "$P1_INVOKE_DIR"
+[ -n "${P1_INVOKE_DIR+set}" ] && set_context 'p1_invoke_dir' "$P1_INVOKE_DIR"
 
 add_to_path
 add_aliases

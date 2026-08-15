@@ -13,7 +13,8 @@ if ($env:TERM_PROGRAM -and $env:TERM_PROGRAM -ne 'Windows Terminal') {
 $required_libraries = @(
     'get_next_run_id.ps1',
     'logging.ps1',
-    'config_dynamic.ps1',
+    'get_context.ps1',
+    'set_context.ps1',
     'add_aliases.ps1',
     'add_to_path.ps1',
     'process_new_tab_file.ps1',
@@ -23,6 +24,7 @@ $required_libraries = @(
     'activate_venv.ps1',
     'pip_install.ps1',
     'set_repo_dir.ps1',
+    'edit_login_profile.ps1',
     'config_base.ps1'  # source this last since it is a script, not a function.
 )
 
@@ -43,7 +45,11 @@ foreach ($lib in $required_libraries) {
 # & $P1_ROOT_SCRIPT\vm\dev_box\unschedule_first_login.ps1 # use this if needed in dev boxes.
 add_aliases
 add_to_path
+edit_login_profile
 
+if (Test-Path variable:P1_INVOKE_DIR) {
+    set_context 'p1_invoke_dir' "$P1_INVOKE_DIR"
+}
 
 $new_tab_queue="$WORKING_DIR/new_tab_queue"
 if (!(Test-Path -PathType Container -Path $new_tab_queue)) {

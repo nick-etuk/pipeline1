@@ -7,13 +7,13 @@
 
 invoke_dir=$(pwd)
 export P1_INVOKE_DIR="$invoke_dir"
-current_dir=$(dirname "$(realpath "$0")")
-cd "$current_dir" || exit
+script_dir=$(dirname "$(realpath "$0")")
+cd "$script_dir" || exit
 
 
 if [ -z "${P1_ROOT_UNIX+set}" ]; then
-    echo "Setting P1 root directory manually to $current_dir"
-    P1_ROOT_UNIX="$current_dir"
+    echo "Setting P1 root directory manually to $script_dir"
+    P1_ROOT_UNIX="$script_dir"
     P1_ROOT_SCRIPT="$P1_ROOT_UNIX/pipeline1/scripts"
     export P1_ROOT_UNIX
     export P1_ROOT_SCRIPT
