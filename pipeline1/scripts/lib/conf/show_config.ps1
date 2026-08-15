@@ -8,6 +8,6 @@ function show_config {
     # Write-Output "GCM_PATH_WSL: $GCM_PATH_WSL"
     Write-Output "P1_ROOT_SCRIPT: $P1_ROOT_SCRIPT"
     Write-Output "P1_ROOT_WIN: $P1_ROOT_WIN"
-    Write-Output "CURRENT_PROJECT_ID: $CURRENT_PROJECT_ID"
-    Write-Output "DEFAULT_STEP_PATH: $DEFAULT_STEP_PATH"
+    # Write-Output "CURRENT_PROJECT_ID: $CURRENT_PROJECT_ID"
+    # Write-Output "DEFAULT_STEP_PATH: $DEFAULT_STEP_PATH"
 }

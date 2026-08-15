@@ -3,6 +3,8 @@
 # which will set up the environment and launch the main p1.py script.
 
 # $ErrorActionPreference = "Stop"
+$invoke_dir = (Get-Location).Path
+$Global:P1_INVOKE_DIR = $invoke_dir
 
 if (!(Test-Path variable:P1_ROOT_WIN)) { 
     Write-output "Setting P1_ROOT_WIN manually"
