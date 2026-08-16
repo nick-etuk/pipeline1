@@ -41,6 +41,12 @@ if [ -f "$script" ]; then
 	edit_login_profile
 fi
 
+# When P1 is invoke from the command line, clear the new_tab_queue
+new_tab_queue_dir="$HOME/.pipeline1/working/new_tab_queue"
+if [ -d "$new_tab_queue_dir" ]; then
+    rm -rf "$new_tab_queue_dir"/*
+fi
+
 script="$P1_ROOT_SCRIPT/terminal_login.sh"
 if [ ! -f "$script" ]; then
     script=$(find "$P1_ROOT_SCRIPT" -name "terminal_login.sh")
