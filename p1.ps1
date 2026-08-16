@@ -24,6 +24,12 @@ if (!(Test-Path variable:P1_ROOT_WIN)) {
 #     }
 # }
 
+# When P1 is invoke from the command line, clear the new_tab_queue
+new_tab_queue_dir="$HOME/.pipeline1/working/new_tab_queue"
+if (Test-Path -Path $new_tab_queue_dir -PathType Container) {
+    Get-ChildItem -Path $new_tab_queue_dir | Remove-Item -Force
+}
+
 $script="$P1_ROOT_SCRIPT/terminal_login.ps1"
 if (!(Test-Path -Path $script -PathType Leaf)) {
     Write-Output "Searching for terminal_login.ps1 in p1.ps1..."

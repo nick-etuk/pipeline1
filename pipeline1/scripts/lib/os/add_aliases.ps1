@@ -15,8 +15,8 @@ function cdp1 { cd "$REPO_DIR\pipeline1" }
 function cdweb { cd "$REPO_DIR\nhsapp\web" }
 function cdand { cd "$REPO_DIR\nhsapp-android" }
 function cdios { cd "$REPO_DIR\nhsapp-ios" }
-function cdparbac { cd "$REPO_DIR\1-sent-backend-proto" }
-function cdparand { cd "$REPO_DIR\1-sent-android-proto" }
+function cdpa { cd "$REPO_DIR\1-sent-android-proto" }
+function cdpb { cd "$REPO_DIR\1-sent-backend-proto" }
 
 remove-alias -name h -ErrorAction SilentlyContinue
 function h { 

@@ -1,5 +1,5 @@
 import os
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Any
 from pipeline1.lib.config import config
 from pipeline1.lib.logging import log
@@ -7,7 +7,7 @@ from pipeline1.run_step.get_step_script import get_step_script
 
 
 def schedule_step(step: dict[str, Any], args: list[str]) -> None:   
-    date_str = datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
+    date_str = datetime.now(timezone.utc).strftime("%Y_%m_%d_%H_%M_%S")
     task_file_name = f"{step['stepId']}_{'_'.join(args)}" if args else f"{step['stepId']}"
     task_file_name += f"_{date_str}.txt"
     task_file = os.path.join(config['working_dir'], "new_tab_queue", task_file_name)
