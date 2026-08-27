@@ -52,8 +52,8 @@ else
 fi
 
 detect_os
+get_onedrive_info
 [ "$VM" = 'wsl' ] && get_wsl_win_info
-
 
 case $MY_OS in
 ubuntu)

@@ -38,21 +38,8 @@ get_wsl_win_info() {
         fi
     fi
 
-    if [ -z "${ONEDRIVE_HOME+set}" ]; then 
-        ONEDRIVE_HOME=$(get_context 'onedrive_home'); 
-        if [ -z "$ONEDRIVE_HOME" ]; then
-            ONEDRIVE_HOME=$(powershell.exe -Command '$env:OneDrive' | tr -d '\r')
-            ONEDRIVE_HOME=$(wslpath "$ONEDRIVE_HOME")
-            set_context 'onedrive_home' "$ONEDRIVE_HOME"
-        fi
-    fi
-    if [ -z "${WORKING_DIR_ONEDRIVE+set}" ]; then 
-        WORKING_DIR_ONEDRIVE=$(get_context 'working_dir_onedrive');
-        if [ -z "$WORKING_DIR_ONEDRIVE" ]; then
-            WORKING_DIR_ONEDRIVE="$ONEDRIVE_HOME/Documents/working"
-            set_context 'working_dir_onedrive' "$WORKING_DIR_ONEDRIVE"
-        fi
-    fi
+    get_onedrive_info # sets ONEDRIVE_HOME and WORKING_DIR_ONEDRIVE
+    
     if [ -z "${COMPUTER_NAME_WIN+set}" ]; then 
         COMPUTER_NAME_WIN=$(get_context 'computer_name_win');
         if [ -z "$COMPUTER_NAME_WIN" ]; then
