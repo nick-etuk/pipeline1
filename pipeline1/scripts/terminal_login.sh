@@ -16,6 +16,7 @@ required_libraries=(
     set_context
     get_shell_version 
     detect_os
+    get_onedrive_info
     get_wsl_win_info
     config_ubuntu
     config_macos
@@ -28,6 +29,7 @@ required_libraries=(
 	install_pyenv
     create_venv
     pip_install
+    show_config
 
     edit_login_profile
     config_base # source this last as it is a script, not a function
@@ -40,7 +42,9 @@ done
 
 get_shell_version
 detect_os
-# [ "$VM" = 'wsl' ] && get_wsl_win_info # done in config_base.sh
+
+# get_onedrive_info                         # done in config_base.sh
+# [ "$VM" = 'wsl' ] && get_wsl_win_info     # done in config_base.sh
 
 # todo: rethink this:
 # Is there a way of doing this once instead of every login? Perhaps set a context variable.
@@ -55,6 +59,8 @@ add_to_path
 add_aliases
 edit_login_profile
 daily_tasks
+show_config
+
 new_tab_queue="$HOME/.pipeline1/working/new_tab_queue"
 if [ -d "$new_tab_queue" ] && [ -n "$(ls "$new_tab_queue")" ]; then
     echo "Tasks found in New Tab queue..."

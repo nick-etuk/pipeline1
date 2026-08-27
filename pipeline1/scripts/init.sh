@@ -33,4 +33,4 @@ get_next_run_id
 LOG_DIR="$LOG_BASE/$RUN_ID"
 mkdir -p "$LOG_DIR"
 
-show_config
+# show_config

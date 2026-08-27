@@ -14,6 +14,9 @@ show_config_base() {
     # debug "DEFAULT_STEP_ID: $DEFAULT_STEP_ID"
     # debug "DEFAULT_STEP_PATH: $DEFAULT_STEP_PATH"
     debug "NODE_MAJOR_VERSION: $NODE_MAJOR_VERSION"
+
+    debug "ONEDRIVE_HOME: $ONEDRIVE_HOME"
+    debug "WORKING_DIR_ONEDRIVE: $WORKING_DIR_ONEDRIVE"
 }
 
 show_config_unix() {
