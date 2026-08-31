@@ -1,0 +1,7 @@
+{
+  "newTab": true,
+  "checks": {
+    "unix": ["! adb -s emulator-\"$ANDROID_EMULATOR_PORT\" shell echo 'I am alive'"],
+    "win": ["! adb -s emulator-\"$ANDROID_EMULATOR_PORT\" shell echo 'I am alive'"]
+  }
+}

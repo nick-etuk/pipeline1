@@ -19,14 +19,13 @@ function parse_template {
 }
 
 function edit_login_profile {
-    writedebug "=> edit_login_profile"
     if (!(Test-Path -PathType Leaf $profile.CurrentUserCurrentHost)) {
         WriteInfo "Creating `$profile.CurrentUserCurrentHost at $($profile.CurrentUserCurrentHost)"
         New-Item -Path $profile.CurrentUserCurrentHost -ItemType File | Out-Null
     }
 
     if (Select-String -Path $profile.CurrentUserCurrentHost -Pattern "pipeline1_v$P1_VERSION|workstation1_v$P1_VERSION") {
-        WriteDebug "Profile $($profile.CurrentUserCurrentHost) already contains pipeline1 content, skipping modification"
+        # WriteDebug "Profile $($profile.CurrentUserCurrentHost) already contains pipeline1 content, skipping modification"
         return
     }
 
