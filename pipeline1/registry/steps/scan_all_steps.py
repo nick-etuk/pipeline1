@@ -10,7 +10,7 @@ from pipeline1.registry.remote_projects.fetch_remote_projects import fetch_remot
 from pipeline1.registry.steps.scan_steps_without_config import scan_steps_without_config
 from pipeline1.registry.steps.scan_project_steps import scan_project_steps
 from pipeline1.lib.logging import log
-from pipeline1.lib.variables_in_path_names import decode_variables_in_path
+from pipeline1.lib.variables_in_path_names import decode_variables_in_path, expand_path
 
 
 def scan_all_steps() -> None:
@@ -28,12 +28,13 @@ def scan_all_steps() -> None:
 
     project_registry = list_projects()
     for project in project_registry:
-        project_path = decode_variables_in_path(project['p1ProjectPath'])
+        # project_path = decode_variables_in_path(project['p1ProjectPath'])
+        project_path = expand_path(project['p1ProjectPath'])
         log.info(f"Scanning {project['projectId']} at {project_path}")
         if not os.path.exists(project_path):
             fetch_remote_projects()
             if not os.path.exists(project_path):
-                log.warn(f"Project {project['projectId']} - path does not exist: {project_path}")
+                log.warn(f"Scan_all_steps: project {project['projectId']} - path does not exist: {project_path}")
                 continue
         project_dir = Path(project_path)
         project_steps = scan_project_steps(project['projectId'], str(project_dir))
@@ -49,11 +50,11 @@ def scan_all_steps() -> None:
 
     # Search for steps without a config file
     for project in project_registry:
-        project_path = decode_variables_in_path(project['p1ProjectPath'])
+        project_path = expand_path(project['p1ProjectPath'])
         if not os.path.exists(project_path):
             fetch_remote_projects()
             if not os.path.exists(project_path):
-                log.warn(f"Project {project['projectId']} - path does not exist: {project_path}")
+                log.warn(f"Scan_all_steps_2: project {project['projectId']} - path does not exist: {project_path}")
                 continue
         project_dir = Path(project_path)
         steps_without_config = scan_steps_without_config(project_id=project['projectId'], project_path=str(project_dir), existing_steps=combined_step_registry)

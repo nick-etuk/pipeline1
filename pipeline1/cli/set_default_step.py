@@ -1,7 +1,7 @@
 import os
 import json
 from typing import Any
-
+from pipeline1.lib.variables_in_path_names import expand_path
 from pipeline1.lib.context import get_context, set_context
 from pipeline1.lib.logging import log
 from pipeline1.run_step.enrich_step import enrich_step
@@ -9,16 +9,6 @@ from icecream import ic
 
 def is_absolute_path(path: str) -> bool:
     return path == '/' or (len(path) >= 2 and path[1] == ':' and len(path) >= 2)
-
-def expand_path(path: str) -> str:
-    expanded_path = os.path.expandvars(path)
-    if ('$' in path or '~' in path) and expanded_path == path:
-        log.warn(f"set_default_step: path contains unexpanded environment variable: {expanded_path}")
-
-    if not os.path.isdir(expanded_path):
-        log.warn(f"set_default_step: path does not exist: {expanded_path}")
-        return ''
-    return expanded_path
 
 
 def set_step_exit_path(step: dict[str, Any], project_registry: list[dict[str, Any]]) -> None:  

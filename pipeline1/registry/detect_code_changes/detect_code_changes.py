@@ -10,6 +10,7 @@ from pipeline1.lib.logging import log
 from pipeline1.registry.detect_code_changes.check_core import check_core
 from pipeline1.registry.detect_code_changes.check_libs import check_libraries
 from pipeline1.registry.detect_code_changes.scan_sub_directories import scan_sub_directories
+from pipeline1.lib.variables_in_path_names import expand_path
 
 
 def scan_dir(directory: Path, last_scan_time_param: float) -> bool:
@@ -34,12 +35,13 @@ def scan_dir(directory: Path, last_scan_time_param: float) -> bool:
 def scan_projects(last_scan_time: float) -> bool:
     project_registry = list_projects()
     for project in project_registry:
-        if not os.path.exists(project['p1ProjectPath']):
+        # project_dir = Path(project['p1ProjectPath']) # do we need to use Path here or can we just use os.scandir with the string path?
+        project_dir = expand_path(project['p1ProjectPath'])
+        if not os.path.exists(project_dir):
             fetch_remote_projects()
-            if not os.path.exists(project['p1ProjectPath']):
-                log.warn(f"Project {project['projectId']} - path does not exist: {project['p1ProjectPath']}")
+            if not os.path.exists(project_dir):
+                log.warn(f"detect_code_changes.scan_projects: project {project['projectId']} - path does not exist: {project_dir}")
                 continue
-        project_dir = Path(project['p1ProjectPath']) # do we need to use Path here or can we just use os.scandir with the string path? --- IGNORE ---
         has_changed = scan_dir(project_dir, last_scan_time)
         if has_changed:
             return True

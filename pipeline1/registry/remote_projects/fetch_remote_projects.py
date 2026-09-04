@@ -1,19 +1,24 @@
 import json
 import os
-import sys
 from pipeline1.registry.remote_projects.configure_builtin_remotes import configure_builtin_remotes
 from pipeline1.lib.config import config
 from pipeline1.lib.logging import log
 from pipeline1.registry.add_project.add_project import add_project_registry_entry
 from pipeline1.registry.steps.scan_project_steps import project_sort_order
 from pipeline1.run_step.invoke_commands import invoke_commands
+from pipeline1.registry.add_project.list_projects import list_projects
 
 
 def fetch_remote_projects(force: bool = False) -> None:
+    """
+    Read configs for all remotes, and add to registry if not already there. 
+    This allows users to add their own remotes by adding config files to the remotes dir.
+    """
+
     configure_builtin_remotes()
     remotes_dir = config['remotes_dir']
-    # Read configs for all remotes, and add to registry if not already there. 
-    # This allows users to add their own remotes by adding config files to the remotes dir.
+    project_registry = list_projects()
+
     for config_file in os.listdir(remotes_dir):
         if not config_file.endswith('.json'):
             continue
@@ -29,7 +34,6 @@ def fetch_remote_projects(force: bool = False) -> None:
 
         git_url = project['repo']
         project_basename = git_url.rsplit('/', maxsplit=-1)[-1].replace('.git', '')
-        log.debug(f"git_url: {git_url} project_basename: {project_basename}")
         project_id = project.get("projectId", project_basename)
         if not project_id:
             log.warn(f"Remote project config {config_file} is missing 'projectId'. Skipping.")
@@ -43,6 +47,10 @@ def fetch_remote_projects(force: bool = False) -> None:
             'p1ProjectPath': project_dir,
             'sortOrder': project_sort_order(project_id),
         }
+        
+        if any(x['projectId'] == project_id for x in project_registry):
+            continue
+
         add_project_registry_entry(registry_entry)
 
         if os.path.exists(project_dir) and not force:
@@ -55,11 +63,11 @@ def fetch_remote_projects(force: bool = False) -> None:
         if not os.path.exists(parent_dir):
             os.makedirs(parent_dir, exist_ok=True)
 
+        log.debug(f"git_url: {git_url} project_basename: {project_basename}")
         command = f"git clone {git_url} {project_dir}"
         invoke_commands([command])
         if not os.path.exists(project_dir):
             log.warn(f"Failed to clone {git_url}.")
-            # sys.exit(1)
             continue
 
         log.info(f"Remote project {git_url} cloned to {project_dir}.")
@@ -67,7 +75,7 @@ def fetch_remote_projects(force: bool = False) -> None:
         # make all script files executable
         for root, _, files in os.walk(project_dir):
             for file in files:
-                if file.endswith('.sh') or file.endswith('.py'):
+                if file.endswith(('.sh', '.py')):
                     file_path = os.path.join(root, file)
                     os.chmod(file_path, 0o755)
 

@@ -1,5 +1,6 @@
 import os
 from pipeline1.lib.config import config
+from pipeline1.lib.logging import log
 
 def encode_variables_in_path(path: str) -> str:
     '''
@@ -47,3 +48,15 @@ def decode_variables_in_path(path: str) -> str:
             new_path = new_path.replace(f"${key}", value)
 
     return new_path
+
+
+def expand_path(path: str) -> str:
+    decoded_path = decode_variables_in_path(path)
+    expanded_path = os.path.expandvars(decoded_path)
+    if ('$' in path or '~' in path) and expanded_path == path:
+        log.warn(f"set_default_step: path contains unexpanded environment variable: {expanded_path}")
+
+    if not os.path.isdir(expanded_path):
+        log.warn(f"set_default_step: path does not exist: {expanded_path}")
+        return ''
+    return expanded_path
