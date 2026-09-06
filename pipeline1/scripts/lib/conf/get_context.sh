@@ -29,5 +29,6 @@ get_context() {
     [ ! -f "$status_file" ] && return
 
     value=$(cat "$status_file")
+    value=$(echo "$value" | xargs)
     echo "$value"
 }

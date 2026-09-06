@@ -1,0 +1,3 @@
+It is not possible to detect programatically if intellij plugins have been installed, 
+so the completion of this step will be marked by
+the creation of the file intellij-plugins-installed.txt in c:\provsioning\working.

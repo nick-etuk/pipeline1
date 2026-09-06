@@ -1,0 +1,6 @@
+{
+  "checks": {
+    "unix": ["true"]
+  },
+  "runOnce": true
+}
