@@ -13,16 +13,17 @@ function get_context {
         }
     }
 
-    $ConfigFile = "$WORKING_DIR\context\$Group\$Key.txt"
+    $ContextFile = "$WORKING_DIR\context\$Group\$Key.txt"
 
     if (!(Test-Path "$WORKING_DIR\context\$Group" -PathType Container)) {
         return
     }
 
-    if (!(Test-Path $ConfigFile)) {
+    if (!(Test-Path $ContextFile)) {
         return
     }
 
-    $Value = Get-Content $ConfigFile
+    $Value = Get-Content $ContextFile
+    $Value = $Value.Trim()
     return $Value
 }

@@ -1,0 +1,6 @@
+Android Studio cannot be installed using winget - it does not exist in the winget repository.
+We have to install and use Chocolatey to do it.
+An elevated shell required, so  Run Powershell as an Administrator.
+
+There is no need to intsall the Android SDK or SDK tools at this stage.
+When you build the nhs-android App, the SDK will be installed for you.

@@ -1,10 +1,16 @@
 function Search-For-Exe {
     param (
         $FileName,
-        $InDirectory
+        $ExpectedDirectory
     )
 
+    $VSCodePath = (Get-Command code).path
+    $VSCodeRoot = $VSCodePath -replace "\\bin\\code.cmd",""
+    $VSCodeParent = Split-Path -Path $VSCodeRoot -Parent
+    writeDebug "VSCodeParent: $VSCodeParent"
+
     $LikelyPaths = @(
+        "$VSCodeParent",
         "C:\Program Files",
         "$env:LocalAppData\Programs",
         "$env:LocalAppData"
@@ -15,7 +21,7 @@ function Search-For-Exe {
         $Result = Get-Childitem -Path $Path -Include $FileName -File -Recurse -ErrorAction SilentlyContinue | Select-Object FullName
         if ($Result) { 
             WriteDebug "$FileName found in likely path $Path"
-            $CorrectDirectory = CheckDirectory $Result.FullName $Path $InDirectory
+            $CorrectDirectory = CheckDirectory $Result.FullName $Path $ExpectedDirectory
             if ($CorrectDirectory) { return $CorrectDirectory }
         }
     }
@@ -25,7 +31,7 @@ function Search-For-Exe {
         $Result = Get-Childitem -Path $Path -Include $FileName -File -Recurse -ErrorAction SilentlyContinue | Select-Object FullName
         if ($Result) { 
             WriteDebug "$FileName found in environment path $Path"
-            $CorrectDirectory = CheckDirectory $Result.FullName $Path $InDirectory
+            $CorrectDirectory = CheckDirectory $Result.FullName $Path $ExpectedDirectory
             if ($CorrectDirectory) { return $CorrectDirectory }
         }
     }
@@ -33,7 +39,7 @@ function Search-For-Exe {
     WriteInfo "Searching C drive for $FileName..."
     $Result = Get-Childitem -Path "C:\" -Include $FileName -File -Recurse -ErrorAction SilentlyContinue | Select-Object FullName
     if ($Result) { 
-        $CorrectDirectory = CheckDirectory $Result.FullName $Path $InDirectory
+        $CorrectDirectory = CheckDirectory $Result.FullName $Path $ExpectedDirectory
         if ($CorrectDirectory) { return $CorrectDirectory }
     }
 }
@@ -45,26 +51,25 @@ function CheckDirectory {
         [Parameter(Position=1)]
         $Path,
         [Parameter(Position=2)]
-        $InDirectory
+        $ExpectedDirectory
     )
-    if (!($InDirectory)) {
+    if (!($ExpectedDirectory)) {
         WriteInfo "$FileName found at $Path"
         return $Path
     }
 
-    if($Path -match $InDirectory) {
-        WriteInfo "$FileName in $InDirectory found at $Path"
+    if($Path -match $ExpectedDirectory) {
+        WriteInfo "$FileName in $ExpectedDirectory found at $Path"
         return $Path
     }
-    WriteInfo "$FileName found, but not in expected directory $InDirectory. Path found is $Path"
+    WriteInfo "$FileName found, but not in expected directory $ExpectedDirectory. Path found is $Path"
 }
 
 function Find-Executable {
     param (
         $FileName,
-        $InDirectory
+        $ExpectedDirectory
     )
-
     $CachedPath = get_context $FileName 'file_paths'
     if ($CachedPath) {
         WriteDebug "$FileName found in cache"
@@ -74,15 +79,22 @@ function Find-Executable {
     $Result = (Get-Command $FileName -errorAction SilentlyContinue).path
     if ($Result) { 
         WriteInfo "$FileName is a command"
-        $CorrectDirectory = CheckDirectory $FileName $Result $InDirectory 
+        
+        if (!($ExpectedDirectory)) {
+            set_context $FileName $Result 'file_paths'
+            return $Result
+        }
+
+        $CorrectDirectory = CheckDirectory $FileName $Result $ExpectedDirectory 
         if ($CorrectDirectory) { 
-            set_context 'git-credential-manager.exe' $CorrectDirectory 'file_paths'
-            return $CorrectDirectory }
+            set_context $FileName $CorrectDirectory 'file_paths'
+            return $CorrectDirectory 
+        }
     }
 
     $Result = Search-For-Exe $FileName
     if ($Result) { 
-        $CorrectDirectory = CheckDirectory $FileName $Result $InDirectory
+        $CorrectDirectory = CheckDirectory $FileName $Result $ExpectedDirectory
         if ($CorrectDirectory) { 
             set_context $FileName $CorrectDirectory  'file_paths'
             return $CorrectDirectory

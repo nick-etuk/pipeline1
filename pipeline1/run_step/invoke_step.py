@@ -29,7 +29,7 @@ def invoke_step(step: dict[str, Any], args: list[str]) -> bool:
         print(f"Step {step_id} exited with code {return_code}. Output:")
         print(process.stdout)
         return return_code == 0
-    
+    log.debug(f"invoke_step: step_id: {step_id}, step_file_no_extension: {step_file_no_extension}, args: {args} my_os: {config['my_os']}")
     if config['my_os'] == 'win':
         startup_script = os.path.join(config['script_root'], 'run_script.ps1')
         step_script = f"{step_file_no_extension}.ps1"

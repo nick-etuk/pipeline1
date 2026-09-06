@@ -1,0 +1,7 @@
+{
+  "checks": {
+    "macos": ["mdfind -name 'Visual Studio Code.app' >/dev/null 2>&1"],
+    "unix": ["command -v code"]
+  },
+  "runOnce": true
+}

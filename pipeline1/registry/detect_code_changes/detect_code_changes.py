@@ -1,10 +1,10 @@
 import os
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from pipeline1.lib.config import config
 from pipeline1.registry.add_project.list_projects import list_projects
 from pipeline1.registry.remote_projects.fetch_remote_projects import fetch_remote_projects
-from pipeline1.registry.steps.run_smoke_tests import run_smoke_tests
+# from pipeline1.registry.steps.run_smoke_tests import run_smoke_tests
 from pipeline1.registry.steps.scan_all_steps import scan_all_steps
 from pipeline1.lib.logging import log
 from pipeline1.registry.detect_code_changes.check_core import check_core
@@ -13,23 +13,21 @@ from pipeline1.registry.detect_code_changes.scan_sub_directories import scan_sub
 from pipeline1.lib.variables_in_path_names import expand_path
 
 
-def scan_dir(directory: Path, last_scan_time_param: float) -> bool:
+def scan_dir(directory: str, last_scan_time_param: float) -> bool:
     last_scan_time = float(last_scan_time_param)
-    for entry in scan_sub_directories(directory):
-        update_time = entry.stat().st_mtime
-        if entry.name.endswith('.json'):
-            if update_time > last_scan_time:
-                log.info(f"Config changed: {entry.path}")
-                log.info(f"Updated at {datetime.fromtimestamp(update_time).strftime('%Y-%m-%d %H:%M')}")
-                return True
-        if entry.name.endswith('.sh') or entry.name.endswith('.ps1'):
+    for item in scan_sub_directories(Path(directory)):
+        update_time = item.stat().st_mtime
+        if item.name.endswith('.json') and update_time > last_scan_time:
+            log.info(f"Config changed: {item.name}")
+            log.info(f"Updated at {datetime.fromtimestamp(update_time, tz=timezone.utc).strftime('%Y-%m-%d %H:%M:%S')}")
+            return True
+        if item.name.endswith(('.sh', '.ps1')) and update_time > last_scan_time:
             # todo: this will detetct any change in a script file.
             # find a way to detect only new or added script files, not changes to existing ones.
             # might have to store step creation date in the step registry, and compare with that.
-            if update_time > last_scan_time:
-                log.info(f"Step changed: {entry.path}")
-                log.info(f"Updated at {datetime.fromtimestamp(update_time).strftime('%Y-%m-%d %H:%M')}")
-                return True
+            log.info(f"Step changed: {item.name}")
+            log.info(f"Updated at {datetime.fromtimestamp(update_time, tz=timezone.utc).strftime('%Y-%m-%d %H:%M:%S')}")
+            return True
     return False
 
 def scan_projects(last_scan_time: float) -> bool:
@@ -62,7 +60,7 @@ def detect_code_changes() -> None:
     
     if not os.path.exists(last_scan_file):
         log.debug('No last scan file found, creating one')
-        last_scan_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        last_scan_time = datetime.now(tz=timezone.utc).strftime('%Y-%m-%d %H:%M:%S')
         with open(last_scan_file, 'w', encoding='utf-8') as file:
             file.write(str(last_scan_time))
         return
@@ -70,7 +68,7 @@ def detect_code_changes() -> None:
     with open(last_scan_file, 'r', encoding='utf-8') as file:
         raw_time_string = file.read().strip()
 
-    last_scan_time = datetime.strptime(raw_time_string, '%Y-%m-%d %H:%M:%S').timestamp()
+    last_scan_time = datetime.strptime(raw_time_string, '%Y-%m-%d %H:%M:%S').replace(tzinfo=timezone.utc).timestamp()
 
     core_changes = check_core(last_scan_time)
     lib_changes = check_libraries(last_scan_time)
@@ -78,12 +76,12 @@ def detect_code_changes() -> None:
     #     run_smoke_tests()
 
     project_changes = scan_projects(last_scan_time)
-    built_in_dir = Path(config['script_root'])
-    built_in_changes = scan_dir(built_in_dir, last_scan_time)
+    built_in_changes = scan_dir(config['script_root'], last_scan_time)
     if project_changes or built_in_changes:
         scan_all_steps()
 
-    last_scan_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    last_scan_time = datetime.now(tz=timezone.utc).strftime('%Y-%m-%d %H:%M:%S')
+    log.debug(f"Updating last scan file to {last_scan_time}")
     with open(last_scan_file, 'w', encoding='utf-8') as file:
         file.write(str(last_scan_time))
     
