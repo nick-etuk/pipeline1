@@ -19,6 +19,7 @@ function wait_for_ide($IDE) {
         }
     }
 
+    writeInfo "Waiting for IDE $IDE..."
     while ($true) {
         $ide_processes = Get-Process | Where-Object { $_.MainWindowTitle -ne '' } | Where-Object { $_.Path -like "*$exe_filename*" }
         if ($ide_processes) {

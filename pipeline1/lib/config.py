@@ -83,6 +83,6 @@ android_emulator_port = '5554'
 loginenv = 'sandpit'
 
 node_major_version = '22'
-dotnet_major_version = '8'
+dotnet_major_version = '10'
 python_major_version = '3.10'
     

@@ -17,6 +17,7 @@ function cdand { cd "$REPO_DIR\nhsapp-android" }
 function cdios { cd "$REPO_DIR\nhsapp-ios" }
 function cdpa { cd "$REPO_DIR\1-sent-android-proto" }
 function cdpb { cd "$REPO_DIR\1-sent-backend-proto" }
+function cdpd { cd "$REPO_DIR\para1-backend" }
 
 remove-alias -name h -ErrorAction SilentlyContinue
 function h { 
