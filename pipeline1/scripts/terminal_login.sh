@@ -30,7 +30,7 @@ required_libraries=(
     create_venv
     pip_install
     show_config
-
+    start_ssh_agent
     edit_login_profile
     config_base # source this last as it is a script, not a function
 )
@@ -59,6 +59,7 @@ add_to_path
 add_aliases
 edit_login_profile
 daily_tasks
+start_ssh_agent
 show_config
 
 new_tab_queue="$HOME/.pipeline1/working/new_tab_queue"
