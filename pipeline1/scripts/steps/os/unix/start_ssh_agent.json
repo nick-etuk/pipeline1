@@ -1,0 +1,6 @@
+{
+  "checks": {
+    "unix": ["[ -n \"$SSH_AGENT_PID\" ] && ps -p \"$SSH_AGENT_PID\" > /dev/null"],
+    "windows": ["(Get-Service -Name ssh-agent).Status -eq 'Running'"]
+  }
+}
