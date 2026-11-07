@@ -20,7 +20,10 @@ def scan_all_steps() -> None:
 
     backup_file = f"{step_registry_file}.bak"
     if Path(step_registry_file).exists():
-        os.replace(step_registry_file, backup_file)
+        try:
+            os.replace(step_registry_file, backup_file)
+        except OSError:
+            log.warn(f"Could not create backup of {step_registry_file}")
     else:
         create_blank_registry('step')
 

@@ -15,7 +15,8 @@ from pipeline1.registry.get_registries import (
 class TestProjectRegistry(unittest.TestCase):
 
     @patch('pipeline1.registry.get_registries.os.path.exists')
-    def test_returns_empty_list_when_file_missing(self, mock_exists: MagicMock):
+    @patch('builtins.input', return_value='n')
+    def test_returns_empty_list_when_file_missing(self, mock_input: MagicMock, mock_exists: MagicMock):
         mock_exists.return_value = False
         result = get_project_registry()
         self.assertEqual(result, [])
@@ -53,8 +54,9 @@ class TestProjectRegistry(unittest.TestCase):
 class TestStepRegistry(unittest.TestCase):
 
     @patch('pipeline1.registry.get_registries.os.path.exists')
+    @patch('builtins.input', return_value='n')
     @pytest.mark.skip(reason="todo: fix and unskip.")
-    def test_returns_empty_list_when_file_missing(self, mock_exists: MagicMock):
+    def test_returns_empty_list_when_file_missing(self, mock_input: MagicMock, mock_exists: MagicMock):
         mock_exists.return_value = False
         self.assertEqual(get_step_registry(), [])
 
