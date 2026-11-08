@@ -2,6 +2,10 @@
 from typing import Any
 import os
 import subprocess
+import runpy
+import traceback
+from datetime import datetime
+
 from pipeline1.lib.config import config
 from pipeline1.lib.logging import log
 # from icecream import ic
@@ -11,15 +15,23 @@ def invoke_step(step: dict[str, Any], args: list[str]) -> bool:
     step_id = step['stepId']
     
     step_file_no_extension = os.path.join(step['path'], f"{step['baseFilename']}")
-    python_executable = 'python' if config['my_os'] == 'win' else 'python3'
+    # python_executable = 'python' if config['my_os'] == 'win' else 'python3'
     return_code = 0
 
     if os.path.exists(f"{step_file_no_extension}.py"):
         step_script = f"{step_file_no_extension}.py"
-        process = subprocess.run([python_executable, step_script] + args, capture_output=True, text=True, check=False)
-        return_code = process.returncode
-        print(f"Step {step_id} exited with code {return_code}. Output:")
-        print(process.stdout)
+        # process = subprocess.run([python_executable, step_script] + args, capture_output=True, text=True, check=False)
+        # return_code = process.returncode
+        # print(f"Step {step_id} exited with code {return_code}. Output:")
+        # print(process.stdout)
+        try:
+            runpy.run_path(step_script, run_name="__main__")
+        except SystemExit as e:
+            return_code = e.code
+        except Exception as e:
+            print(f"Exception occurred: {e}")
+            traceback.print_exc()
+            return_code = 1
         return return_code == 0
     
     if os.path.exists(f"{step_file_no_extension}.pl"):
