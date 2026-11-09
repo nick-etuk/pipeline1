@@ -78,12 +78,14 @@ def sync_dir(source_repo, dir_name, target_dir, backup_dtm):
     backup_root = backup_dir / backup_dtm / Path(target_dir).name / dir_name
 
     if not source_dir.is_dir():
+        print(f"No {dir_name}")
         return
 
     if is_within(destination_dir, repo_root):
         print(f"Warning: skipping destination inside repository: {destination_dir}")
         return
 
+    print(f"Directory: {dir_name}")
     if dir_name == "skills":
         roots = skill_roots(source_dir, destination_dir)
     else:
@@ -93,10 +95,10 @@ def sync_dir(source_repo, dir_name, target_dir, backup_dtm):
         if is_within(destination_root, repo_root):
             print(f"Warning: skipping destination inside repository: {destination_root}")
             continue
-
         for source_file in source_root.rglob("*"):
             relative = source_file.relative_to(source_root)
             if any(part in ignore for part in relative.parts):
+                print(f"Ignoring {source_file.name}")
                 continue
 
             destination_file = destination_root / relative
@@ -115,15 +117,23 @@ def sync_dir(source_repo, dir_name, target_dir, backup_dtm):
 
 
 def main():
+    if not repo_dir.is_dir():
+        print(f"Repo directory {repo_dir} not found")
+        return
+    
     backup_dtm = datetime.now().strftime("%Y%m%d%H%M%S")
     source_repos = ["nhsapp-ai-factory-nav-onboarding"]
     dirs_to_copy = ["skills", "instructions"]  # 'instructions' will exist in future
     target_dirs = [home_dir / ".copilot"]
 
-    for source_repo in source_repos:
-        print(f"Source repo: {source_repo}")
+    for source_repo_str in source_repos:
+        source_repo = Path(repo_dir  / source_repo_str)
+        if not source_repo.is_dir():
+            print(f"Source repo {source_repo_str} not found")
+            continue
+            
+        print(f"Source repo: {source_repo_str}")
         for dir_name in dirs_to_copy:
-            print(f"Directory: {dir_name}")
             for target_dir in target_dirs:
                 sync_dir(
                     source_repo=source_repo, 
