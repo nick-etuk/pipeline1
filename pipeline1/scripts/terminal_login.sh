@@ -59,7 +59,7 @@ add_to_path
 add_aliases
 edit_login_profile
 daily_tasks
-start_ssh_agent
+# start_ssh_agent
 show_config
 
 new_tab_queue="$HOME/.pipeline1/working/new_tab_queue"
