@@ -4,13 +4,14 @@ import csv
 from typing import Any
 import difflib
 from pipeline1.lib.config import config
+from pipeline1.lib.constants import FILE_HEADERS
 from pipeline1.registry.add_project.list_projects import list_projects
-from pipeline1.registry.create_blank_registry import create_blank_registry
+# from pipeline1.registry.create_blank_registry import create_blank_registry
 from pipeline1.registry.remote_projects.fetch_remote_projects import fetch_remote_projects
 from pipeline1.registry.steps.scan_steps_without_config import scan_steps_without_config
 from pipeline1.registry.steps.scan_project_steps import scan_project_steps
 from pipeline1.lib.logging import log
-from pipeline1.lib.variables_in_path_names import decode_variables_in_path, expand_path
+from pipeline1.lib.variables_in_path_names import expand_path
 
 
 def scan_all_steps() -> None:
@@ -18,14 +19,13 @@ def scan_all_steps() -> None:
     log.info('Updating step registry')
     step_registry_file = f"{config['working_dir']}/step_registry.csv"
 
-    backup_file = f"{step_registry_file}.bak"
+    old_content: str | None = None
     if Path(step_registry_file).exists():
         try:
-            os.replace(step_registry_file, backup_file)
+            with open(step_registry_file, 'r', encoding='utf-8') as f:
+                old_content = f.read()
         except OSError:
-            log.warn(f"Could not create backup of {step_registry_file}")
-    else:
-        create_blank_registry('step')
+            log.warn(f"Could not read existing {step_registry_file}")
 
     combined_step_registry: list[dict[str, Any]] = []
 
@@ -67,8 +67,8 @@ def scan_all_steps() -> None:
 
     combined_step_registry = sorted(combined_step_registry, key=lambda x: (x['sortOrder']))
 
-    with open(step_registry_file, 'w', newline='') as csvfile:
-        fieldnames = combined_step_registry[0].keys()
+    fieldnames = list(combined_step_registry[0].keys()) if combined_step_registry else FILE_HEADERS['step']
+    with open(step_registry_file, 'w', newline='', encoding='utf-8') as csvfile:
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
 
         writer.writeheader()
@@ -83,22 +83,20 @@ def scan_all_steps() -> None:
                 'path': step['path']
             })
 
-    if Path(step_registry_file).exists() and Path(backup_file).exists():
-        with open(step_registry_file, 'r') as new_file, open(backup_file, 'r') as old_file:
+    if old_content is not None:
+        with open(step_registry_file, 'r', encoding='utf-8') as new_file:
             new_content = new_file.read()
-            old_content = old_file.read()
-            if new_content == old_content:
-                log.info('Step registry unchanged.')
-            else:
-                log.info('Step registry updated.')
-                diff = difflib.unified_diff(
-                    old_content.splitlines(),
-                    new_content.splitlines(),
-                    fromfile='Previous',
-                    tofile='New',
-                    lineterm='')
-                for line in diff:
-                    print(line)
-        os.remove(backup_file)
+        if new_content == old_content:
+            log.info('Step registry unchanged.')
+        else:
+            log.info('Step registry updated.')
+            diff = difflib.unified_diff(
+                old_content.splitlines(),
+                new_content.splitlines(),
+                fromfile='Previous',
+                tofile='New',
+                lineterm='')
+            for line in diff:
+                print(line)
     else:
         log.info('Step registry created.')

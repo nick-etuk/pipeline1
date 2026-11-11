@@ -143,3 +143,5 @@ venv.bak/
 # ignore egg-info
 *.egg-info/
 .eggs/
+
+.idea/
