@@ -56,7 +56,7 @@ def copy_file(source_file, destination_file, backup_file):
         backup_file.parent.mkdir(parents=True, exist_ok=True)
         shutil.copy2(destination_file, backup_file)
 
-    print(f"Copying {source_file.name}")
+    print(f"Copying {source_file.parent.name}/{source_file.name}")
     destination_file.parent.mkdir(parents=True, exist_ok=True)
     shutil.copy2(source_file, destination_file)
 
@@ -124,7 +124,7 @@ def main():
     backup_dtm = datetime.now().strftime("%Y%m%d%H%M%S")
     source_repos = ["nhsapp-ai-factory-nav-onboarding"]
     dirs_to_copy = ["skills", "instructions"]  # 'instructions' will exist in future
-    target_dirs = [home_dir / ".copilot"]
+    target_dirs = [home_dir / ".agents"]
 
     for source_repo_str in source_repos:
         source_repo = Path(repo_dir  / source_repo_str)
