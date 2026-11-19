@@ -4,6 +4,7 @@ from typing import Any
 # from pipeline1.lib.context import get_context
 from pipeline1.lib.detect_os import detect_os
 from pipeline1.definitions import python_root
+from pipeline1.lib.constants import Level
 
 
 home_dir = Path.home()
@@ -30,7 +31,7 @@ if not os.path.exists(working_dir):
     os.makedirs(working_dir, exist_ok=True)
 
 
-def local_get_context(key:str) -> str:
+def local_get_context(key:str, default:str = '') -> str:
     '''Based on pipeline1.lib.context.get_context. Created to avoid circular imports.'''
     # todo: refactor to avoid circular imports. maybe move get_context to config.py
     # pylint: disable=duplicate-code
@@ -40,15 +41,15 @@ def local_get_context(key:str) -> str:
     context_dir = os.path.join(working_dir, 'context', 'global')
     if not os.path.isdir(context_dir):
         os.makedirs(context_dir, exist_ok=True)
-        return ''
+        return default
 
     status_file = os.path.join(context_dir, f"{key}.txt")
     if not os.path.isfile(status_file):
-        return ''
+        return default
     
     with open(status_file, 'r', encoding='utf-8') as file:
         value = file.read().strip()
-    return value
+    return value if value else default
 
 computed_config: dict[str, Any] = {
     'p1_root': str(p1_root),
@@ -63,6 +64,7 @@ computed_config: dict[str, Any] = {
     'log_base': str(base_dir / 'log'),
     'my_download_dir': str(base_dir / 'downloads'),
     'remotes_dir': str(base_dir / 'remote_projects'),
+    'log_fence': local_get_context('log_fence', str(Level.INFO.value)),
     'p1_user_win': local_get_context('p1_user_win'),
     'windows_home': local_get_context('windows_home'),
     'working_dir_win': local_get_context('working_dir_win'),
