@@ -52,7 +52,7 @@ def copy_file(source_file, destination_file, backup_file):
         if source_mtime < destination_mtime:
             print(f"Destination is newer, skipping: {destination_file}")
             return
-        print(f"Backing up {destination_file.name}")
+        # print(f"Backing up {destination_file.name}")
         backup_file.parent.mkdir(parents=True, exist_ok=True)
         shutil.copy2(destination_file, backup_file)
 
@@ -98,7 +98,7 @@ def sync_dir(source_repo, dir_name, target_dir, backup_dtm):
         for source_file in source_root.rglob("*"):
             relative = source_file.relative_to(source_root)
             if any(part in ignore for part in relative.parts):
-                print(f"Ignoring {source_file.name}")
+                print(f"Ignored {source_file.name}")
                 continue
 
             destination_file = destination_root / relative
