@@ -44,8 +44,8 @@ def set_step_exit_path(step: dict[str, Any], project_registry: list[dict[str, An
 def set_default_step(project_registry: list[dict[str, Any]], step_registry_entry: dict[str, Any]) -> None:
     config_file = os.path.join(step_registry_entry['path'], f"{step_registry_entry['baseFilename']}.json")
     if not os.path.isfile(config_file):
-        ic(step_registry_entry, config_file)
         log.warn(f"Cannot set default step to {step_registry_entry['stepId']} because it does not have a config file") 
+        ic(step_registry_entry, config_file)
         return
     
     with open(config_file, encoding="utf-8") as f:

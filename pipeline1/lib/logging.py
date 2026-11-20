@@ -16,7 +16,6 @@ class Logger:
     Direct mode prints log messages immediately.
     '''
     def __init__(self, indent: int = 0):
-        ic(config['log_fence'])
         self.log_fence = int(config['log_fence'])
         self.indent = indent
         self.mode = Mode.DIRECT

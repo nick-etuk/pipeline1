@@ -84,7 +84,6 @@ class TestRunStep(unittest.TestCase):
         } | self.registry_entry
         with patch('subprocess.run') as mock_run, patch('builtins.print'):
             mock_run.return_value = MagicMock(returncode=0, stdout='done')
-            ic(my_step)
             run_step(step_registry_entry=my_step, step_args=['arg1'], overrides=[])
             self.assertTrue(mock_run.called)
             args_passed = mock_run.call_args[0][0]
