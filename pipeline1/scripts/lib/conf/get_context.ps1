@@ -16,10 +16,12 @@ function get_context {
     $ContextFile = "$WORKING_DIR\context\$Group\$Key.txt"
 
     if (!(Test-Path "$WORKING_DIR\context\$Group" -PathType Container)) {
+        WriteWarn "Context group '$Group' undefined."
         return
     }
 
     if (!(Test-Path $ContextFile)) {
+        WriteWarn "Context key '$Key' undefined."
         return
     }
 

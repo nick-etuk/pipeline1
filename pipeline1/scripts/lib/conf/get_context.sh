@@ -23,10 +23,16 @@ get_context() {
         ;;
     esac
 
-    [ ! -d "$WORKING_DIR/context/$group" ] && return
+    if [ ! -d "$WORKING_DIR/context/$group" ]; then
+        warn "Context group '$group' undefined"
+        return
+    fi
 
     status_file="$WORKING_DIR/context/$group/$key.txt"
-    [ ! -f "$status_file" ] && return
+    if [ ! -f "$status_file" ]; then
+        warn "Context variable '$key' undefined"
+        return
+    fi
 
     value=$(cat "$status_file")
     value=$(echo "$value" | xargs)

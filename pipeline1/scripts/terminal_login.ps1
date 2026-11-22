@@ -48,7 +48,7 @@ add_to_path
 edit_login_profile
 
 if (Test-Path variable:P1_INVOKE_DIR) {
-    set_context 'p1_invoke_dir' "$P1_INVOKE_DIR"
+    set_context 'p1_invoke_dir' $P1_INVOKE_DIR
 }
 
 $new_tab_queue="$WORKING_DIR/new_tab_queue"

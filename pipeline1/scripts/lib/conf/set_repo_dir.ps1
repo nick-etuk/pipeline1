@@ -2,16 +2,16 @@ function save_directories {
     # $profileContent = Get-Content -Path $profile.CurrentUserCurrentHost -ErrorAction SilentlyContinue
     # $profileContent = $profileContent -replace "`$global:P1_ROOT_WIN = '$OldRootPath'", "`$global:P1_ROOT_WIN = '$P1_ROOT_WIN'"
     # Set-Content -Path $profile.CurrentUserCurrentHost -Value $profileContent -ErrorAction SilentlyContinue
-    set_context p1_root_win $P1_ROOT_WIN
+    set_context 'p1_root_win' $P1_ROOT_WIN
     $Global:REPO_DIR = (get-item $P1_ROOT_WIN).parent.FullName
     $env:REPO_DIR = $Global:REPO_DIR
-    set_context repo_dir $Global:REPO_DIR
+    set_context 'repo_dir' $Global:REPO_DIR
 }
 
 function set_repo_dir {
     # Check if P1_ROOT_WIN has changed. Update REPO_DIR and the profile if it has.
 
-    $OldRootPath = get_context p1_root_win
+    $OldRootPath = get_context 'p1_root_win'
     if (-not $OldRootPath) {
         save_directories
         return
