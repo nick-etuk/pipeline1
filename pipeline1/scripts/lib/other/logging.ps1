@@ -1,3 +1,6 @@
+# Keep this file as pure Powershell as possible.
+# Avoid calling get_context or any custum functions outside this file.
+
 function set_log_dir {
     if (!(Test-Path variable:RUN_ID)) {
         Write-output "RUN_ID not set, using default value: 001"
@@ -51,9 +54,7 @@ function WriteLog {
     $Message = $Message -replace 'step failed', $CROSS_MARK
 
     $EventLogEnabled = $false
-    # WriteDebug "get_context event_log_source: $(get_context event_log_source)"
-    if($(get_context event_log_source) -eq 'pipeline1') { $EventLogEnabled = $true }
-    # WriteDebug "EventLogEnabled: $EventLogEnabled"
+    # if($(get_context event_log_source) -eq 'pipeline1') { $EventLogEnabled = $true }
     switch ($Level) {
         Verbose { Write-Verbose "$Message" }
         Warning { 
