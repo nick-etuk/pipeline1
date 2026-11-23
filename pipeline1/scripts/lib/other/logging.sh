@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
+
+# Keep this file as pure Shell script as possible.
+# Avoid calling get_context or any custom functions outside this file.
+
 set_log_dir() {
     if [ -z "${LOG_BASE+set}" ]; then
         LOG_BASE="$P1_ROOT_SCRIPT/log"
@@ -16,7 +20,7 @@ write_log() {
     echo "$*" >> "$LOG_DIR/z_all_steps.log"
 }
 
-function info {
+info() {
     # todo: get stage (filename of calling script) automatically
     # PARENT_COMMAND=$(ps -o args= $PPID)
     # PARENT_COMMAND=$(ps $PPID | tail -n 1 | awk "{print \$5}")
@@ -50,7 +54,7 @@ function info {
     write_log "$modified_message"
 }
 
-function error {
+error() {
     echo -e "${RED}Error in ${FUNCNAME[1]}:$*${NC}"
     write_log "$*"
     exit 1

@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 
-function check_repo_dir {
-    error "Directory $1 does not exist"
+check_invalid_directory() {
+    echo "Directory $1 does not exist"
+    return 1
     # info ""
 
     # read -rp "Repo path currently set to $REPO_DIR. Is this correct?" option
@@ -16,14 +17,17 @@ function check_repo_dir {
     # exit 1
 }
 
-function switch_to {
+switch_to() {
+    [ $# -eq 0 ] && { echo "No directory specified to switch to"; return 1; }
+    [ $# -gt 1 ] && { echo "Too many arguments for switch_to: $*"; return 1; }
+
     [ "$1" = "$(pwd)" ] && return
 
-    [ -d "$1" ] || check_repo_dir "$1"
+    [ -d "$1" ] || check_invalid_directory "$1"
 
-    cd "$1" || error "Could not switch to $1"
+    cd "$1" || { echo "Error: Could not switch to $1"; return 1; }
 }
 
-function switch_back {
+switch_back() {
     switch_to "$P1_ROOT_UNIX"
 }

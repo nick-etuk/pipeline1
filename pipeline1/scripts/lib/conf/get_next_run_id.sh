@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-function get_next_run_id {
+get_next_run_id() {
     local last_run_id
     local directories
 
