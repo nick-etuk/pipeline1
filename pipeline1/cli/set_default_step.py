@@ -1,40 +1,78 @@
 import os
 import json
 from typing import Any
+from pathlib import PurePosixPath, PureWindowsPath
 from pipeline1.lib.variables_in_path_names import expand_path
 from pipeline1.lib.context import get_context, set_context
 from pipeline1.lib.logging import log
 from pipeline1.run_step.enrich_step import enrich_step
 from icecream import ic
 
+
 def is_absolute_path(path: str) -> bool:
-    return path == '/' or (len(path) >= 2 and path[1] == ':' and len(path) >= 2)
+    return PurePosixPath(path).is_absolute() or PureWindowsPath(path).is_absolute()
+
+
+def resolve_project_root(project: dict[str, Any]) -> str:
+    # project['sourceCodeRoot'] is the directory where the source code is located
+    # In the past, this was named 'source_code_path'.
+    # project['p1ProjectPath'] is the directory where the project.json file is located.
+    # The two are not always the same. 'sourceCodeRoot' is preferred.
+    
+    if 'sourceCodeRoot' in project and project['sourceCodeRoot']:
+        return project['sourceCodeRoot']
+
+    if 'source_code_path' in project and project['source_code_path']:
+        return project['source_code_path']
+
+    if 'p1ProjectPath' in project and project['p1ProjectPath']:
+        return project['p1ProjectPath']
+
+    log.warn(f"Project root could not be determined for {project['projectId']}")
+    return ""
 
 
 def set_step_exit_path(step: dict[str, Any], project_registry: list[dict[str, Any]]) -> None:  
     if 'exitTo' not in step:
-        step['exitTo'] = step['path']
-        log.debug(f"Using step path ({step['path']}) as exitTo")
-        
-    if is_absolute_path(step['exitTo']) and os.path.isdir(step['exitTo']):
-        log.debug(f"Setting default step exit path to absolute path {step['exitTo']}")
-        set_context('default_step_path', expand_path(step['exitTo']))
+        exit_path = step['path']
+        log.debug(f"No exit path defined for step {step['stepId']}")
+        log.debug(f"Using step path ({exit_path}) as exit path")
+        # step paths are absolute and do not contain environment variables
+        set_context('default_step_path', exit_path)
         return
+
+    exit_path = expand_path(step['exitTo'])
+    if is_absolute_path(exit_path):
+        if not os.path.isdir(exit_path):
+            log.warn(f"Absolute exit path {exit_path} does not exist.")
+            return
+        log.debug(f"Setting default step exit path to absolute path {exit_path}")
+        set_context('default_step_path', exit_path)
+        return
+
+    # Handle relative step['exitTo'] paths
+    relative_path = exit_path
 
     project_found = False
     for project in project_registry:
         if project['projectId'] == step['projectId']:
             project_found = True
-            # project['source_code_path'] is the directory where the source code is located
-            # project['p1ProjectPath'] is the directory where the project.json file is located.
-            # The two are not always the same.
-            project_root = project['source_code_path'] if 'source_code_path' in project else project['p1ProjectPath']
-            exit_to_path = os.path.join(project_root, str(step['exitTo']))
-            if not os.path.isdir(exit_to_path):
-                log.warn(f"Path {exit_to_path} does not exist. Cannot set default step exit path.")
+
+            project_root = resolve_project_root(project)
+            if not project_root:
                 return
-            log.debug(f"Setting default step exit path to {exit_to_path}")
-            set_context('default_step_path', expand_path(exit_to_path))
+
+            project_root = expand_path(project_root)
+            if not os.path.isdir(project_root):
+                log.warn(f"Project root path {project_root} does not exist. Cannot set default step exit path.")
+                return
+
+            exit_path = os.path.join(project_root, relative_path)
+            if not os.path.isdir(exit_path):
+                log.warn(f"Relative exit path {exit_path} does not exist. Cannot set default step exit path.")
+                return
+            log.debug(f"Setting default step exit path to {exit_path}")
+            set_context('default_step_path', exit_path)
             break
 
     if not project_found:

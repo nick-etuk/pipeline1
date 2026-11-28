@@ -54,9 +54,9 @@ def expand_path(path: str) -> str:
     decoded_path = decode_variables_in_path(path)
     expanded_path = os.path.expandvars(decoded_path)
     if ('$' in path or '~' in path) and expanded_path == path:
-        log.warn(f"set_default_step: path contains unexpanded environment variable: {expanded_path}")
+        log.warn(f"expand_path: path contains unexpanded environment variable: {expanded_path}")
 
-    if not os.path.isdir(expanded_path):
-        log.warn(f"set_default_step: path does not exist: {expanded_path}")
-        return ''
+    # if not os.path.isdir(expanded_path):
+    #     log.warn(f"expand_path: path does not exist: {expanded_path}")
+    #     return ''
     return expanded_path

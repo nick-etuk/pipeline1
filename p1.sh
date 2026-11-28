@@ -12,6 +12,7 @@ required_libraries=(
     detect_os
     get_onedrive_info
     get_wsl_win_info
+    check_pipeline1
     config_ubuntu
     config_macos
     config_base # source this last as it is a script, not a function
@@ -58,7 +59,7 @@ fi
 # .zshrc must always run terminal_login.sh
 # Launch p1.py here.
 
-if grep -iq 'pipeline1_v' "$HOME/.bashrc" || grep -iq 'pipeline1_v' "$HOME/.zshrc"; then
+if check_pipeline1; then
     python3 "$P1_ROOT_UNIX/pipeline1/p1.py" "$@"
     exit 0
 fi
